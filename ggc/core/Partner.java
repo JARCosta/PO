@@ -46,5 +46,9 @@ public class Partner {
         _status = "NORMAL";
     }
 
+    public ArrayList<Batch> getBatches(){
+        return _batches;
+    }
+
 
 }
