@@ -49,6 +49,5 @@ public class Partner {
     public ArrayList<Batch> getBatches(){
         return _batches;
     }
-
-
+    // lalalalalal
 }
