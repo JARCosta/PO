@@ -18,7 +18,7 @@ public class Warehouse implements Serializable {
   private static final long serialVersionUID = 202109192006L;
   private Date _date;
   private Map<String, Partner> _partnersMap;
-  private ArrayList<Product> _produtos;
+  private ArrayList<Product> _products;
   
 
   public Warehouse(){
@@ -51,6 +51,17 @@ public class Warehouse implements Serializable {
 
   public Partner getPartner(String id){
     return _partnersMap.get(id);
+  }
+
+  public ArrayList<Product> getProducts(){
+    return _products;
+  }
+
+
+  public Product getProduct(String id){
+    for( Product i : _products){
+      if(i.get)
+    }
   }
 
 

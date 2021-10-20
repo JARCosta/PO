@@ -24,5 +24,6 @@ class DoShowPartner extends Command<WarehouseManager> {
     Partner partner = _receiver.getPartner(stringField("key"));
 
     _display.popup(partner.toString());
+    //_display.popup(partner.notification.toString);
   }
 }

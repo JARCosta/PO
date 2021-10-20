@@ -8,6 +8,7 @@ public class Partner {
     private String _id;
     private String _status;
     private double _points;
+    private ArrayList<Batch> _batches;
 
     public Partner(String name, String adress, String id){
         _name = name;
@@ -23,7 +24,8 @@ public class Partner {
 
     @Override
     public String toString() {
-        return _id + "|" + _name + "|" + _adress + "|" + _points + "|";
+        return _id + "|" + _name + "|" + _adress + "|" + _points + 
+            "|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas";
     }
 
     public double getPoints(){
@@ -37,11 +39,11 @@ public class Partner {
     public void updateStatus(){
         if(_points>2000)
             if(_points>25000)
-                _status = "Elite";
+                _status = "ELITE";
             else
-            _status = "Selection";
+            _status = "SELECTION";
         else
-        _status = "Normal";
+        _status = "NORMAL";
     }
 
 

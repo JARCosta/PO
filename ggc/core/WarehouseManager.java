@@ -3,6 +3,8 @@ package ggc.core;
 //FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -84,5 +86,10 @@ public class WarehouseManager {
   public Partner getPartner(String id){
     return _warehouse.getPartner(id);
   }
+
+  public ArrayList<Product> getProducts(){
+    return _warehouse.getProducts();
+  }
+
 
 }
