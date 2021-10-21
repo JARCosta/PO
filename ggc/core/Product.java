@@ -16,7 +16,6 @@ public abstract class Product {
         return _id + "|" + _maxPrice + "|" + "stock-atual-total";
     }
 
-
     boolean checkQuantity(int quantity, Partner p){ 
         return false;
     }
