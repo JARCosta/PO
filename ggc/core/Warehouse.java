@@ -60,8 +60,10 @@ public class Warehouse implements Serializable {
 
   public Product getProduct(String id){
     for( Product i : _products){
-      if(i.get)
+      if(i.getId() == id);
+      return i;
     }
+    return null;
   }
 
 

@@ -2,19 +2,16 @@ package ggc.core;
 
 public class SimpleProduct extends Product{
 
-    void SimpleProduct(String id){
-        
-
+    SimpleProduct(String id){
+        super(id);
     }
 
-    @Override
-    int checkQuantity(int quantity, Partner p){
-        return 0;
+    boolean checkQuantity(int quantity, Partner p){
+        return super.getQuantity(p) >= quantity;
     }
 
     @Override
     public String toString(){
         return getId() + "|" + getMaxPrice() + "|" + "stock atual total";
     }
-    
 }

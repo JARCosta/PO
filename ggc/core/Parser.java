@@ -92,7 +92,7 @@ public class Parser {
     String idPartner = components[2];
 
     // add code here to do the following
-    if (!_warehouse.getProduct(idProduct)) {
+    if (_warehouse.getProduct(idProduct) == null) {
       ArrayList<Product> products = new ArrayList<>();
       ArrayList<Integer> quantities = new ArrayList<>();
       

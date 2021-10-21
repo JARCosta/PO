@@ -1,13 +1,10 @@
 package ggc.core;
 
-import java.util.ArrayList;
-
 public class Batch {
     private double _price;
     private int _quantity;
     private Product _product;
     private Partner _partner;
-    private ArrayList<Product> _products;
 
 
     public String toString(){
@@ -17,5 +14,8 @@ public class Batch {
     public int getQuantity(){
         return _quantity;
     }
-    
+
+    public Partner getpartner(){
+        return _partner;
+    }
 }

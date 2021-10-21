@@ -1,11 +1,13 @@
 package ggc.core;
 
+import java.util.ArrayList;
+
 public abstract class Product {
     private double _maxPrice;
     private String _id;
-    private Batch _batch;
+    private ArrayList<Batch> _batches;
 
-    void Product(String id){
+    Product(String id){
         _id = id;
         _maxPrice = 0;
     }
@@ -14,8 +16,9 @@ public abstract class Product {
         return _id + "|" + _maxPrice + "|" + "stock-atual-total";
     }
 
-    int checkQuantity(int quantity, Partner p){ 
-        return _batch.getQuantity();
+
+    boolean checkQuantity(int quantity, Partner p){ 
+        return false;
     }
 
     public String getId(){
@@ -25,8 +28,22 @@ public abstract class Product {
     public double getMaxPrice(){
         return _maxPrice;
     }
-    
-    
 
+    public int getQuantity(){
+        int quantity = 0;
+        for( Batch i : _batches){
+            quantity += i.getQuantity();
+        }
+        return quantity;
+    }
 
+    public int getQuantity(Partner p){
+        int quantity = 0;
+        for( Batch i: _batches){
+            if(i.getpartner() == p){
+                quantity += i.getQuantity();
+            }
+        }
+        return quantity;
+    }
 }
