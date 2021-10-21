@@ -18,4 +18,9 @@ public class Batch {
     public Partner getpartner(){
         return _partner;
     }
+
+
+//dsadasdsadsad
+
+
 }
