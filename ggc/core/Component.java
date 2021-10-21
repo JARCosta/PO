@@ -1,9 +1,15 @@
 package ggc.core;
 
-import java.util.ArrayList;
-
 public class Component {
     private int _quantity;
-    private ArrayList<Product> _products;
+    private Product _product;
     
+
+    public Product getProduct(){
+        return _product;
+    }
+
+    public int getQuantity(){
+        return _quantity;
+    }
 }
