@@ -55,9 +55,9 @@ public class Parser {
     String id = components[1];
     String name = components[2];
     String address = components[3];
-    
-    // add code here to
-    // register partner with id, name, address in _warehouse;
+
+    _warehouse.registerPartner(id, address, id);
+
   }
 
   //BATCH_S|idProduto|idParceiro|prec ̧o|stock-actual
@@ -70,16 +70,14 @@ public class Parser {
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
     
-    // add code here to do the following
-    //if (!_warehouse does not have product with idProduct)
-    //  register simple product with idProduct in _warehouse;
+    if(_warehouse.getProduct(idProduct) == null){
+      _warehouse.registerSimpleProduct(idProduct);
+    }
     
-    // add code here 
-    //Product product = get Product in _warehouse with productId;
-    //Partner partner = get Partner in _warehouse with partnerId;
+    Product product = _warehouse.getProduct(idProduct);
+    Partner partner = _warehouse.getPartner(idPartner);
 
-    // add code here to
-    // add batch with price, stock and partner to product
+    _warehouse.registerBatch(price,stock, partner, product);
   }
  
     
@@ -91,29 +89,27 @@ public class Parser {
     String idProduct = components[1];
     String idPartner = components[2];
 
-    // add code here to do the following
+
+
     if (_warehouse.getProduct(idProduct) == null) {
       ArrayList<Product> products = new ArrayList<>();
       ArrayList<Integer> quantities = new ArrayList<>();
       
       for (String component : components[6].split("#")) {
         String[] recipeComponent = component.split(":");
-        // add code here to 
-        // products.add(get Product with id recipeComponent[0]);
+        products.add(_warehouse.getProduct(recipeComponent[0]));
         quantities.add(Integer.parseInt(recipeComponent[1]));
       }
-      
-      // add code here to 
-      // register in _warehouse aggregate product with idProduct, aggravation=Double.parseDouble(components[5])
-      // and recipe given by products and quantities);
+            
+      double aggravation=Double.parseDouble(components[5]);
+      _warehouse.registerAggregateProduct(idProduct, aggravation, products, quantities);
     }
     
-    // add code here to 
-    //Product product = get Product in _warehouse with productId;
-    //Partner partner = get Partner in _warehouse with partnerId;
+    Product product = _warehouse.getProduct(idProduct);
+    Partner partner = _warehouse.getPartner(idPartner);
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
-    // add code here to
-    // add batch with price, stock and partner to product
+
+    _warehouse.registerBatch(price, stock, partner, product);
   }
 }

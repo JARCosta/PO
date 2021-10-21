@@ -6,6 +6,17 @@ public class Recipe {
     private double _alpha;
     ArrayList<Component> _components;
 
+
+    public Recipe(double alpha,ArrayList<Product> products, ArrayList<Integer> quantities){
+        _alpha = alpha;
+        for(int i = 0;i < products.size(); i++){
+            Product prod = products.get(i);
+            int quan = quantities.get(i);
+            Component comp = new Component(prod, quan);
+            _components.add( comp );
+        }
+    }
+
     public ArrayList<Component> getComponents(){
         return _components;
     }

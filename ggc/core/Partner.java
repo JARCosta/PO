@@ -46,6 +46,11 @@ public class Partner {
         _status = "NORMAL";
     }
 
+    public void registerBatch(double price, int stock, Partner partner, Product product){
+        Batch batch = new Batch(price, stock, partner, product);
+        _batches.add(batch);
+    }
+
     public ArrayList<Batch> getBatches(){
         return _batches;
     }

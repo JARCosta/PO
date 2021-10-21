@@ -75,8 +75,8 @@ public class WarehouseManager {
     _warehouse.advanceDate(days);
   }
 
-  public void addPartner(String name, String adress, String id){
-    _warehouse.addPartner(name, adress, id);
+  public void registerPartner(String name, String adress, String id){
+    _warehouse.registerPartner(name, adress, id);
   }
 
   public Map<String, Partner> getPartners(){

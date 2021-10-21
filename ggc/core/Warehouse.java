@@ -3,6 +3,7 @@ package ggc.core;
 // FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class Warehouse implements Serializable {
     _date.advanceDate(days);
   }
 
-  public void addPartner(String name, String Adress, String id){
+  public void registerPartner(String name, String Adress, String id){
     Partner partner = new Partner(name, Adress, id);
     _partnersMap.put(id,partner);
   }
@@ -53,10 +54,14 @@ public class Warehouse implements Serializable {
     return _partnersMap.get(id);
   }
 
+  public void registerSimpleProduct(String id){
+    SimpleProduct prod = new SimpleProduct(id);
+    _products.add(prod);
+  }
+
   public ArrayList<Product> getProducts(){
     return _products;
   }
-
 
   public Product getProduct(String id){
     for( Product i : _products){
@@ -66,6 +71,13 @@ public class Warehouse implements Serializable {
     return null;
   }
 
+  public void registerAggregateProduct(String idProduct, double aggravation,ArrayList<Product> products,ArrayList<Integer> quantities){
+    AggregateProduct product = new AggregateProduct(idProduct, aggravation, products, quantities);
+  }
+
+  public void registerBatch( double price, int stock,Partner partner,Product product){
+    partner.registerBatch(price, stock, partner, product);
+  }
 
 
 

@@ -7,6 +7,13 @@ public class Batch {
     private Partner _partner;
 
 
+    public Batch(double price, int stock,Partner partner, Product product){
+        _price = price;
+        _quantity = stock;
+        _product = product;
+        _partner = partner;
+    }
+
     public String toString(){
         return _product.getId() + "|" + _partner.getId() + "|" + _price + "|" + _quantity;
     }

@@ -20,7 +20,7 @@ class DoRegisterPartner extends Command<WarehouseManager> {
 
   @Override
   public void execute() throws CommandException {
-    _receiver.addPartner(stringField("name"),stringField("adress"), stringField("key"));
+    _receiver.registerPartner(stringField("name"),stringField("adress"), stringField("key"));
 
   }
 
