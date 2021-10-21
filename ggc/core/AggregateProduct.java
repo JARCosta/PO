@@ -1,6 +1,7 @@
 package ggc.core;
 
 public class AggregateProduct extends Product {
+    private Recipe _recipe;
     
     AggregateProduct(String id){
         super(id);
@@ -9,10 +10,14 @@ public class AggregateProduct extends Product {
     boolean checkQuantity(int quantity, Partner p){
         return super.getQuantity(p) >= quantity;
     }
+    
+    public int getQuantity(){
+        return super.getQuantity();
+    }
 
     @Override
     public String toString(){
-        return getId() + "|" + getMaxPrice() + "|" + "stock atual total" + "|" + "componente-1:quantidade-1#...#componente-n:quantidade-n";
+        return getId() + "|" + getMaxPrice() + "|" + getQuantity() + "|" + _recipe.toString();
     }
 
 }

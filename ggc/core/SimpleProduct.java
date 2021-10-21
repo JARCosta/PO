@@ -10,8 +10,12 @@ public class SimpleProduct extends Product{
         return super.getQuantity(p) >= quantity;
     }
 
+    public int getQuantity(){
+        return super.getQuantity();
+    }
+
     @Override
     public String toString(){
-        return getId() + "|" + getMaxPrice() + "|" + "stock atual total";
+        return getId() + "|" + getMaxPrice() + "|" + getQuantity();
     }
 }
