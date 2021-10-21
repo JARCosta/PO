@@ -18,6 +18,8 @@ class DoSaveFile extends Command<WarehouseManager> {
   @Override
   public final void execute() throws CommandException {
     //FIXME implement command and create a local Form
+    //addIntegerField("days", Message.requestDaysToAdvance()); 
+    //_receiver.saveAs(filename);
   }
 
 }
