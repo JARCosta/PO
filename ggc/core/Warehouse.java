@@ -11,8 +11,8 @@ import ggc.core.exception.BadEntryException;
 public class Warehouse implements Serializable {
   private static final long serialVersionUID = 202109192006L;
   private Date _date;
-  private Map<String, Partner> _partners;
-  private ArrayList<Product> _products;
+  private HashMap<String, Partner> _partners;
+  private HashMap<String, Product> _products;
   
   public Warehouse(){
     _date = new Date(0);
@@ -38,11 +38,11 @@ public class Warehouse implements Serializable {
 
   public void registerSimpleProduct(String id){
     SimpleProduct prod = new SimpleProduct(id);
-    _products.add(prod);
+    _products.put(id, prod);
   }
 
-  public void registerAggregateProduct(String idProduct, double aggravation,ArrayList<Product> products,ArrayList<Integer> quantities){
-    AggregateProduct product = new AggregateProduct(idProduct, aggravation, products, quantities);
+  public void registerAggregateProduct(String idProduct, double aggravation,ArrayList<Component> components){
+    AggregateProduct product = new AggregateProduct(idProduct, aggravation, components);
   }
 
   public void registerBatch( double price, int stock,Partner partner,Product product){
@@ -55,7 +55,7 @@ public class Warehouse implements Serializable {
     return _partners;
   }
 
-  public ArrayList<Product> getProducts(){
+  public HashMap<String, Product> getProductMap(){
     return _products;
   }
 
@@ -64,11 +64,7 @@ public class Warehouse implements Serializable {
   }
 
   public Product getProduct(String id){
-    for( Product i : _products){
-      if(i.getId() == id);
-      return i;
-    }
-    return null;
+    return _products.get(id);
   }
 
 
@@ -81,6 +77,6 @@ public class Warehouse implements Serializable {
    */
   void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
     //FIXME implement method
-    
+
   }
 }

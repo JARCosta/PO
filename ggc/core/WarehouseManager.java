@@ -5,6 +5,7 @@ package ggc.core;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -87,8 +88,12 @@ public class WarehouseManager {
     return _warehouse.getPartner(id);
   }
 
-  public ArrayList<Product> getProducts(){
-    return _warehouse.getProducts();
+  public HashMap<String, Product> getProductMap(){
+    return _warehouse.getProductMap();
+  }
+
+  public Product getProduct(String id){
+    return _warehouse.getProduct(id);
   }
 
 

@@ -17,8 +17,8 @@ class DoShowAllProducts extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    
-    for(Product p : _receiver.getProducts()){
+    for(String id : _receiver.getProductMap().keySet()){
+      Product p = _receiver.getProduct(id);
       _display.popup(p.toString());
     }
   }

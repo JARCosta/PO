@@ -6,11 +6,14 @@ public class Recipe {
     private double _alpha;
     ArrayList<Component> _components;
 
+
+
     public Recipe(double alpha, ArrayList<Component> components){
         _alpha = alpha;
         _components = components;
     }
 
+/* may be useless
     public Recipe(double alpha,ArrayList<Product> products, ArrayList<Integer> quantities){
         _alpha = alpha;
         _components = new ArrayList<Component>();
@@ -21,6 +24,7 @@ public class Recipe {
             _components.add( comp );
         }
     }
+*/
 
     public ArrayList<Component> getComponents(){
         return _components;

@@ -100,9 +100,17 @@ public class Parser {
         products.add(_warehouse.getProduct(recipeComponent[0]));
         quantities.add(Integer.parseInt(recipeComponent[1]));
       }
-            
+
+      ArrayList<Component> comps = new ArrayList<Component>();
+      for(int i = 0;i < products.size(); i++){
+        Product prod = products.get(i);
+        int quan = quantities.get(i);
+        Component comp = new Component(prod, quan);
+        comps.add( comp );
+      }
+       
       double aggravation=Double.parseDouble(components[5]);
-      _warehouse.registerAggregateProduct(idProduct, aggravation, products, quantities);
+      _warehouse.registerAggregateProduct(idProduct, aggravation, comps);
     }
     
     Product product = _warehouse.getProduct(idProduct);
