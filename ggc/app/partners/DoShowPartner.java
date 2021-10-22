@@ -29,6 +29,5 @@ class DoShowPartner extends Command<WarehouseManager> {
     } catch (BadEntryException upke){
       throw new UnknownPartnerKeyException(stringField("key"));
     }  
-    //_display.popup(partner.notification.toString);
   }
 }

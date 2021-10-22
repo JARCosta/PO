@@ -36,7 +36,13 @@ public class Warehouse implements Serializable {
 
 
   public void registerPartner(String name, String adress, String id) throws BadEntryException{
-    if(!_partners.containsKey(id)){
+    Collection<String> ids = _partners.keySet();
+    for(String i : ids){
+      i = i.toLowerCase();
+      System.out.println(i.toLowerCase());
+
+    }
+    if(!ids.contains(id)){
       Partner partner = new Partner(name, adress, id);
       _partners.put(id,partner);
       }
