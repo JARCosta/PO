@@ -68,6 +68,13 @@ public class Warehouse implements Serializable {
     return _partners;
   }
 
+  public ArrayList<Product> getProductSortedList(){
+    Collection<Product> products = _products.values();
+    ArrayList<Product> productList = new ArrayList<>(products);
+    productList.sort(new ProductComparator());
+    return productList;
+  }
+
   public ArrayList<Partner> getPartnerSortedList(){
     Collection<Partner> partners = _partners.values();
     ArrayList<Partner> partnerList = new ArrayList<>(partners);

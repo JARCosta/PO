@@ -14,7 +14,7 @@ public class Partner {
         _name = name;
         _adress = adress;
         _id = id;
-        _status = "Normal";
+        _status = "NORMAL";
         _points = 0;
     }
 
@@ -24,7 +24,7 @@ public class Partner {
 
     @Override
     public String toString() {
-        return _id + "|" + _name + "|" + _adress + "|" + _points + "|" + _status +
+        return _id + "|" + _name + "|" + _adress + "|" + _points + "|" + _status + 
             "|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas";
     }
 

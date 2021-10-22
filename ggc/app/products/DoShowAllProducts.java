@@ -17,10 +17,10 @@ class DoShowAllProducts extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    for(String id : _receiver.getProductMap().keySet()){
-      Product p = _receiver.getProduct(id);
-      _display.popup(p.toString());
+    for(Product product: _receiver.getProductSortedList()){
+      _display.addLine(product.toString());
     }
+    _display.display();
   }
 
 }

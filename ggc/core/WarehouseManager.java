@@ -47,6 +47,10 @@ public class WarehouseManager {
     return _warehouse.getPartnerSortedList();
   }
 
+  public ArrayList<Product> getProductSortedList(){
+    return _warehouse.getProductSortedList();
+  }
+
   public HashMap<String, Product> getProductMap(){
     return _warehouse.getProductMap();
   }

@@ -15,15 +15,15 @@ class DoRegisterPartner extends Command<WarehouseManager> {
   DoRegisterPartner(WarehouseManager receiver) {
     super(Label.REGISTER_PARTNER, receiver);
 
+    addStringField("key", Message.requestPartnerKey());
     addStringField("name", Message.requestPartnerName()); 
     addStringField("adress", Message.requestPartnerAddress()); 
-    addStringField("key", Message.requestPartnerKey());
   }
 
   @Override
   public void execute() throws CommandException {
     try{
-      _receiver.registerPartner(stringField("name"),stringField("adress"), stringField("key"));
+      _receiver.registerPartner(stringField("name"), stringField("adress"), stringField("key"));
     } catch(BadEntryException PartnerAlreadyexists){
       throw new DuplicatePartnerKeyException(stringField("key"));
     }

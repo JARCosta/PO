@@ -22,8 +22,16 @@ public class Batch {
         return _quantity;
     }
 
+    public double getPrice(){
+        return _price;
+    }
+
     public Partner getpartner(){
         return _partner;
+    }
+
+    public Product getProduct(){
+        return _product;
     }
 
 
