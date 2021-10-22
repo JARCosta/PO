@@ -10,8 +10,6 @@ import java.io.Reader;
 import ggc.core.exception.BadEntryException;
 
 public class Parser {
-
-  // It could be WarehouseManager too. Or something else.
   private Warehouse _warehouse;
 
   public Parser(Warehouse w) {
@@ -56,7 +54,7 @@ public class Parser {
     String name = components[2];
     String address = components[3];
 
-    _warehouse.registerPartner(id, address, id);
+    _warehouse.registerPartner(name, address, id);
 
   }
 

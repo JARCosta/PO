@@ -1,7 +1,7 @@
 package ggc.core;
 
 public class Date {
-    private static Date _i = new Date();
+    private static Date _now = new Date();
     private int _days;
 
     public Date(){
@@ -9,7 +9,6 @@ public class Date {
     }
 
     public void advanceDate(int days){
-        if(0 < days)
         _days += days;
     }
 
@@ -20,9 +19,8 @@ public class Date {
     public int difference(Date other){
         return _days - other.currentDate();
     }
-/*
-    public static Date now(){
-    }
-*/
 
+    public static Date now(){
+        return _now;
+    }
 }

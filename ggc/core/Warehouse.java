@@ -25,14 +25,17 @@ public class Warehouse implements Serializable {
     return _date.currentDate();
   }
 
-  public void advanceDate(int days){
+  public void advanceDate(int days) throws BadEntryException{
+    if(days <= 0){
+      throw new BadEntryException("invalid date");
+    }
     _date.advanceDate(days);
   }
 
 
 
-  public void registerPartner(String name, String Adress, String id){
-    Partner partner = new Partner(name, Adress, id);
+  public void registerPartner(String name, String adress, String id){
+    Partner partner = new Partner(name, adress, id);
     _partners.put(id,partner);
   }
 
@@ -68,8 +71,6 @@ public class Warehouse implements Serializable {
   }
 
 
-
-
   /**
    * @param txtfile filename to be loaded.
    * @throws IOException
@@ -77,6 +78,6 @@ public class Warehouse implements Serializable {
    */
   void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
     //FIXME implement method
-
+    
   }
 }

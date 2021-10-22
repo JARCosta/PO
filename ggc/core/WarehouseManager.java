@@ -4,15 +4,10 @@ package ggc.core;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
@@ -27,12 +22,11 @@ public class WarehouseManager {
   public WarehouseManager(){
   }
 
-
   public int currentDate(){
     return _warehouse.currentDate();
   }
 
-  public void advanceDate(int days){
+  public void advanceDate(int days) throws BadEntryException{
     _warehouse.advanceDate(days);
   }
 
