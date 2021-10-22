@@ -35,9 +35,14 @@ public class Warehouse implements Serializable {
 
 
 
-  public void registerPartner(String name, String adress, String id){
-    Partner partner = new Partner(name, adress, id);
-    _partners.put(id,partner);
+  public void registerPartner(String name, String adress, String id) throws BadEntryException{
+    if(!_partners.containsKey(id)){
+      Partner partner = new Partner(name, adress, id);
+      _partners.put(id,partner);
+      }
+      else{
+        throw new BadEntryException("Partner already exists");
+      }
   }
 
   public void registerSimpleProduct(String id){

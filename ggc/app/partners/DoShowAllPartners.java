@@ -1,9 +1,5 @@
 package ggc.app.partners;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
 import ggc.core.Partner;
 import ggc.core.WarehouseManager;
 //FIXME import classes: imperted Partner

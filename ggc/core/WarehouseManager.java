@@ -31,7 +31,7 @@ public class WarehouseManager {
     _warehouse.advanceDate(days);
   }
 
-  public void registerPartner(String name, String adress, String id){
+  public void registerPartner(String name, String adress, String id) throws BadEntryException{
     _warehouse.registerPartner(name, adress, id);
   }
 
