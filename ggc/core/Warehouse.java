@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import ggc.core.exception.BadEntryException;
 
@@ -36,19 +37,15 @@ public class Warehouse implements Serializable {
 
 
   public void registerPartner(String name, String adress, String id) throws BadEntryException{
-    Collection<String> ids = _partners.keySet();
-    for(String i : ids){
-      i = i.toLowerCase();
-      System.out.println(i.toLowerCase());
-
-    }
-    if(!ids.contains(id)){
-      Partner partner = new Partner(name, adress, id);
-      _partners.put(id,partner);
-      }
-      else{
+    
+    for(String i : _partners.keySet()){
+      if(i.toLowerCase().equals(id.toLowerCase())){
         throw new BadEntryException("Partner already exists");
       }
+    }
+    
+    Partner partner = new Partner(name, adress, id);
+    _partners.put(id,partner);
   }
 
   public void registerSimpleProduct(String id){
@@ -58,6 +55,7 @@ public class Warehouse implements Serializable {
 
   public void registerAggregateProduct(String idProduct, double aggravation,ArrayList<Component> components){
     AggregateProduct product = new AggregateProduct(idProduct, aggravation, components);
+    _products.put(idProduct, product);
   }
 
   public void registerBatch( double price, int stock,Partner partner,Product product){
