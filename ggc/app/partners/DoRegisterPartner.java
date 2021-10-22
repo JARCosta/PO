@@ -4,6 +4,7 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
 //FIXME import classes
+import ggc.core.exception.BadEntryException;
 
 /**
  * Register new partner.
@@ -20,7 +21,11 @@ class DoRegisterPartner extends Command<WarehouseManager> {
 
   @Override
   public void execute() throws CommandException {
-    _receiver.registerPartner(stringField("name"),stringField("adress"), stringField("key"));
+ /*   try{
+      _receiver.registerPartner(stringField("name"),stringField("adress"), stringField("key"));
+    } catch (BadEntryException bee){
+      
+    }*/
 
   }
 
