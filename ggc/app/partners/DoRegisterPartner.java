@@ -21,11 +21,9 @@ class DoRegisterPartner extends Command<WarehouseManager> {
 
   @Override
   public void execute() throws CommandException {
- /*   try{
+ //   try{
       _receiver.registerPartner(stringField("name"),stringField("adress"), stringField("key"));
-    } catch (BadEntryException bee){
-      
-    }*/
+ //   }
 
   }
 

@@ -3,6 +3,7 @@ package ggc.core;
 // FIXME import classes (cannot import from pt.tecnico or ggc.app)
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
@@ -58,12 +59,23 @@ public class Warehouse implements Serializable {
     return _partners;
   }
 
+  public ArrayList<Partner> getPartnerSortedList(){
+    Collection<Partner> partners = _partners.values();
+    ArrayList<Partner> partnerList = new ArrayList<>(partners);
+    partnerList.sort(new PartnerComparator());
+    return partnerList;
+  }
+
   public HashMap<String, Product> getProductMap(){
     return _products;
   }
 
-  public Partner getPartner(String id){
-    return _partners.get(id);
+  public Partner getPartner(String id) throws BadEntryException{
+    if(_partners.containsKey(id)){
+      return _partners.get(id);
+    } else{
+      throw new BadEntryException("unknowPartner");
+    }
   }
 
   public Product getProduct(String id){
@@ -78,6 +90,7 @@ public class Warehouse implements Serializable {
    */
   void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
     //FIXME implement method
-    
+    Parser parser = new Parser(this);
+    //parser.
   }
 }

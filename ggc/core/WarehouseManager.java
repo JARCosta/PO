@@ -4,6 +4,7 @@ package ggc.core;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
@@ -38,8 +39,12 @@ public class WarehouseManager {
     return _warehouse.getPartners();
   }
 
-  public Partner getPartner(String id){
+  public Partner getPartner(String id) throws BadEntryException{
     return _warehouse.getPartner(id);
+  }
+
+  public ArrayList<Partner> getPartnerSortedList(){
+    return _warehouse.getPartnerSortedList();
   }
 
   public HashMap<String, Product> getProductMap(){
