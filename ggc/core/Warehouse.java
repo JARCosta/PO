@@ -15,7 +15,7 @@ public class Warehouse implements Serializable {
   private HashMap<String, Product> _products;
   
   public Warehouse(){
-    _date = new Date(0);
+    _date = new Date();
     _partners = new HashMap<String, Partner>();
   }
   

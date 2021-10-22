@@ -1,10 +1,11 @@
 package ggc.core;
 
 public class Date {
+    private static Date _i = new Date();
     private int _days;
 
-    public Date(int date){
-        _days = date;
+    public Date(){
+        _days = 0;
     }
 
     public void advanceDate(int days){
