@@ -1,7 +1,9 @@
 package ggc.app.partners;
 
+import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.Partner;
 import ggc.core.WarehouseManager;
+import ggc.core.exception.BadEntryException;
 //FIXME import classes
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
@@ -21,9 +23,11 @@ class DoShowPartner extends Command<WarehouseManager> {
   @Override
   public void execute() throws CommandException {
     
-    Partner partner = _receiver.getPartner(stringField("key"));
-
-    _display.popup(partner.toString());
-    //_display.popup(partner.notification.toString);
+    try{
+      Partner partner = _receiver.getPartner(stringField("key"));
+      _display.popup(partner.toString());
+    } catch (BadEntryException upke){
+      throw new UnknownPartnerKeyException(stringField("key"));
+    }  
   }
 }

@@ -1,1 +1,5 @@
 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
+
+
+javac -cp po-uilib.jar:. `find ggc -name *.java`
+java -cp po-uilib.jar:. ggc.app.App

@@ -1,9 +1,5 @@
 package ggc.app.partners;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
 import ggc.core.Partner;
 import ggc.core.WarehouseManager;
 //FIXME import classes: imperted Partner
@@ -21,15 +17,10 @@ class DoShowAllPartners extends Command<WarehouseManager> {
 
   @Override
   public void execute() throws CommandException {
-    Map<String, Partner> partnerMap = _receiver.getPartners();
-    Collection<Partner> partners = partnerMap.values();
-    ArrayList<Partner> partnerList = new ArrayList<>(partners);
-
-
-    for(Partner partner : partnerList){
+    
+    for(Partner partner : _receiver.getPartnerSortedList()){
       _display.addLine(partner.toString());
     }
     _display.display();
   }
-
 }
