@@ -1,0 +1,49 @@
+*** tests/A-01-02-M-ok.out	2021-10-10 16:52:11.000000000 +0100
+--- tests/A-01-02-M-ok.outhyp	2021-10-24 00:12:29.514022674 +0100
+***************
+*** 17,25 ****
+  5 - Mostrar compras com parceiro
+  6 - Mostrar vendas (e desagregações) com parceiro
+  0 - Sair
+! Escolha uma opção: E4|Filomena Figueiredo|Lisboa, Portugal|NORMAL|0|0|0|0
+! P1|Lages|Lisboa, Portugal|NORMAL|0|0|0|0
+! R2|Jorge Figueiredo|Lisboa, Portugal|NORMAL|0|0|0|0
+  Gestão de Parceiros
+  1 - Mostrar parceiro
+  2 - Mostrar parceiros
+--- 17,25 ----
+  5 - Mostrar compras com parceiro
+  6 - Mostrar vendas (e desagregações) com parceiro
+  0 - Sair
+! Escolha uma opção: E4|Filomena Figueiredo|Lisboa, Portugal|0.0|NORMAL|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas
+! P1|Lages|Lisboa, Portugal|0.0|NORMAL|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas
+! R2|Jorge Figueiredo|Lisboa, Portugal|0.0|NORMAL|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas
+  Gestão de Parceiros
+  1 - Mostrar parceiro
+  2 - Mostrar parceiros
+***************
+*** 39,45 ****
+  8 - Menu de Consultas
+  9 - Ver Saldo Global
+  0 - Sair
+! Escolha uma opção: Ficheiro sem nome. Guardar ficheiro como: Menu Principal
+  1 - Abrir
+  2 - Guardar
+  3 - Mostrar Data
+--- 39,45 ----
+  8 - Menu de Consultas
+  9 - Ver Saldo Global
+  0 - Sair
+! Escolha uma opção: Menu Principal
+  1 - Abrir
+  2 - Guardar
+  3 - Mostrar Data
+***************
+*** 50,53 ****
+--- 50,54 ----
+  8 - Menu de Consultas
+  9 - Ver Saldo Global
+  0 - Sair
++ Escolha uma opção: Número inválido!
+  Escolha uma opção: 
+\ No newline at end of file
