@@ -26,38 +26,54 @@ public class WarehouseManager {
   public int currentDate(){
     return _warehouse.currentDate();
   }
-
   public void advanceDate(int days) throws BadEntryException{
     _warehouse.advanceDate(days);
   }
+
 
   public void registerPartner(String name, String adress, String id) throws BadEntryException{
     _warehouse.registerPartner(name, adress, id);
   }
 
-  public Map<String, Partner> getPartners(){
-    return _warehouse.getPartners();
-  }
-
-  public Partner getPartner(String id) throws BadEntryException{
-    return _warehouse.getPartner(id);
-  }
-
-  public ArrayList<Partner> getPartnerSortedList(){
-    return _warehouse.getPartnerSortedList();
-  }
-
-  public ArrayList<Product> getProductSortedList(){
-    return _warehouse.getProductSortedList();
-  }
-
-  public HashMap<String, Product> getProductMap(){
-    return _warehouse.getProductMap();
-  }
 
   public Product getProduct(String id){
     return _warehouse.getProduct(id);
   }
+  public HashMap<String, Product> getProductMap(){
+    return _warehouse.getProductMap();
+  }
+  public ArrayList<Product> getProductList(){
+    return _warehouse.getProductList();
+  }
+  public ArrayList<Product> getProductSortedList(){
+    return _warehouse.getProductSortedList();
+  }
+
+
+  public ArrayList<Batch> getBatchList(){
+    return _warehouse.getBatchList();
+  }
+  public ArrayList<Batch> getBatchSortedList(){
+    return _warehouse.getBatchSortedList();
+  }
+  public ArrayList<Batch> getBatchSortedList(Product product){
+    return _warehouse.getBatchSortedList(product);
+  }
+  public ArrayList<Batch> getBatchSortedList(Partner partner){
+    return _warehouse.getBatchSortedList(partner);
+  }
+
+
+  public Map<String, Partner> getPartnerMap(){
+    return _warehouse.getPartnerMap();
+  }
+  public Partner getPartner(String id) throws BadEntryException{
+    return _warehouse.getPartner(id);
+  }
+  public ArrayList<Partner> getPartnerSortedList(){
+    return _warehouse.getPartnerSortedList();
+  }
+
 
 
   /**

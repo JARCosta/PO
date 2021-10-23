@@ -45,4 +45,13 @@ public abstract class Product {
         }
         return quantity;
     }
+
+    public ArrayList<Batch> getBatches(){
+        return _batches;
+    }
+/*    public ArrayList<Batch> getBatchSortedList(){
+        ArrayList<Batch> batchSorted = _batches;
+        batchSorted.sort(new BatchComparator());
+        return batchSorted;
+    }*/
 }

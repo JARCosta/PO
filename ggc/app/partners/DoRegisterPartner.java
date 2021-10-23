@@ -4,7 +4,6 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.DuplicatePartnerKeyException;
 import ggc.core.WarehouseManager;
-//FIXME import classes
 import ggc.core.exception.BadEntryException;
 
 /**

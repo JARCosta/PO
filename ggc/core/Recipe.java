@@ -30,6 +30,10 @@ public class Recipe {
         return _components;
     }
 
+    public double getAggravaton(){
+        return _alpha;
+    }
+
     public String toString(){
         String ret = "";
         for( Component i : _components){

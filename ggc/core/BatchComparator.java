@@ -9,8 +9,13 @@ class BatchComparator implements Comparator<Batch> {
 
         if(diff == 0){
             diff = b1.getpartner().getId().compareTo(b2.getpartner().getId());
+            
             if(diff == 0){
                 diff = (int)(b1.getPrice() - b2.getPrice());
+
+                if(diff == 0){
+                    diff = b1.getQuantity() - b2.getQuantity();
+                }
             }
         }
         return diff;
