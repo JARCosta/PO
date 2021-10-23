@@ -13,7 +13,7 @@ public abstract class Product {
     }
 
     public String toString(){
-        return _id + "|" + _maxPrice + "|" + "stock-atual-total";
+        return _id + "|" + (int)_maxPrice + "|" + "stock-atual-total";
     }
 
     boolean checkQuantity(int quantity, Partner p){ 
