@@ -1,42 +1,20 @@
 *** tests/A-04-02-M-ok.out	2021-10-24 00:39:34.307660545 +0100
---- tests/A-04-02-M-ok.outhyp	2021-10-24 01:24:14.796169205 +0100
+--- tests/A-04-02-M-ok.outhyp	2021-10-24 13:33:37.765184761 +0100
 ***************
-*** 1,36 ****
-- Menu Principal
-- 1 - Abrir
-- 2 - Guardar
-- 3 - Mostrar Data
-- 4 - Avançar Data
-- 5 - Gestão de Produtos
-- 6 - Gestão de Parceiros
-- 7 - Gestão de Transacções
-- 8 - Menu de Consultas
-- 9 - Ver Saldo Global
-- 0 - Sair
-- Escolha uma opção: Gestão de Produtos
-- 1 - Visualizar todos os produtos
-- 2 - Visualizar todos os lotes
-- 3 - Visualizar lotes fornecidos por parceiro
-- 4 - Visualizar lotes de um dado produto
-- 0 - Sair
-- Escolha uma opção: HIDROGENIO|S1|200|5000
-- Gestão de Produtos
-- 1 - Visualizar todos os produtos
-- 2 - Visualizar todos os lotes
-- 3 - Visualizar lotes fornecidos por parceiro
-- 4 - Visualizar lotes de um dado produto
-- 0 - Sair
-- Escolha uma opção: Menu Principal
-- 1 - Abrir
-- 2 - Guardar
-- 3 - Mostrar Data
-- 4 - Avançar Data
-- 5 - Gestão de Produtos
-- 6 - Gestão de Parceiros
-- 7 - Gestão de Transacções
-- 8 - Menu de Consultas
-- 9 - Ver Saldo Global
-- 0 - Sair
-- Escolha uma opção: 
-\ No newline at end of file
---- 0 ----
+*** 15,22 ****
+  3 - Visualizar lotes fornecidos por parceiro
+  4 - Visualizar lotes de um dado produto
+  0 - Sair
+! Escolha uma opção: HIDROGENIO|S1|200|5000
+! Gestão de Produtos
+  1 - Visualizar todos os produtos
+  2 - Visualizar todos os lotes
+  3 - Visualizar lotes fornecidos por parceiro
+--- 15,21 ----
+  3 - Visualizar lotes fornecidos por parceiro
+  4 - Visualizar lotes de um dado produto
+  0 - Sair
+! Escolha uma opção: Gestão de Produtos
+  1 - Visualizar todos os produtos
+  2 - Visualizar todos os lotes
+  3 - Visualizar lotes fornecidos por parceiro

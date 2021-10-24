@@ -31,8 +31,8 @@ public class WarehouseManager {
   }
 
 
-  public void registerPartner(String name, String adress, String id) throws BadEntryException{
-    _warehouse.registerPartner(name, adress, id);
+  public void registerPartner(String id, String name, String adress) throws BadEntryException{
+    _warehouse.registerPartner(id, name, adress);
   }
 
 

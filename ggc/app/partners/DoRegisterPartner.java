@@ -22,7 +22,7 @@ class DoRegisterPartner extends Command<WarehouseManager> {
   @Override
   public void execute() throws CommandException {
     try{
-      _receiver.registerPartner(stringField("name"), stringField("adress"), stringField("key"));
+      _receiver.registerPartner(stringField("key"), stringField("name"), stringField("adress"));
     } catch(BadEntryException PartnerAlreadyexists){
       throw new DuplicatePartnerKeyException(stringField("key"));
     }

@@ -54,7 +54,7 @@ public class Parser {
     String name = components[2];
     String address = components[3];
 
-    _warehouse.registerPartner(name, address, id);
+    _warehouse.registerPartner(id, name, address);
 
   }
 
@@ -68,13 +68,13 @@ public class Parser {
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
     
-    if(_warehouse.getProduct(idProduct) == null){
+    if(!_warehouse.getProductMap().containsKey(idProduct)){
       _warehouse.registerSimpleProduct(idProduct);
     }
     
     Product product = _warehouse.getProduct(idProduct);
     Partner partner = _warehouse.getPartner(idPartner);
-
+    product.addBatch(new Batch(price, stock, partner, product));
     _warehouse.registerBatch(price,stock, partner, product);
   }
  
@@ -86,8 +86,6 @@ public class Parser {
     
     String idProduct = components[1];
     String idPartner = components[2];
-
-
 
     if (_warehouse.getProduct(idProduct) == null) {
       ArrayList<Product> products = new ArrayList<>();
@@ -116,6 +114,7 @@ public class Parser {
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
 
+    product.addBatch(new Batch(price, stock, partner, product));
     _warehouse.registerBatch(price, stock, partner, product);
   }
 }

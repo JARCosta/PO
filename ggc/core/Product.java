@@ -10,10 +10,11 @@ public abstract class Product {
     Product(String id){
         _id = id;
         _maxPrice = 0;
+        _batches = new ArrayList<Batch>();
     }
 
     public String toString(){
-        return _id + "|" + (int)_maxPrice + "|" + "stock-atual-total";
+        return _id + "|" + (int)_maxPrice + "|" + getQuantity();
     }
 
     boolean checkQuantity(int quantity, Partner p){ 
@@ -49,9 +50,12 @@ public abstract class Product {
     public ArrayList<Batch> getBatches(){
         return _batches;
     }
-/*    public ArrayList<Batch> getBatchSortedList(){
+    public ArrayList<Batch> getBatchSortedList(){
         ArrayList<Batch> batchSorted = _batches;
         batchSorted.sort(new BatchComparator());
         return batchSorted;
-    }*/
+    }
+    public void addBatch(Batch batch){
+        _batches.add(batch);
+    }
 }

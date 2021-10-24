@@ -18,6 +18,7 @@ public class Warehouse implements Serializable {
   public Warehouse(){
     _date = new Date();
     _partners = new HashMap<String, Partner>();
+    _products = new HashMap<String, Product>();
   }
   
 
@@ -52,6 +53,9 @@ public class Warehouse implements Serializable {
     return new ArrayList<Product>(_products.values());
   }
   public ArrayList<Product> getProductSortedList(){
+    if(_products.values() == null){
+      return null;
+    }
     ArrayList<Product> productList = new ArrayList<>(_products.values());
     productList.sort(new ProductComparator());
     return productList;
@@ -83,12 +87,12 @@ public class Warehouse implements Serializable {
     return sortBatches(partner.getBatches());
   }
 
-  public void registerPartner(String name, String adress, String id) throws BadEntryException{
+  public void registerPartner(String id, String name, String adress) throws BadEntryException{
     if(_partners.containsKey(id.toLowerCase()));
     for(String i : _partners.keySet())
       if(i.toLowerCase().equals(id.toLowerCase())) 
         throw new BadEntryException("Partner already exists");
-    Partner partner = new Partner(name, adress, id);
+    Partner partner = new Partner(id, name, adress);
     _partners.put(id.toLowerCase(),partner);
   }
   public Partner getPartner(String id) throws BadEntryException{
@@ -117,7 +121,6 @@ public class Warehouse implements Serializable {
    * @throws BadEntryException
    */
   void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
-    //FIXME implement method
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
     }

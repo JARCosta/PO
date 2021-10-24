@@ -9,8 +9,11 @@ public class Partner {
     private String _status;
     private double _points;
     private ArrayList<Batch> _batches;
+    private double _valorCompras;
+    private double _valorVendas;
+    private double _valorVendasPagas;
 
-    public Partner(String name, String adress, String id){
+    public Partner(String id, String name, String adress){
         _name = name;
         _adress = adress;
         _id = id;
@@ -24,8 +27,8 @@ public class Partner {
 
     @Override
     public String toString() {
-        return _id + "|" + _name + "|" + _adress + "|" + _points + "|" + _status + 
-            "|valor-compras|valor-vendas-efectuadas|valor-vendas-pagas";
+        return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + 
+            "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
     }
 
     public double getPoints(){
