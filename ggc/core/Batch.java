@@ -33,9 +33,4 @@ public class Batch {
     public Product getProduct(){
         return _product;
     }
-
-
-//dsadasdsadsad
-
-
 }

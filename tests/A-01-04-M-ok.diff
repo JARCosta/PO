@@ -1,39 +1,5 @@
 *** tests/A-01-04-M-ok.out	2021-10-24 00:39:34.307660545 +0100
---- tests/A-01-04-M-ok.outhyp	2021-10-24 13:33:36.381199213 +0100
-***************
-*** 15,31 ****
-  3 - Visualizar lotes fornecidos por parceiro
-  4 - Visualizar lotes de um dado produto
-  0 - Sair
-! Escolha uma opção: HIDROGENIO|200|5000
-! OXIGENIO|1200|2500
-  Gestão de Produtos
-  1 - Visualizar todos os produtos
-  2 - Visualizar todos os lotes
-  3 - Visualizar lotes fornecidos por parceiro
-  4 - Visualizar lotes de um dado produto
-  0 - Sair
-! Escolha uma opção: HIDROGENIO|S1|200|5000
-! OXIGENIO|P1|1200|2500
-! Gestão de Produtos
-  1 - Visualizar todos os produtos
-  2 - Visualizar todos os lotes
-  3 - Visualizar lotes fornecidos por parceiro
---- 15,28 ----
-  3 - Visualizar lotes fornecidos por parceiro
-  4 - Visualizar lotes de um dado produto
-  0 - Sair
-! Escolha uma opção: HIDROGENIO|0|0
-  Gestão de Produtos
-  1 - Visualizar todos os produtos
-  2 - Visualizar todos os lotes
-  3 - Visualizar lotes fornecidos por parceiro
-  4 - Visualizar lotes de um dado produto
-  0 - Sair
-! Escolha uma opção: Gestão de Produtos
-  1 - Visualizar todos os produtos
-  2 - Visualizar todos os lotes
-  3 - Visualizar lotes fornecidos por parceiro
+--- tests/A-01-04-M-ok.outhyp	2021-10-24 14:17:12.802043734 +0100
 ***************
 *** 72,78 ****
   8 - Menu de Consultas
@@ -43,7 +9,7 @@
   1 - Abrir
   2 - Guardar
   3 - Mostrar Data
---- 69,75 ----
+--- 72,78 ----
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair
@@ -53,7 +19,7 @@
   3 - Mostrar Data
 ***************
 *** 83,86 ****
---- 80,84 ----
+--- 83,87 ----
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair

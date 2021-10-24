@@ -26,9 +26,12 @@ public abstract class Product {
     }
 
     public double getMaxPrice(){
-        return _maxPrice;
+        double maxPrice = 0;
+        for(Batch i : _batches){
+            maxPrice += i.getPrice();
+        }
+        return _maxPrice = maxPrice;
     }
-
     public int getQuantity(){
         int quantity = 0;
         for( Batch i : _batches){
@@ -57,5 +60,6 @@ public abstract class Product {
     }
     public void addBatch(Batch batch){
         _batches.add(batch);
+
     }
 }
