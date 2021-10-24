@@ -84,11 +84,12 @@ public class Warehouse implements Serializable {
   }
 
   public void registerPartner(String name, String adress, String id) throws BadEntryException{
+    if(_partner.contains(id.toLowercase()));
     for(String i : _partners.keySet())
       if(i.toLowerCase().equals(id.toLowerCase())) 
         throw new BadEntryException("Partner already exists");
     Partner partner = new Partner(name, adress, id);
-    _partners.put(id,partner);
+    _partners.put(toLowerCase(id),partner);
   }
   public Partner getPartner(String id) throws BadEntryException{
     if(_partners.containsKey(id)){
