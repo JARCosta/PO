@@ -85,10 +85,11 @@ public class WarehouseManager {
    * @@throws MissingFileAssociationException
    */
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
-    //FIXME implement serialization method
     FileOutputStream fileOut = new FileOutputStream(_filename);
     ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
     outStream.writeObject(_warehouse);
+    outStream.close();
+    fileOut.close();
   }
   
   /**
@@ -107,13 +108,22 @@ public class WarehouseManager {
    * @@throws UnavailableFileException
    * @throws IOException
    */
-  public void load(String filename) throws UnavailableFileException, ClassNotFoundException, IOException  {
+/*  public void load(String filename) throws UnavailableFileException, ClassNotFoundException, IOException  {
     //FIXME implement serialization method
-    FileInputStream fileIn = new FileInputStream(filename);
-    System.out.println(filename);
-    ObjectInputStream inStream = new ObjectInputStream(fileIn);
+    ObjectInputStream inStream = new ObjectInputStream(new FileInputStream(_filename));
+    //FileInputStream fileIn = new FileInputStream(filename);
+    //ObjectInputStream inStream = new ObjectInputStream(fileIn);
     _warehouse = (Warehouse) inStream.readObject();
     _filename = filename;
+  }*/
+
+  public void load(String filename) throws UnavailableFileException, ClassNotFoundException{
+    try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))){
+      _warehouse = (Warehouse) ois.readObject();
+      _filename = filename;
+    } catch(ClassNotFoundException | IOException a){
+      throw new UnavailableFileException(filename);
+    }
   }
 
   /**

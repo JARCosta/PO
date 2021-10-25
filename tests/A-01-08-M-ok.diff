@@ -1,5 +1,5 @@
 *** tests/A-01-08-M-ok.out	2021-10-24 00:39:34.307660545 +0100
---- tests/A-01-08-M-ok.outhyp	2021-10-25 18:20:53.033138485 +0100
+--- tests/A-01-08-M-ok.outhyp	2021-10-25 23:32:59.005759676 +0100
 ***************
 *** 9,15 ****
   8 - Menu de Consultas
@@ -9,11 +9,12 @@
   1 - Abrir
   2 - Guardar
   3 - Mostrar Data
---- 9,15 ----
+--- 9,16 ----
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair
-! Escolha uma opção: Ficheiro sem nome. Guardar ficheiro como: Menu Principal
+! Escolha uma opção: Ficheiro a abrir: Abrir: Operação inválida: Problema ao abrir 'app03.dat'.
+! Menu Principal
   1 - Abrir
   2 - Guardar
   3 - Mostrar Data
@@ -30,7 +31,7 @@
   1 - Mostrar parceiro
   2 - Mostrar parceiros
   3 - Registar parceiro
---- 28,34 ----
+--- 29,35 ----
   5 - Mostrar compras com parceiro
   6 - Mostrar vendas (e desagregações) com parceiro
   0 - Sair
@@ -47,7 +48,7 @@
   1 - Abrir
   2 - Guardar
   3 - Mostrar Data
---- 58,64 ----
+--- 59,65 ----
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair
@@ -62,7 +63,7 @@
   0 - Sair
 ! Escolha uma opção: 
 \ No newline at end of file
---- 69,72 ----
+--- 70,73 ----
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair

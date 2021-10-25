@@ -2,8 +2,14 @@ package ggc.app.main;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
+import java.io.FileNotFoundException;
+
+import ggc.app.exception.FileOpenFailedException;
 import ggc.core.WarehouseManager;
 //FIXME import classes
+import ggc.core.exception.MissingFileAssociationException;
+import ggc.core.exception.UnavailableFileException;
 
 /**
  * Open existing saved state.
@@ -13,17 +19,17 @@ class DoOpenFile extends Command<WarehouseManager> {
   /** @param receiver */
   DoOpenFile(WarehouseManager receiver) {
     super(Label.OPEN, receiver);
-    //FIXME maybe add command fields
-    addStringField("name", Message.newSaveAs());
+    addStringField("name", Message.openFile());
   }
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
     try {
-      _receiver.load(stringField("name"));      
-    } catch (Exception e) {
-      //TODO: handle exception
+      _receiver.load(stringField("name"));
+    } catch (UnavailableFileException noFile) {
+      throw new FileOpenFailedException(stringField("name"));
+    } catch (Exception e){
+      System.out.println("appapapapap");
     }
   }
 
