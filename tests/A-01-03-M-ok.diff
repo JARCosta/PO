@@ -1,5 +1,5 @@
 *** tests/A-01-03-M-ok.out	2021-10-24 00:39:34.307660545 +0100
---- tests/A-01-03-M-ok.outhyp	2021-10-24 14:17:12.670044898 +0100
+--- tests/A-01-03-M-ok.outhyp	2021-10-25 18:20:52.333145195 +0100
 ***************
 *** 9,15 ****
   8 - Menu de Consultas
@@ -13,20 +13,10 @@
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair
-! Escolha uma opção: Menu Principal
+! Escolha uma opção: Ficheiro sem nome. Guardar ficheiro como: Menu Principal
   1 - Abrir
   2 - Guardar
   3 - Mostrar Data
-***************
-*** 20,25 ****
---- 20,26 ----
-  8 - Menu de Consultas
-  9 - Ver Saldo Global
-  0 - Sair
-+ Escolha uma opção: Número inválido!
-  Escolha uma opção: Gestão de Parceiros
-  1 - Mostrar parceiro
-  2 - Mostrar parceiros
 ***************
 *** 28,37 ****
   5 - Mostrar compras com parceiro
@@ -39,7 +29,7 @@
   1 - Mostrar parceiro
   2 - Mostrar parceiros
   3 - Registar parceiro
---- 29,35 ----
+--- 28,34 ----
   5 - Mostrar compras com parceiro
   6 - Mostrar vendas (e desagregações) com parceiro
   0 - Sair

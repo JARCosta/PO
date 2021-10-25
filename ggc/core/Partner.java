@@ -27,8 +27,7 @@ public class Partner {
 
     @Override
     public String toString() {
-        return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + 
-            "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
+        return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
     }
 
     public double getPoints(){

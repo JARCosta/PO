@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
@@ -18,7 +22,6 @@ import ggc.core.exception.MissingFileAssociationException;
 public class WarehouseManager {
   private String _filename = "";
   private Warehouse _warehouse = new Warehouse();
-  String _fileAssociation;
 
   public WarehouseManager(){
   }
@@ -83,6 +86,9 @@ public class WarehouseManager {
    */
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
     //FIXME implement serialization method
+    FileOutputStream fileOut = new FileOutputStream(_filename);
+    ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
+    outStream.writeObject(_warehouse);
   }
   
   /**
@@ -95,13 +101,19 @@ public class WarehouseManager {
     _filename = filename;
     save();
   }
-
+  
   /**
    * @@param filename
    * @@throws UnavailableFileException
+   * @throws IOException
    */
-  public void load(String filename) throws UnavailableFileException, ClassNotFoundException  {
+  public void load(String filename) throws UnavailableFileException, ClassNotFoundException, IOException  {
     //FIXME implement serialization method
+    FileInputStream fileIn = new FileInputStream(filename);
+    System.out.println(filename);
+    ObjectInputStream inStream = new ObjectInputStream(fileIn);
+    _warehouse = (Warehouse) inStream.readObject();
+    _filename = filename;
   }
 
   /**

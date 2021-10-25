@@ -12,5 +12,5 @@ public class FileOpenFailedException extends CommandException {
   public FileOpenFailedException(String filename) {
     super(Message.problemOpeningFile(filename));
   }
-
+  
 }

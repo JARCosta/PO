@@ -1,5 +1,5 @@
 *** tests/A-01-09-M-ok.out	2021-10-24 00:39:34.307660545 +0100
---- tests/A-01-09-M-ok.outhyp	2021-10-24 14:17:13.326039113 +0100
+--- tests/A-01-09-M-ok.outhyp	2021-10-25 18:20:53.157137295 +0100
 ***************
 *** 9,15 ****
   8 - Menu de Consultas
@@ -13,7 +13,7 @@
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair
-! Escolha uma opção: Menu Principal
+! Escolha uma opção: Ficheiro sem nome. Guardar ficheiro como: Menu Principal
   1 - Abrir
   2 - Guardar
   3 - Mostrar Data
@@ -26,11 +26,10 @@
   Menu Principal
   1 - Abrir
   2 - Guardar
---- 20,27 ----
+--- 20,26 ----
   8 - Menu de Consultas
   9 - Ver Saldo Global
   0 - Sair
-! Escolha uma opção: Número inválido!
 ! Escolha uma opção: Data actual: 0
   Menu Principal
   1 - Abrir
