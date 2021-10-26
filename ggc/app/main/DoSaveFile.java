@@ -23,36 +23,6 @@ class DoSaveFile extends Command<WarehouseManager> {
     super(Label.SAVE, receiver);    
   }
 
-  /*
-  @Override
-  public final void execute() throws CommandException {
-    String _filename;
-    try{
-      _receiver.save();
-    } catch (IOException | MissingFileAssociationException fnf){
-      _filename = Form.requestString(Message.newSaveAs());
-      try{
-        _receiver.saveAs(_filename);
-      } catch (IOException | MissingFileAssociationException das){
-        throw new FileOpenFailedException(_filename);
-      }
-    }
-    //FIXME implement command and create a local Form      
-  }
-
-
-  @Override
-  public final void execute() throws CommandException {
-    try {
-      _receiver.saveAs(Form.requestString(Message.newSaveAs()));
-    } catch (MissingFileAssociationException lala) {
-      System.out.println("lalalallala");
-    } catch (IOException papa) {
-      System.out.println("papapapapa");
-    }
-  }
-  */
-
   @Override
   public final void execute() throws CommandException {
     try{

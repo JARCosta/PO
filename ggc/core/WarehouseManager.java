@@ -2,8 +2,6 @@ package ggc.core;
 
 //FIXME import classes (cannot import from pt.tecnico or ggc.app)
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
