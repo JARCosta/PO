@@ -19,7 +19,7 @@ import ggc.core.exception.ImportFileException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.MissingFileAssociationException;
 
-public class WarehouseManager {
+public class WarehouseManager{
   private String _filename = "";
   private Warehouse _warehouse = new Warehouse();
 
@@ -117,9 +117,9 @@ public class WarehouseManager {
     _filename = filename;
   }*/
 
-  public void load(String filename) throws UnavailableFileException, ClassNotFoundException{
-    try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))){
-      _warehouse = (Warehouse) ois.readObject();
+  public void load(String filename) throws UnavailableFileException{
+    try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
+      _warehouse = (Warehouse) file.readObject();
       _filename = filename;
     } catch(ClassNotFoundException | IOException a){
       throw new UnavailableFileException(filename);

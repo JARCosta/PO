@@ -1,6 +1,8 @@
 package ggc.core;
 
-public class Date {
+import java.io.Serializable;
+
+public class Date implements Serializable{
     private static Date _now = new Date();
     private int _days;
 

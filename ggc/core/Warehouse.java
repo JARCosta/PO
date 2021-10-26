@@ -3,9 +3,7 @@ package ggc.core;
 // FIXME import classes (cannot import from pt.tecnico or ggc.app)
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 import java.io.IOException;
 import ggc.core.exception.BadEntryException;
 

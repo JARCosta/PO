@@ -7,13 +7,10 @@ import java.io.FileNotFoundException;
 
 import ggc.app.exception.FileOpenFailedException;
 import ggc.core.WarehouseManager;
-//FIXME import classes
+
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.UnavailableFileException;
 
-/**
- * Open existing saved state.
- */
 class DoOpenFile extends Command<WarehouseManager> {
 
   /** @param receiver */
