@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.Reader;
 
+import ggc.app.exception.DuplicatePartnerKeyException;
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.InvalidPartnerIdException;
+import ggc.core.exception.InvalidProductIdException;
 
 public class Parser {
   private Warehouse _warehouse;
@@ -16,7 +19,7 @@ public class Parser {
     _warehouse = w;
   }
 
-  void parseFile(String filename) throws IOException, BadEntryException {
+  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerKeyException, InvalidPartnerIdException, InvalidProductIdException {
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
 
@@ -25,7 +28,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException {
+  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerKeyException, InvalidPartnerIdException, InvalidProductIdException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {
@@ -46,20 +49,18 @@ public class Parser {
   }
 
   //PARTNER|id|nome|endereço
-  private void parsePartner(String[] components, String line) throws BadEntryException {
+  private void parsePartner(String[] components, String line) throws BadEntryException, DuplicatePartnerKeyException {
     if (components.length != 4)
       throw new BadEntryException("Invalid partner with wrong number of fields (4): " + line);
     
     String id = components[1];
     String name = components[2];
     String address = components[3];
-
     _warehouse.registerPartner(id, name, address);
-
   }
 
   //BATCH_S|idProduto|idParceiro|prec ̧o|stock-actual
-  private void parseSimpleProduct(String[] components, String line) throws BadEntryException {
+  private void parseSimpleProduct(String[] components, String line) throws BadEntryException, InvalidPartnerIdException, InvalidProductIdException {
     if (components.length != 5)
       throw new BadEntryException("Invalid number of fields (4) in simple batch description: " + line);
     
@@ -80,14 +81,14 @@ public class Parser {
  
     
   //BATCH_M|idProduto|idParceiro|prec ̧o|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
-  private void parseAggregateProduct(String[] components, String line) throws BadEntryException {
+  private void parseAggregateProduct(String[] components, String line) throws BadEntryException, InvalidPartnerIdException, InvalidProductIdException {
     if (components.length != 7)
       throw new BadEntryException("Invalid number of fields (7) in aggregate batch description: " + line);
     
     String idProduct = components[1];
     String idPartner = components[2];
 
-    if (_warehouse.getProduct(idProduct) == null) {
+    if (!_warehouse.getProductList().contains(idProduct)) {
       ArrayList<Product> products = new ArrayList<>();
       ArrayList<Integer> quantities = new ArrayList<>();
       

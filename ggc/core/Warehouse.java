@@ -1,17 +1,22 @@
 package ggc.core;
 
-// FIXME import classes (cannot import from pt.tecnico or ggc.app)
 import java.io.Serializable;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
-import ggc.core.exception.BadEntryException;
 
+import ggc.app.exception.DuplicatePartnerKeyException;
+import ggc.core.exception.BadEntryException;
+import ggc.core.exception.InvalidDateException;
+import ggc.core.exception.InvalidPartnerIdException;
+import ggc.core.exception.InvalidProductIdException;
 public class Warehouse implements Serializable {
   private static final long serialVersionUID = 202109192006L;
   private Date _date;
-  private HashMap<String, Partner> _partners;
-  private HashMap<String, Product> _products;
+  private Map<String, Partner> _partners;
+  private Map<String, Product> _products;
   
   public Warehouse(){
     _date = new Date();
@@ -24,10 +29,7 @@ public class Warehouse implements Serializable {
   public int currentDate(){
     return _date.currentDate();
   }
-  public void advanceDate(int days) throws BadEntryException{
-    if(days <= 0){
-      throw new BadEntryException("invalid date");
-    }
+  public void advanceDate(int days) throws InvalidDateException{
     _date.advanceDate(days);
   }
 
@@ -37,24 +39,27 @@ public class Warehouse implements Serializable {
     SimpleProduct prod = new SimpleProduct(id);
     _products.put(id, prod);
   }
-  public void registerAggregateProduct(String idProduct, double aggravation,ArrayList<Component> components){
-    AggregateProduct product = new AggregateProduct(idProduct, aggravation, components);
-    _products.put(idProduct, product);
+  public void registerAggregateProduct(String id, double aggravation,List<Component> components){
+    AggregateProduct product = new AggregateProduct(id, aggravation, components);
+    _products.put(id, product);
   }
-  public Product getProduct(String id){
+  public Product getProduct(String id) throws InvalidProductIdException{
+    if(!_products.containsKey(id)){
+      throw new InvalidProductIdException(id);
+    }
     return _products.get(id);
   }
-  public HashMap<String, Product> getProductMap(){
+  public Map<String, Product> getProductMap(){
     return _products;
   }
-  public ArrayList<Product> getProductList(){
+  public List<Product> getProductList(){
     return new ArrayList<Product>(_products.values());
   }
-  public ArrayList<Product> getProductSortedList(){
+  public List<Product> getProductSortedList(){
     if(_products.values() == null){
       return null;
     }
-    ArrayList<Product> productList = new ArrayList<>(_products.values());
+    List<Product> productList = new ArrayList<>(_products.values());
     productList.sort(new ProductComparator());
     return productList;
   }
@@ -64,52 +69,49 @@ public class Warehouse implements Serializable {
   public void registerBatch( double price, int stock,Partner partner,Product product){
     partner.registerBatch(price, stock, partner, product);
   }
-  public ArrayList<Batch> getBatchList(){
-    ArrayList<Batch> batches= new ArrayList<>();
+  public List<Batch> getBatchList(){
+    List<Batch> batches= new ArrayList<>();
     for(Product product : new ArrayList<>(_products.values()))
       for(Batch batch : product.getBatches())
         batches.add(batch);
     return batches;
   }
-  public ArrayList<Batch> sortBatches(ArrayList<Batch> batches){
+  public List<Batch> sortBatches(List<Batch> batches){
     batches.sort(new BatchComparator());
     return batches;
   }
-  public ArrayList<Batch> getBatchSortedList(){
+  public List<Batch> getBatchSortedList(){
     return sortBatches(getBatchList());
   }
-  public ArrayList<Batch> getBatchSortedList(Product product){
+  public List<Batch> getBatchSortedList(Product product){
     return sortBatches(product.getBatches());
   }
-  public ArrayList<Batch> getBatchSortedList(Partner partner){
+  public List<Batch> getBatchSortedList(Partner partner){
     return sortBatches(partner.getBatches());
   }
 
-  public void registerPartner(String id, String name, String adress) throws BadEntryException{
+  public void registerPartner(String id, String name, String adress) throws DuplicatePartnerKeyException{
     if(_partners.containsKey(id.toLowerCase())){
-      throw new BadEntryException("Partner already exists");
+      throw new DuplicatePartnerKeyException(id);
     }
-    //for(String i : _partners.keySet())
-    //  if(i.toLowerCase().equals(id.toLowerCase())) 
-    //    throw new BadEntryException("Partner already exists");
     Partner partner = new Partner(id, name, adress);
     _partners.put(id.toLowerCase(),partner);
   }
-  public Partner getPartner(String id) throws BadEntryException{
+  public Partner getPartner(String id) throws InvalidPartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
       return _partners.get(id.toLowerCase());
     } else{
-      throw new BadEntryException("unknowPartner");
+      throw new InvalidPartnerIdException(id);
     }
   }
-  public HashMap<String, Partner> getPartnerMap(){
+  public Map<String, Partner> getPartnerMap(){
     return _partners;
   }
-  public ArrayList<Partner> getPartnerList(){
+  public List<Partner> getPartnerList(){
     return new ArrayList<>(_partners.values());
   }
-  public ArrayList<Partner> getPartnerSortedList(){
-    ArrayList<Partner> partnerList = getPartnerList();
+  public List<Partner> getPartnerSortedList(){
+    List<Partner> partnerList = getPartnerList();
     partnerList.sort(new PartnerComparator());
     return partnerList;
   }
@@ -119,8 +121,11 @@ public class Warehouse implements Serializable {
    * @param txtfile filename to be loaded.
    * @throws IOException
    * @throws BadEntryException
+   * @throws InvalidProductIdException
+   * @throws InvalidPartnerIdException
+   * @throws DuplicatePartnerKeyException
    */
-  void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */ {
+  void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */, DuplicatePartnerKeyException, InvalidPartnerIdException, InvalidProductIdException {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
     }

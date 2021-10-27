@@ -5,7 +5,7 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
 //FIXME import classes
-import ggc.core.exception.BadEntryException;
+import ggc.core.exception.InvalidPartnerIdException;
 
 /**
  * Show batches supplied by partner.
@@ -23,7 +23,7 @@ class DoShowBatchesByPartner extends Command<WarehouseManager> {
       for(Object batch : _receiver.getBatchSortedList(_receiver.getPartner(stringField("partner")))){
         _display.addLine(batch.toString());
       }
-    } catch(BadEntryException UnknowPartnerId){
+    } catch(InvalidPartnerIdException UnknowPartnerId){
       throw new UnknownPartnerKeyException("partner");
     }
     _display.display();  }

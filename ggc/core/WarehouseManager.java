@@ -4,6 +4,7 @@ package ggc.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,8 +13,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import ggc.app.exception.DuplicatePartnerKeyException;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.ImportFileException;
+import ggc.core.exception.InvalidDateException;
+import ggc.core.exception.InvalidPartnerIdException;
+import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.MissingFileAssociationException;
 
@@ -27,40 +32,39 @@ public class WarehouseManager{
   public int currentDate(){
     return _warehouse.currentDate();
   }
-  public void advanceDate(int days) throws BadEntryException{
+  public void advanceDate(int days) throws InvalidDateException{
     _warehouse.advanceDate(days);
   }
 
 
-  public void registerPartner(String id, String name, String adress) throws BadEntryException{
+  public void registerPartner(String id, String name, String adress) throws BadEntryException, DuplicatePartnerKeyException{
     _warehouse.registerPartner(id, name, adress);
   }
 
-
-  public Product getProduct(String id){
+  public Product getProduct(String id) throws InvalidProductIdException{
     return _warehouse.getProduct(id);
   }
-  public HashMap<String, Product> getProductMap(){
+  public Map<String, Product> getProductMap(){
     return _warehouse.getProductMap();
   }
-  public ArrayList<Product> getProductList(){
+  public List<Product> getProductList(){
     return _warehouse.getProductList();
   }
-  public ArrayList<Product> getProductSortedList(){
+  public List<Product> getProductSortedList(){
     return _warehouse.getProductSortedList();
   }
 
 
-  public ArrayList<Batch> getBatchList(){
+  public List<Batch> getBatchList(){
     return _warehouse.getBatchList();
   }
-  public ArrayList<Batch> getBatchSortedList(){
+  public List<Batch> getBatchSortedList(){
     return _warehouse.getBatchSortedList();
   }
-  public ArrayList<Batch> getBatchSortedList(Product product){
+  public List<Batch> getBatchSortedList(Product product){
     return _warehouse.getBatchSortedList(product);
   }
-  public ArrayList<Batch> getBatchSortedList(Partner partner){
+  public List<Batch> getBatchSortedList(Partner partner){
     return _warehouse.getBatchSortedList(partner);
   }
 
@@ -68,10 +72,10 @@ public class WarehouseManager{
   public Map<String, Partner> getPartnerMap(){
     return _warehouse.getPartnerMap();
   }
-  public Partner getPartner(String id) throws BadEntryException{
-    return _warehouse.getPartner(id);
+  public Partner getPartner(String id) throws InvalidPartnerIdException{
+      return _warehouse.getPartner(id);
   }
-  public ArrayList<Partner> getPartnerSortedList(){
+  public List<Partner> getPartnerSortedList(){
     return _warehouse.getPartnerSortedList();
   }
 
@@ -83,11 +87,11 @@ public class WarehouseManager{
    * @@throws MissingFileAssociationException
    */
   public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
-    FileOutputStream fileOut = new FileOutputStream(_filename);
-    ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
-    outStream.writeObject(_warehouse);
-    outStream.close();
-    fileOut.close();
+      FileOutputStream fileOut = new FileOutputStream(_filename);
+      ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
+      outStream.writeObject(_warehouse);
+      outStream.close();
+      fileOut.close();
   }
   
   /**
@@ -106,15 +110,6 @@ public class WarehouseManager{
    * @@throws UnavailableFileException
    * @throws IOException
    */
-/*  public void load(String filename) throws UnavailableFileException, ClassNotFoundException, IOException  {
-    //FIXME implement serialization method
-    ObjectInputStream inStream = new ObjectInputStream(new FileInputStream(_filename));
-    //FileInputStream fileIn = new FileInputStream(filename);
-    //ObjectInputStream inStream = new ObjectInputStream(fileIn);
-    _warehouse = (Warehouse) inStream.readObject();
-    _filename = filename;
-  }*/
-
   public void load(String filename) throws UnavailableFileException{
     try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
       _warehouse = (Warehouse) file.readObject();
@@ -127,11 +122,14 @@ public class WarehouseManager{
   /**
    * @param textfile
    * @throws ImportFileException
+   * @throws InvalidProductIdException
+   * @throws InvalidPartnerIdException
+   * @throws DuplicatePartnerKeyException
    */
-  public void importFile(String textfile) throws ImportFileException {
+  public void importFile(String textfile) throws ImportFileException{
     try {
       _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException /* FIXME maybe other exceptions*/  e) {
+    } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerKeyException  e) {
       throw new ImportFileException(textfile, e);
     }
   }
