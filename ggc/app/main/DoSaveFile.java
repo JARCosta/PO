@@ -27,18 +27,13 @@ class DoSaveFile extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     try{
       _receiver.save();
-    } catch (FileNotFoundException lili){
+    } catch (MissingFileAssociationException | IOException noFile){
+      String name = Form.requestString(Message.newSaveAs());
       try {
-        _receiver.saveAs(Form.requestString(Message.newSaveAs()));
-      } catch (MissingFileAssociationException lala) {
-        System.out.println("lalalallala");
-      } catch (IOException papa) {
- //       System.out.println("papapapapa");
+        _receiver.saveAs(name);
+      } catch (MissingFileAssociationException | IOException fileError) {
+        throw new FileOpenFailedException(name);
       }
-    } catch (MissingFileAssociationException lulu){
-      System.out.println("lululululu");
-    } catch (IOException io){
-  //    System.out.println("ioiooioioio");
     }
   }
 }

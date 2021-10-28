@@ -79,10 +79,9 @@ public class WarehouseManager{
 
   /**
    * @@throws IOException
-   * @@throws FileNotFoundException
    * @@throws MissingFileAssociationException
    */
-  public void save() throws IOException, FileNotFoundException, MissingFileAssociationException {
+  public void save() throws MissingFileAssociationException, IOException {
       FileOutputStream fileOut = new FileOutputStream(_filename);
       ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
       outStream.writeObject(_warehouse);

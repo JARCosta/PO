@@ -2,7 +2,6 @@ package ggc.app.partners;
 
 import ggc.core.Partner;
 import ggc.core.WarehouseManager;
-//FIXME import classes: imperted Partner
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
