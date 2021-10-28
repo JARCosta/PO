@@ -4,19 +4,42 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+/**
+*@author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
+*
+*/
 public abstract class Product implements Serializable{
+  /**
+  *Maximum price of this product
+  */
   private double _maxPrice;
+  /**
+  *Product's id
+  */
   private String _id;
+  /**
+  *List of Batches that contain this product
+  */
   private List<Batch> _batches;
+  /**
+  *Constructor: Inicialize a product
+  *@param id the input value. 
+  */
   Product(String id){
     _id = id;
     _maxPrice = 0;
     _batches = new ArrayList<Batch>();
   }
+
+  @Override
   public String toString(){
     return _id + "|" + (int)_maxPrice + "|" + getQuantity();
   }
-
+  /**
+  *@param quantity quantity of a product
+  *@param Partner a partner 
+  *@return true or false to if the total quantity of a product 
+          is more or less than the quantity inserted*/
   boolean checkQuantity(int quantity, Partner p){
     int total = 0;
     for(Batch batch : p.getBatches()){
@@ -44,6 +67,13 @@ public abstract class Product implements Serializable{
     return quantity;
   }
 
+  /**
+   * 
+   * Get partner's quantity of this porduct from every batch
+   * 
+   * @param p selected partner
+   * @return quantity of this product
+   */
   public int getQuantity(Partner p){
     int quantity = 0;
     for( Batch i: _batches){
