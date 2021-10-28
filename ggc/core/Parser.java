@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.Reader;
 
-import ggc.app.exception.DuplicatePartnerKeyException;
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 
@@ -19,7 +19,7 @@ public class Parser {
     _warehouse = w;
   }
 
-  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerKeyException, InvalidPartnerIdException, InvalidProductIdException {
+  void parseFile(String filename) throws IOException, BadEntryException, DuplicatePartnerIdException, InvalidPartnerIdException, InvalidProductIdException {
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
 
@@ -28,7 +28,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException, DuplicatePartnerKeyException, InvalidPartnerIdException, InvalidProductIdException {
+  private void parseLine(String line) throws BadEntryException, BadEntryException, InvalidPartnerIdException, InvalidProductIdException, DuplicatePartnerIdException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {
@@ -49,7 +49,7 @@ public class Parser {
   }
 
   //PARTNER|id|nome|endereço
-  private void parsePartner(String[] components, String line) throws BadEntryException, DuplicatePartnerKeyException {
+  private void parsePartner(String[] components, String line) throws BadEntryException, DuplicatePartnerIdException {
     if (components.length != 4)
       throw new BadEntryException("Invalid partner with wrong number of fields (4): " + line);
     

@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
 
-import ggc.app.exception.DuplicatePartnerKeyException;
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidDateException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
@@ -90,9 +90,9 @@ public class Warehouse implements Serializable {
     return sortBatches(partner.getBatches());
   }
 
-  public void registerPartner(String id, String name, String adress) throws DuplicatePartnerKeyException{
+  public void registerPartner(String id, String name, String adress) throws DuplicatePartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
-      throw new DuplicatePartnerKeyException(id);
+      throw new DuplicatePartnerIdException(id);
     }
     Partner partner = new Partner(id, name, adress);
     _partners.put(id.toLowerCase(),partner);
@@ -123,9 +123,9 @@ public class Warehouse implements Serializable {
    * @throws BadEntryException
    * @throws InvalidProductIdException
    * @throws InvalidPartnerIdException
-   * @throws DuplicatePartnerKeyException
+   * @throws DuplicatePartnerIdException
    */
-  void importFile(String txtfile) throws IOException, BadEntryException /* FIXME maybe other exceptions */, DuplicatePartnerKeyException, InvalidPartnerIdException, InvalidProductIdException {
+  void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerIdException, InvalidPartnerIdException, InvalidProductIdException {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
     }

@@ -1,9 +1,5 @@
 package ggc.core;
 
-//FIXME import classes (cannot import from pt.tecnico or ggc.app)
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -13,8 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import ggc.app.exception.DuplicatePartnerKeyException;
 import ggc.core.exception.BadEntryException;
+import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDateException;
 import ggc.core.exception.InvalidPartnerIdException;
@@ -37,7 +33,7 @@ public class WarehouseManager{
   }
 
 
-  public void registerPartner(String id, String name, String adress) throws BadEntryException, DuplicatePartnerKeyException{
+  public void registerPartner(String id, String name, String adress) throws BadEntryException, DuplicatePartnerIdException{
     _warehouse.registerPartner(id, name, adress);
   }
 
@@ -124,12 +120,12 @@ public class WarehouseManager{
    * @throws ImportFileException
    * @throws InvalidProductIdException
    * @throws InvalidPartnerIdException
-   * @throws DuplicatePartnerKeyException
+   * @throws DuplicatePartnerIdException
    */
   public void importFile(String textfile) throws ImportFileException{
     try {
       _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerKeyException  e) {
+    } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerIdException  e) {
       throw new ImportFileException(textfile, e);
     }
   }

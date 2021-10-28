@@ -5,25 +5,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 /**
-*@author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
+* @author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
 *
 */
+
 public abstract class Product implements Serializable{
   /**
-  *Maximum price of this product
+  * Highest price for a product in all batches
   */
   private double _maxPrice;
+
   /**
-  *Product's id
+  * Product's id
   */
   private String _id;
+
   /**
-  *List of Batches that contain this product
+  * List of Batches that contain this product
   */
   private List<Batch> _batches;
+
   /**
-  *Constructor: Inicialize a product
-  *@param id the input value. 
+  * Constructor: Inicialize a product
+  * @param id the input value. 
   */
   Product(String id){
     _id = id;
@@ -31,27 +35,43 @@ public abstract class Product implements Serializable{
     _batches = new ArrayList<Batch>();
   }
 
+  /**
+  * Visual representation of a product 
+  */
   @Override
   public String toString(){
     return _id + "|" + (int)_maxPrice + "|" + getQuantity();
   }
+
   /**
-  *@param quantity quantity of a product
-  *@param Partner a partner 
-  *@return true or false to if the total quantity of a product 
-          is more or less than the quantity inserted*/
+  * Checks if the partner p has enough quantity of this product
+  * @param quantity quantity of a product
+  * @param Partner a partner 
+  * @return true or false to if the total quantity of a product 
+  *        is greater than the quantity inserted
+  */
   boolean checkQuantity(int quantity, Partner p){
     int total = 0;
     for(Batch batch : p.getBatches()){
       total += batch.getQuantity();
     }
-    return total > quantity;
+    return total >= quantity;
   }
-
+  
+  /**
+  * Get the product's id
+  * @return id 
+  */
   public String getId(){
     return _id;
   }
 
+  /**
+  * Obtains the highest price per unit of all batches
+  * This method iterates through every batch this product is in 
+  *and updates the maxPrice every time it finds a new highest price
+  * @return changes the actual maxPrice(highest price) of a product for the new highest price
+  */
   public double getMaxPrice(){
     double maxPrice = 0;
     for(Batch i : _batches){
@@ -59,6 +79,11 @@ public abstract class Product implements Serializable{
     }
     return _maxPrice = maxPrice;
   }
+
+  /**
+  * Sum quantity of a product in all batches
+  * @return total quantity
+  */
   public int getQuantity(){
     int quantity = 0;
     for( Batch i : _batches){
@@ -68,11 +93,9 @@ public abstract class Product implements Serializable{
   }
 
   /**
-   * 
-   * Get partner's quantity of this porduct from every batch
-   * 
+   * Sum quantity of a porduct in every batch owned by a partner
    * @param p selected partner
-   * @return quantity of this product
+   * @return total quantity of this product
    */
   public int getQuantity(Partner p){
     int quantity = 0;
@@ -84,23 +107,37 @@ public abstract class Product implements Serializable{
     return quantity;
   }
 
+  /**
+  * Get the batches this product is in
+  * @return list of batches 
+  */
   public List<Batch> getBatches(){
     return _batches;
   }
 
+  /**
+  * Sort the list of batches this product is in
+  * @return sorted list
+  */
   public ArrayList<Batch> getBatchSortedList(){
     ArrayList<Batch> batchSorted = (ArrayList<Batch>) _batches;
     batchSorted.sort(new BatchComparator());
     return batchSorted;
   }
+
+  /**
+  * Associate a new batch to this product 
+  */
   public void addBatch(Batch batch){
     _batches.add(batch);
   }
 
+  
   @Override
   public int hashCode(){
     return Objects.hash(_id);
   }
+
   @Override
   public boolean equals(Object p2){
     return p2 instanceof Product && _id.equals(((Product) p2).getId());
