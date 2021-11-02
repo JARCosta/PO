@@ -15,6 +15,8 @@ public class Partner implements Serializable{
   private double _valorCompras;
   private double _valorVendas;
   private double _valorVendasPagas;
+  private List<Aquisition> _aquisitions;
+  private List<Sale> _sales;
 
   public Partner(String id, String name, String adress){
     _name = name;
@@ -68,6 +70,16 @@ public class Partner implements Serializable{
     }
     return ret;
   }
+
+
+//TRANSACTION
+  public void registerAquisition(Aquisition aquisition){
+    _aquisitions.add(aquisition);
+  }
+  public void registerSale(Sale sale){
+    _sales.add(sale);
+  }
+
 
   @Override
   public int hashCode(){
