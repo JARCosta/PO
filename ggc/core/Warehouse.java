@@ -56,9 +56,6 @@ public class Warehouse implements Serializable {
     return new ArrayList<Product>(_products.values());
   }
   public List<Product> getProductSortedList(){
-    if(_products.values() == null){
-      return null;
-    }
     List<Product> productList = new ArrayList<>(_products.values());
     productList.sort(new ProductComparator());
     return productList;
