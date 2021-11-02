@@ -124,9 +124,8 @@ public class Warehouse implements Serializable {
 
 
 //TRANSACTION
-
-  public void registerTransaction(Product product, int quantity){
-    _transactions.add(new Transaction(product, quantity));
+  public void registerAquisition(Product product, int quantity, Partner partner){
+    _transactions.add(new Aquisition(product, quantity, partner));
   }
 
   public List<Transaction> getTransactionList(){

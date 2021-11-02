@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import ggc.core.Sale;
 
 public class Partner implements Serializable{
   private String _name;
@@ -12,10 +11,10 @@ public class Partner implements Serializable{
   private String _id;
   private String _status;
   private double _points;
-  private ArrayList<Batch> _batches;
   private double _valorCompras;
   private double _valorVendas;
   private double _valorVendasPagas;
+  private ArrayList<Batch> _batches;
   private List<Aquisition> _aquisitions;
   private List<Sale> _sales;
 
@@ -74,14 +73,10 @@ public class Partner implements Serializable{
 
 
 //TRANSACTION
-  public void registerAquisition(Aquisition aquisition){
+  public void registerAquisition(Product product, int quantity){
+    Aquisition aquisition = new Aquisition(product, quantity, this);
     _aquisitions.add(aquisition);
   }
-  public void registerSale(Product product, int quantity){
-    Sale sale = new Sale(product,quantity,this);
-    _sales.add(sale);
-  }
-
 
   @Override
   public int hashCode(){

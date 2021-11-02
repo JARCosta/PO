@@ -6,11 +6,11 @@ public class Aquisition extends Transaction{
   Aquisition(Product product, int quantity, Partner partner){
     super(product, quantity);
     _partner = partner;
-    partner.registerAquisition(this);
   }
 
   @Override
   public String toString() {
-    return "COMPRA|" + super.getId();
+    //COMPRA|id|idParceiro|idProduto|quantidade|valor-pago|data-pagamento
+    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + super.getBaseValue() + "|" + super.getDate();
   }
 }

@@ -75,7 +75,8 @@ public abstract class Product implements Serializable{
   public double getMaxPrice(){
     double maxPrice = 0;
     for(Batch i : _batches){
-      maxPrice += i.getPrice();
+      if(i.getPrice()>maxPrice)
+        maxPrice = i.getPrice();
     }
     return _maxPrice = maxPrice;
   }
