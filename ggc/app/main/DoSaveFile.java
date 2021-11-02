@@ -1,14 +1,9 @@
 package ggc.app.main;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.MissingFormatArgumentException;
-
-import javax.imageio.IIOException;
 
 import ggc.app.exception.FileOpenFailedException;
 import ggc.core.WarehouseManager;
-//FIXME import classes
 import ggc.core.exception.MissingFileAssociationException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
