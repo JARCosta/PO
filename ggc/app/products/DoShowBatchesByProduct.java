@@ -3,8 +3,6 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownProductKeyException;
-import ggc.core.Batch;
-import ggc.core.Product;
 import ggc.core.WarehouseManager;
 //FIXME import classes
 import ggc.core.exception.InvalidProductIdException;
@@ -21,8 +19,7 @@ class DoShowBatchesByProduct extends Command<WarehouseManager> {
   @Override
   public final void execute() throws CommandException {
     try {
-      Product product = _receiver.getProduct(stringField("product"));
-      for(Batch batch : _receiver.getBatchSortedList(product)){
+      for(Object batch : _receiver.getBatchSortedList(_receiver.getProduct(stringField("product")))){
         _display.addLine(batch.toString());
       }
       _display.display();  

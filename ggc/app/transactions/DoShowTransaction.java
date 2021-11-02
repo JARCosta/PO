@@ -17,7 +17,9 @@ public class DoShowTransaction extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    //FIXME implement command
+    for( Object trans : _receiver.getTransactionList()){
+      _display.popup(trans.toString());
+    }
   }
 
 }

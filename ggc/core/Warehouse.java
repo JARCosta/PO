@@ -17,6 +17,7 @@ public class Warehouse implements Serializable {
   private Date _date;
   private Map<String, Partner> _partners;
   private Map<String, Product> _products;
+  private List<Transaction> _transactions;
   
   public Warehouse(){
     _date = new Date();
@@ -25,7 +26,8 @@ public class Warehouse implements Serializable {
   }
   
 
-  
+//DATE
+
   public int currentDate(){
     return _date.currentDate();
   }
@@ -34,6 +36,7 @@ public class Warehouse implements Serializable {
   }
 
 
+  //PRODUCT
 
   public void registerSimpleProduct(String id){
     SimpleProduct prod = new SimpleProduct(id);
@@ -62,6 +65,7 @@ public class Warehouse implements Serializable {
   }
 
 
+//BATCH
 
   public void registerBatch( double price, int stock,Partner partner,Product product){
     partner.registerBatch(price, stock, partner, product);
@@ -87,6 +91,9 @@ public class Warehouse implements Serializable {
     return sortBatches(partner.getBatches());
   }
 
+
+//PARTNER
+
   public void registerPartner(String id, String name, String adress) throws DuplicatePartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
       throw new DuplicatePartnerIdException(id);
@@ -111,6 +118,13 @@ public class Warehouse implements Serializable {
     List<Partner> partnerList = getPartnerList();
     partnerList.sort(new PartnerComparator());
     return partnerList;
+  }
+
+
+//TRANSACTION
+
+  public List<Transaction> getTransactionList(){
+    return _transactions;
   }
 
 

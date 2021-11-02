@@ -1,6 +1,5 @@
 package ggc.app.partners;
 
-import ggc.core.Partner;
 import ggc.core.WarehouseManager;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
@@ -17,7 +16,7 @@ class DoShowAllPartners extends Command<WarehouseManager> {
   @Override
   public void execute() throws CommandException {
     
-    for(Partner partner : _receiver.getPartnerSortedList()){
+    for(Object partner : _receiver.getPartnerSortedList()){
       _display.addLine(partner.toString());
     }
     _display.display();

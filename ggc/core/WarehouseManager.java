@@ -25,6 +25,9 @@ public class WarehouseManager{
   public WarehouseManager(){
   }
 
+
+//DATE
+
   public int currentDate(){
     return _warehouse.currentDate();
   }
@@ -33,9 +36,7 @@ public class WarehouseManager{
   }
 
 
-  public void registerPartner(String id, String name, String adress) throws BadEntryException, DuplicatePartnerIdException{
-    _warehouse.registerPartner(id, name, adress);
-  }
+//PRODUCT
 
   public Product getProduct(String id) throws InvalidProductIdException{
     return _warehouse.getProduct(id);
@@ -51,6 +52,9 @@ public class WarehouseManager{
   }
 
 
+
+//BATCH
+
   public List<Batch> getBatchList(){
     return _warehouse.getBatchList();
   }
@@ -65,6 +69,11 @@ public class WarehouseManager{
   }
 
 
+//PARTNER
+
+  public void registerPartner(String id, String name, String adress) throws BadEntryException, DuplicatePartnerIdException{
+    _warehouse.registerPartner(id, name, adress);
+  }
   public Map<String, Partner> getPartnerMap(){
     return _warehouse.getPartnerMap();
   }
@@ -73,6 +82,11 @@ public class WarehouseManager{
   }
   public List<Partner> getPartnerSortedList(){
     return _warehouse.getPartnerSortedList();
+  }
+
+//TRANSACTION
+  public List<Transaction> getTransactionList(){
+    return _warehouse.getTransactionList();
   }
 
 
