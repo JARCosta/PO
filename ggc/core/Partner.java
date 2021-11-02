@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import ggc.core.Sale;
 
 public class Partner implements Serializable{
   private String _name;
@@ -76,7 +77,8 @@ public class Partner implements Serializable{
   public void registerAquisition(Aquisition aquisition){
     _aquisitions.add(aquisition);
   }
-  public void registerSale(Sale sale){
+  public void registerSale(Product product, int quantity){
+    Sale sale = new Sale(product,quantity,this);
     _sales.add(sale);
   }
 

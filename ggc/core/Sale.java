@@ -1,8 +1,10 @@
 package ggc.core;
 
 public abstract class Sale extends Transaction {
+  private Partner _Partner;
+  
   Sale(Product product, int quantity, Partner partner){
-    super(quantity);
-    partner.registerSale(this);
+    super(product, quantity);
+    _Partner = partner;
   }
 }

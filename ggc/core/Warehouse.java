@@ -12,6 +12,8 @@ import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidDateException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
+
+
 public class Warehouse implements Serializable {
   private static final long serialVersionUID = 202109192006L;
   private Date _date;
@@ -122,6 +124,10 @@ public class Warehouse implements Serializable {
 
 
 //TRANSACTION
+
+  public void registerTransaction(Product product, int quantity){
+    _transactions.add(new Transaction(product, quantity));
+  }
 
   public List<Transaction> getTransactionList(){
     return _transactions;
