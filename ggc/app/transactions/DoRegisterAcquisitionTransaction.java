@@ -31,7 +31,7 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
       Object partner = (Object)_receiver.getPartner(stringField("partnerId"));
       Object product = (Object)_receiver.getProduct(stringField("productId"));
       int quantity = integerField("quantity");
-      _receiver.registerAquisition(product, quantity, partner);  
+      _receiver.registerAcquisition(product, quantity, partner);  
     } catch(InvalidPartnerIdException ipie){
       throw new UnknownPartnerKeyException(stringField("partnerId"));
     } catch(InvalidProductIdException ipie){

@@ -15,7 +15,7 @@ public class Partner implements Serializable{
   private double _valorVendas;
   private double _valorVendasPagas;
   private ArrayList<Batch> _batches;
-  private List<Aquisition> _aquisitions;
+  private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
 
   public Partner(String id, String name, String adress){
@@ -73,9 +73,9 @@ public class Partner implements Serializable{
 
 
 //TRANSACTION
-  public void registerAquisition(Product product, int quantity){
-    Aquisition aquisition = new Aquisition(product, quantity, this);
-    _aquisitions.add(aquisition);
+  public void registerAcquisition(Product product, int quantity){
+    Acquisition acquisition = new Acquisition(product, quantity, this);
+    _acquisitions.add(acquisition);
   }
 
   @Override

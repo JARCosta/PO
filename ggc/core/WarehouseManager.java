@@ -106,9 +106,9 @@ public class WarehouseManager{
   public List<Transaction> getTransactionList(){
     return _warehouse.getTransactionList();
   }
-  public void registerAquisition(Object product, Object quantity, Object partner){
-    ((Partner)partner).registerAquisition((Product)product,(int)quantity);
-    _warehouse.registerAquisition((Product)product,(int)quantity,(Partner)partner);
+  public void registerAcquisition(Object product, Object quantity, Object partner){
+    ((Partner)partner).registerAcquisition((Product)product,(int)quantity);
+    _warehouse.registerAcquisition((Product)product,(int)quantity,(Partner)partner);
   }
 
 
