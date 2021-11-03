@@ -1,5 +1,6 @@
 package ggc.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -37,6 +38,23 @@ public class WarehouseManager{
 
 
 //PRODUCT
+
+  public void registerSimpleProduct(String id){
+    _warehouse.registerSimpleProduct(id);
+  }
+
+  public void registerAggregateProduct(String id, double aggravation, List<Component> comps) throws InvalidProductIdException{
+    _warehouse.registerAggregateProduct(id, aggravation, comps);
+  }
+
+  public void registerAggregateProduct(String id, double aggravation, List<String> ids, List<Integer> qnts) throws InvalidProductIdException{
+    ArrayList<Component> comps = new ArrayList<>();
+    for(int i=0;i<ids.size();i++){
+        Component comp = new Component(getProduct(ids.get(i)), (int)qnts.get(i));
+        comps.add(comp);
+    }
+    _warehouse.registerAggregateProduct(id, aggravation, comps);
+  }
 
   public Product getProduct(String id) throws InvalidProductIdException{
     return _warehouse.getProduct(id);
