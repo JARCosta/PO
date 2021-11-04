@@ -30,10 +30,40 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
 
   @Override
   public final void execute() throws CommandException {
-    Product product;
-    Partner partner;
+    String productId = stringField("productId");
+    String partnerId = stringField("partnerId");
     int quantity = integerField("quantity");
     double price = realField("price");
+
+    try {
+      _receiver.registerAcquisition(partnerId, productId, quantity, price );
+    } catch (InvalidPartnerIdException e1) {
+      throw new UnknownPartnerKeyException(partnerId);
+    } catch (InvalidProductIdException e1) {
+      // ask simple or agregate product
+      if(!Form.requestString(Message.requestAddRecipe()).toLowerCase().equals("s"))
+        // register simple
+        _receiver.registerSimpleProduct(productId);
+      else{
+        // register aggregate
+        int nComponents = Form.requestInteger(Message.requestNumberOfComponents());
+        Double alpha = Form.requestReal(Message.requestAlpha());
+        ArrayList<String> ids = new ArrayList<>();
+        ArrayList<Integer> qnts = new ArrayList<>();
+        for(int i=0;i<nComponents;i++){
+          ids.add(Form.requestString(Message.requestProductKey()));
+          qnts.add(Form.requestInteger(Message.requestAmount()));
+        }
+        try{
+        _receiver.registerAggregateProduct(productId, alpha, ids, qnts);
+        }catch (InvalidProductIdException e) {
+          // duplicate product
+          throw new UnknownProductKeyException(productId); // should be duplicate product exception
+        }
+        _receiver.registerAcquisition(partnerId, productId, quantity, price);
+      }
+    }
+    /*
     try {
       // find partner
       partner = _receiver.getPartner(stringField("partnerId"));
@@ -73,6 +103,6 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
         partner.registerBatch(price, quantity, partner, product);
         partner.registerAcquisition(product, quantity);      
       }
-    }
+    }*/
   }
 }

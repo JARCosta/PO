@@ -110,7 +110,11 @@ public class WarehouseManager{
     ((Partner)partner).registerAcquisition((Product)product,(int)quantity);
     _warehouse.registerAcquisition((Product)product,(int)quantity,(Partner)partner);
   }
-
+  public void registerAcquisition(String partnerId, String productId, int quantity, double price ) throws InvalidPartnerIdException, InvalidProductIdException{
+    getPartner(partnerId).registerBatch(price, quantity, getPartner(partnerId), getProduct(productId));
+    getPartner(partnerId).registerAcquisition(getProduct(productId),quantity);
+    _warehouse.registerAcquisition(getProduct(productId),quantity, getPartner(partnerId));
+  }
 
 
   /**
