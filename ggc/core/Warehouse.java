@@ -40,13 +40,15 @@ public class Warehouse implements Serializable {
 
   //PRODUCT
 
-  public void registerSimpleProduct(String id){
+  public Product registerSimpleProduct(String id){
     SimpleProduct prod = new SimpleProduct(id);
     _products.put(id, prod);
+    return prod;
   }
-  public void registerAggregateProduct(String id, double aggravation,List<Component> components){
+  public Product registerAggregateProduct(String id, double aggravation,List<Component> components){
     AggregateProduct product = new AggregateProduct(id, aggravation, components);
     _products.put(id, product);
+    return product;
   }
   public Product getProduct(String id) throws InvalidProductIdException{
     if(!_products.containsKey(id)){
