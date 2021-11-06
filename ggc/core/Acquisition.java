@@ -11,6 +11,6 @@ public class Acquisition extends Transaction{
   @Override
   public String toString() {
     //COMPRA|id|idParceiro|idProduto|quantidade|valor-pago|data-pagamento
-    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + super.getBaseValue() + "|" + super.getDate();
+    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + super.getBaseValue() + "|" + super.getPaymentDate();
   }
 }

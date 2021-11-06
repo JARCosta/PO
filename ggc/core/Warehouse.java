@@ -22,7 +22,7 @@ public class Warehouse implements Serializable {
   private List<Transaction> _transactions;
   
   public Warehouse(){
-    _date = new Date();
+    _date = new Date(0);
     _partners = new HashMap<String, Partner>();
     _products = new HashMap<String, Product>();
   }

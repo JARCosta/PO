@@ -60,7 +60,12 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
           // duplicate product
           throw new UnknownProductKeyException(productId); // should be duplicate product exception
         }
-        _receiver.registerAcquisition(partnerId, productId, quantity, price);
+        try {
+          _receiver.registerAcquisition(partnerId, productId, quantity, price);
+        } catch (InvalidPartnerIdException | InvalidProductIdException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
     }
     /*

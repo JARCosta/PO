@@ -7,4 +7,7 @@ public abstract class Sale extends Transaction {
     super(product, quantity);
     _Partner = partner;
   }
+  public Partner getpartner(){
+    return _Partner;
+  }
 }

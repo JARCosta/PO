@@ -12,16 +12,17 @@ public abstract class Transaction {
   Transaction(Product product,int quantity){
     _quantity = quantity;
     _product = product;
+    _paymentDate = null;
   }
 
   public int getId(){return _id;}
   public int getQuantity(){return _quantity;}
   public double getBaseValue(){return _baseValue;}
-  public Date getDate(){return _paymentDate;}
+  public Date getPaymentDate(){return _paymentDate;}
   public Product getProduct(){return _product;}
 
   public String toString(){
-    return _id +"|"+ _quantity + "|" + _baseValue + "|" + _paymentDate;
+    return getId() +"|"+ getQuantity() + "|" + getBaseValue() + "|" + getPaymentDate();
     }
 
 }
