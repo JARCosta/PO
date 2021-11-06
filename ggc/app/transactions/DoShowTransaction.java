@@ -2,8 +2,8 @@ package ggc.app.transactions;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+import ggc.core.Transaction;
 import ggc.core.WarehouseManager;
-//FIXME import classes
 
 /**
  * Show specific transaction.
@@ -17,9 +17,8 @@ public class DoShowTransaction extends Command<WarehouseManager> {
 
   @Override
   public final void execute() throws CommandException {
-    for( Object trans : _receiver.getTransactionList()){
+    for( Transaction trans : _receiver.getTransactionList()){
       _display.popup(trans.toString());
     }
   }
-
 }

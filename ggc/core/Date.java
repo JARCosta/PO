@@ -26,6 +26,7 @@ public class Date implements Serializable{
   public int difference(Date other){
     return _days - other.currentDate();
   }
+  @Override
   public String toString(){
     return "" + currentDate();
   }

@@ -1,6 +1,7 @@
 package ggc.app.partners;
 
 import ggc.app.exception.UnknownPartnerKeyException;
+import ggc.core.Partner;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
 //FIXME import classes
@@ -25,6 +26,7 @@ class DoShowPartner extends Command<WarehouseManager> {
     try{
       Object partner = _receiver.getPartner(stringField("key"));
       _display.popup(partner.toString());
+      _display.popup(((Partner) partner).showNotifications());    
     } catch (InvalidPartnerIdException upke){
       throw new UnknownPartnerKeyException(stringField("key"));
     }  

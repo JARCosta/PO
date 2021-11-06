@@ -17,6 +17,7 @@ public class Partner implements Serializable{
   private ArrayList<Batch> _batches;
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
+  private List<Notification> _notifications;
 
   public Partner(String id, String name, String adress){
     _name = name;
@@ -24,6 +25,10 @@ public class Partner implements Serializable{
     _id = id;
     _status = "NORMAL";
     _points = 0;
+    _batches = new ArrayList<>();
+    _acquisitions = new ArrayList<>();
+    _sales = new ArrayList<>();
+    _notifications = new ArrayList<>();
   }
 
   public String getId(){
@@ -34,6 +39,20 @@ public class Partner implements Serializable{
   public String toString() {
     return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
   }
+
+  public String showNotifications(){
+    String notifs = "";
+    for(Notification notif: _notifications){
+      notifs += notif.toString();
+    }
+    return notifs;
+  }
+
+  public void addNotification(String type, Product product, Partner partner){
+    Notification notif = new Notification(type, product.getId(), product.getMaxPrice());
+    _notifications.add(notif);
+  }
+  
 
   public double getPoints(){
     return _points;
@@ -74,7 +93,7 @@ public class Partner implements Serializable{
 
 //TRANSACTION
   public void registerAcquisition(Product product, int quantity){
-    Acquisition acquisition = new Acquisition(product, quantity, this);
+    Acquisition acquisition = new Acquisition(this, product, quantity);
     _acquisitions.add(acquisition);
   }
 

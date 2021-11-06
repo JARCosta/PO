@@ -4,7 +4,7 @@ public class SaleByCredit extends Sale{
     private Date _deadine;
     private double _amountPaid;
 
-    public SaleByCredit(Product product, int quantity, Partner partner, int deadline){
+    public SaleByCredit(Partner partner, Product product, int quantity, int deadline){
         super(product, quantity, partner);
         _deadine = new Date(deadline);
     }

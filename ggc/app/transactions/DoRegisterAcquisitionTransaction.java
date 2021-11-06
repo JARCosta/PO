@@ -3,10 +3,8 @@ package ggc.app.transactions;
 import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-//import ggc.core.Component;
 import ggc.core.WarehouseManager;
 import ggc.core.Partner;
-import ggc.core.Product;
 
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidPartnerIdException;
@@ -30,20 +28,16 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
 
   @Override
   public final void execute() throws CommandException {
-    String productId = stringField("productId");
-    String partnerId = stringField("partnerId");
     int quantity = integerField("quantity");
     double price = realField("price");
 
     try {
-      _receiver.registerAcquisition(partnerId, productId, quantity, price );
-    } catch (InvalidPartnerIdException e1) {
-      throw new UnknownPartnerKeyException(partnerId);
-    } catch (InvalidProductIdException e1) {
+      _receiver.registerAcquisition(stringField("partnerId"), stringField("productId"), quantity, price );
+    } catch (InvalidProductIdException e2) {
       // ask simple or agregate product
       if(!Form.requestString(Message.requestAddRecipe()).toLowerCase().equals("s"))
         // register simple
-        _receiver.registerSimpleProduct(productId);
+        _receiver.registerSimpleProduct(stringField("productId"));
       else{
         // register aggregate
         int nComponents = Form.requestInteger(Message.requestNumberOfComponents());
@@ -55,18 +49,21 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
           qnts.add(Form.requestInteger(Message.requestAmount()));
         }
         try{
-        _receiver.registerAggregateProduct(productId, alpha, ids, qnts);
+          System.out.println("lalalalal");
+
+        _receiver.registerAggregateProduct(stringField("productId"), alpha, ids, qnts);
         }catch (InvalidProductIdException e) {
           // duplicate product
-          throw new UnknownProductKeyException(productId); // should be duplicate product exception
-        }
-        try {
-          _receiver.registerAcquisition(partnerId, productId, quantity, price);
-        } catch (InvalidPartnerIdException | InvalidProductIdException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+          throw new UnknownProductKeyException(stringField("productId")); // should be duplicate product exception
         }
       }
+      try {
+        _receiver.registerAcquisition(stringField("partnerId"), stringField("productId"), quantity, price );
+      } catch (InvalidPartnerIdException | InvalidProductIdException e) {
+        System.out.println("second try to registerAquisition failed");
+      }
+    } catch (InvalidPartnerIdException e) {
+      throw new UnknownPartnerKeyException(stringField("partnerId"));
     }
     /*
     try {

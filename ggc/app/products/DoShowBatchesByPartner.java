@@ -23,7 +23,7 @@ class DoShowBatchesByPartner extends Command<WarehouseManager> {
         _display.addLine(batch.toString());
       }
     } catch(InvalidPartnerIdException UnknowPartnerId){
-      throw new UnknownPartnerKeyException("partner");
+      throw new UnknownPartnerKeyException(UnknowPartnerId.getInvalidId());
     }
     _display.display();  }
 

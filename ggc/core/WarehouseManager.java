@@ -18,6 +18,7 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.MissingFileAssociationException;
+import ggc.core.exception.ProductAmountException;
 
 public class WarehouseManager{
   private String _filename = "";
@@ -43,17 +44,8 @@ public class WarehouseManager{
     return _warehouse.registerSimpleProduct(id);
   }
 
-  public Product registerAggregateProduct(String id, double aggravation, List<Component> comps) throws InvalidProductIdException{
-    return _warehouse.registerAggregateProduct(id, aggravation, comps);
-  }
-
   public Product registerAggregateProduct(String id, double aggravation, List<String> ids, List<Integer> qnts) throws InvalidProductIdException{
-    ArrayList<Component> comps = new ArrayList<>();
-    for(int i=0;i<ids.size();i++){
-        Component comp = new Component(getProduct(ids.get(i)), (int)qnts.get(i));
-        comps.add(comp);
-    }
-    return _warehouse.registerAggregateProduct(id, aggravation, comps);
+    return _warehouse.registerAggregateProduct(id, aggravation, ids, qnts);
   }
 
   public Product getProduct(String id) throws InvalidProductIdException{
@@ -106,14 +98,12 @@ public class WarehouseManager{
   public List<Transaction> getTransactionList(){
     return _warehouse.getTransactionList();
   }
-  public void registerAcquisition(Object product, Object quantity, Object partner){
-    ((Partner)partner).registerAcquisition((Product)product,(int)quantity);
-    _warehouse.registerAcquisition((Product)product,(int)quantity,(Partner)partner);
+
+  public void registerAcquisition(String partnerId, String productId, int quantity, double price) throws InvalidPartnerIdException, InvalidProductIdException{
+    _warehouse.registerAcquisition(getPartner(partnerId), getProduct(productId),quantity, price);
   }
-  public void registerAcquisition(String partnerId, String productId, int quantity, double price ) throws InvalidPartnerIdException, InvalidProductIdException{
-    getPartner(partnerId).registerBatch(price, quantity, getPartner(partnerId), getProduct(productId));
-    getPartner(partnerId).registerAcquisition(getProduct(productId),quantity);
-    _warehouse.registerAcquisition(getProduct(productId),quantity, getPartner(partnerId));
+  public void registerSaleByCredit(String partnerId, String productId, int deadline, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+    _warehouse.registerSaleByCredit(partnerId, productId, deadline,quantity);
   }
 
 

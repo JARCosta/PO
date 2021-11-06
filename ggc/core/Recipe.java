@@ -27,23 +27,24 @@ public class Recipe implements Serializable{
   }
 */
 
-  public List<Component> getComponents(){
-    return _components;
-  }
+public List<Component> getComponents(){
+  return _components;
+}
 
-  public double getAggravaton(){
-    return _alpha;
-  }
+public double getAggravaton(){
+  return _alpha;
+}
 
-  public String toString(){
-    String ret = "";
-    for( Component i : _components){
-      Product p = i.getProduct();
-      if(!ret.equals(""))
-        ret += "#";
-      ret += "" + p.getId() + ":" + i.getQuantity();
-    }
-    return ret;
+@Override
+public String toString(){
+  String ret = "";
+  for( Component i : _components){
+    Product p = i.getProduct();
+    if(!ret.equals(""))
+      ret += "#";
+    ret += "" + p.getId() + ":" + i.getQuantity();
+  }
+  return ret;
   }
   
 }

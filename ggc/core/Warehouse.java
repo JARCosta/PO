@@ -12,6 +12,7 @@ import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidDateException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
+import ggc.core.exception.ProductAmountException;
 
 
 public class Warehouse implements Serializable {
@@ -25,6 +26,7 @@ public class Warehouse implements Serializable {
     _date = new Date(0);
     _partners = new HashMap<String, Partner>();
     _products = new HashMap<String, Product>();
+    _transactions = new ArrayList<>();
   }
   
 
@@ -45,8 +47,19 @@ public class Warehouse implements Serializable {
     _products.put(id, prod);
     return prod;
   }
-  public Product registerAggregateProduct(String id, double aggravation,List<Component> components){
-    AggregateProduct product = new AggregateProduct(id, aggravation, components);
+
+  public Product registerAggregateProduct(String id, double aggravation, List<Component> comps){
+    AggregateProduct product = new AggregateProduct(id, aggravation, comps);
+    _products.put(id, product);
+    return product;
+  }
+
+  public Product registerAggregateProduct(String id, double aggravation,List<String> ids, List<Integer> qnts) throws InvalidProductIdException{
+    ArrayList<Component> comps = new ArrayList<>();
+    for(int i=0;i<ids.size();i++){
+        comps.add(new Component(getProduct(ids.get(i)), (int)qnts.get(i)));
+    }
+    AggregateProduct product = new AggregateProduct(id, aggravation, comps);
     _products.put(id, product);
     return product;
   }
@@ -126,8 +139,16 @@ public class Warehouse implements Serializable {
 
 
 //TRANSACTION
-  public void registerAcquisition(Product product, int quantity, Partner partner){
-    _transactions.add(new Acquisition(product, quantity, partner));
+  public void registerAcquisition(Partner partner, Product product, int quantity, double price){
+    partner.registerBatch(price, quantity, partner, product);
+    partner.registerAcquisition(product,quantity);
+    _transactions.add(new Acquisition(partner,product, quantity));
+  }
+  public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+    if(getProduct(productId).getQuantity()<quantity){
+      throw new ProductAmountException(productId,quantity);
+    }
+    _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline));
   }
 
   public List<Transaction> getTransactionList(){
