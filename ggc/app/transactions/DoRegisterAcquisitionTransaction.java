@@ -4,7 +4,6 @@ import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
-import ggc.core.Partner;
 
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidPartnerIdException;
@@ -49,8 +48,6 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
           qnts.add(Form.requestInteger(Message.requestAmount()));
         }
         try{
-          System.out.println("lalalalal");
-
         _receiver.registerAggregateProduct(stringField("productId"), alpha, ids, qnts);
         }catch (InvalidProductIdException e) {
           // duplicate product

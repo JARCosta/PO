@@ -8,11 +8,14 @@ public abstract class Transaction {
   private double _baseValue;
   private int _quantity;
   private Product _product;
+  private static int _currentId;
 
   Transaction(Product product,int quantity){
     _quantity = quantity;
     _product = product;
     _paymentDate = null;
+    _id = _currentId;
+    _currentId++;
   }
 
   public int getId(){return _id;}
@@ -23,6 +26,5 @@ public abstract class Transaction {
 
   public String toString(){
     return getId() +"|"+ getQuantity() + "|" + getBaseValue() + "|" + getPaymentDate();
-    }
-
+  }
 }

@@ -84,8 +84,9 @@ public class Warehouse implements Serializable {
 
 //BATCH
 
-  public void registerBatch( double price, int stock,Partner partner,Product product){
-    partner.registerBatch(price, stock, partner, product);
+  public void registerBatch( double price, int quantity,Partner partner,Product product){
+    partner.registerBatch(price, quantity, partner, product);
+    product.addBatch(new Batch(price, quantity, partner, product));
   }
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
@@ -140,7 +141,7 @@ public class Warehouse implements Serializable {
 
 //TRANSACTION
   public void registerAcquisition(Partner partner, Product product, int quantity, double price){
-    partner.registerBatch(price, quantity, partner, product);
+    registerBatch(price, quantity, partner, product);
     partner.registerAcquisition(product,quantity);
     _transactions.add(new Acquisition(partner,product, quantity));
   }

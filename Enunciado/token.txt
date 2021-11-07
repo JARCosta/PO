@@ -3,4 +3,5 @@ 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
 
 javac -cp po-uilib.jar:. `find ggc -name *.java`
 java -cp po-uilib.jar:. ggc.app.App
+java -cp po-uilib.jar:. -Dimport=save.import ggc.app.App
 ./runtests.sh

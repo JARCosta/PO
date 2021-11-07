@@ -73,11 +73,10 @@ public class Parser {
     
     Product product = _warehouse.getProduct(idProduct);
     Partner partner = _warehouse.getPartner(idPartner);
-    product.addBatch(new Batch(price, stock, partner, product));
-    //_warehouse.registerBatch(price,stock, partner, product);
+    _warehouse.registerBatch(price, stock, partner, product);
   }
- 
-    
+  
+  
   //BATCH_M|idProduto|idParceiro|prec ̧o|stock-actual|agravamento|componente-1:quantidade-1#...#componente-n:quantidade-n
   private void parseAggregateProduct(String[] components, String line) throws BadEntryException, InvalidPartnerIdException, InvalidProductIdException {
     if (components.length != 7)
