@@ -112,7 +112,6 @@ public class Parser {
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
 
-    product.addBatch(new Batch(price, stock, partner, product));
-    //_warehouse.registerBatch(price, stock, partner, product);
+    _warehouse.registerBatch(price, stock, partner, product);
   }
 }

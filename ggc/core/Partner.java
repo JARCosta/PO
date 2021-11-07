@@ -48,7 +48,7 @@ public class Partner implements Serializable{
     return notifs;
   }
 
-  public void addNotification(String type, Product product, Partner partner){
+  public void addNotification(String type, Product product){
     Notification notif = new Notification(type, product.getId(), product.getMaxPrice());
     _notifications.add(notif);
   }

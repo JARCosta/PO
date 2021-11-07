@@ -42,15 +42,25 @@ public class Warehouse implements Serializable {
 
   //PRODUCT
 
+  public void newProductNotification(Product product){
+    if(_partners.size() != 0){
+      for(Partner partner: _partners.values()){
+        partner.addNotification("NEW", product);
+      }
+    }//FIX Se um parceiro for criado depois de uma certa notificacao ele tbm esta interassado nesse produto
+  }
+  
   public Product registerSimpleProduct(String id){
-    SimpleProduct prod = new SimpleProduct(id);
-    _products.put(id, prod);
-    return prod;
+    SimpleProduct product = new SimpleProduct(id);
+    _products.put(id, product);
+    newProductNotification(product);
+    return product;
   }
 
   public Product registerAggregateProduct(String id, double aggravation, List<Component> comps){
     AggregateProduct product = new AggregateProduct(id, aggravation, comps);
     _products.put(id, product);
+    newProductNotification(product);
     return product;
   }
 
@@ -61,6 +71,7 @@ public class Warehouse implements Serializable {
     }
     AggregateProduct product = new AggregateProduct(id, aggravation, comps);
     _products.put(id, product);
+    newProductNotification(product);
     return product;
   }
   public Product getProduct(String id) throws InvalidProductIdException{
