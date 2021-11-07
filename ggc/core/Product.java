@@ -93,6 +93,17 @@ public abstract class Product implements Serializable{
     }
     return retBatch.getPrice();
   }
+
+  public Batch searchCheapestBatch() {
+    Batch cheapestBatch = null;
+    for(Batch batch : getBatches()){
+      if(cheapestBatch == null)
+        cheapestBatch = batch;
+      else if(batch.getPrice()<cheapestBatch.getPrice())
+        cheapestBatch = batch;
+    }
+    return cheapestBatch;
+  }
   /*
   public Batch getMinPriceBatch(){
     Batch retBatch = null;

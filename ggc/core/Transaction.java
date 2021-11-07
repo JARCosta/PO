@@ -1,7 +1,5 @@
 package ggc.core;
 
-import java.sql.Date;
-
 public abstract class Transaction {
   private int _id;
   private Date _paymentDate;

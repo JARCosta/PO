@@ -129,6 +129,7 @@ public class Warehouse implements Serializable {
     }
     Partner partner = new Partner(id, name, adress);
     _partners.put(id.toLowerCase(),partner);
+    
   }
   public Partner getPartner(String id) throws InvalidPartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
@@ -163,37 +164,30 @@ public class Warehouse implements Serializable {
       throw new ProductAmountException(productId,quantity);
     }
     _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline));
-    Batch removingBatch = searchCheapestBatch(productId);
+
+    double _baseValue=0;
+    Batch removingBatch = getProduct(productId).searchCheapestBatch();
     while(quantity > 0){
-      //System.out.println("" + quantity);
       if(removingBatch.getQuantity()<quantity){
         quantity -= removingBatch.getQuantity();
+        _baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
         removeBatch(removingBatch);
       } else{
+        _baseValue += quantity*removingBatch.getPrice();
         quantity-= removingBatch.getQuantity();
         removingBatch.removeQuantity(quantity);
       }
     }
-    //System.out.println("" + quantity);
   }
 
-  public Batch searchCheapestBatch(String productId) throws InvalidProductIdException{
-    Batch cheapestBatch = null;
-    for(Batch batch : getProduct(productId).getBatches()){
-      if(cheapestBatch == null)
-        cheapestBatch = batch;
-      else if(batch.getPrice()<cheapestBatch.getPrice())
-        cheapestBatch = batch;
-    }
-    return cheapestBatch;
-  }
+
 
   public List<Transaction> getTransactionList(){
     return _transactions;
   }
 
 //NOTIFICATION
-  /*
+  
   public void addNotificationToSystem(String type, Product product){
     Notification notif = new Notification(type, product.getId(), product.get);
   }
@@ -206,7 +200,7 @@ public class Warehouse implements Serializable {
   
   public void addNotificationsToPartner(Partner partner){
     for(Notification notification: _notifications.values()){
-      partner.addNotification(notification.getType(), getProduct(notification.getProductId()));
+      partner.addNotification(notification.getType(), );
     }
   }
   
