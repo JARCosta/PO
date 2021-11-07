@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+
+import javax.lang.model.element.QualifiedNameable;
+
 import java.util.HashMap;
 import java.io.IOException;
 
@@ -20,12 +23,14 @@ public class Warehouse implements Serializable {
   private Date _date;
   private Map<String, Partner> _partners;
   private Map<String, Product> _products;
+  private Map<String, Notification> _notifications;
   private List<Transaction> _transactions;
   
   public Warehouse(){
     _date = new Date(0);
     _partners = new HashMap<String, Partner>();
     _products = new HashMap<String, Product>();
+    _notifications = new HashMap<>();
     _transactions = new ArrayList<>();
   }
   
@@ -42,25 +47,15 @@ public class Warehouse implements Serializable {
 
   //PRODUCT
 
-  public void newProductNotification(Product product){
-    if(_partners.size() != 0){
-      for(Partner partner: _partners.values()){
-        partner.addNotification("NEW", product);
-      }
-    }//FIX Se um parceiro for criado depois de uma certa notificacao ele tbm esta interassado nesse produto
-  }
-  
   public Product registerSimpleProduct(String id){
     SimpleProduct product = new SimpleProduct(id);
     _products.put(id, product);
-    newProductNotification(product);
     return product;
   }
 
   public Product registerAggregateProduct(String id, double aggravation, List<Component> comps){
     AggregateProduct product = new AggregateProduct(id, aggravation, comps);
     _products.put(id, product);
-    newProductNotification(product);
     return product;
   }
 
@@ -71,7 +66,6 @@ public class Warehouse implements Serializable {
     }
     AggregateProduct product = new AggregateProduct(id, aggravation, comps);
     _products.put(id, product);
-    newProductNotification(product);
     return product;
   }
   public Product getProduct(String id) throws InvalidProductIdException{
@@ -116,8 +110,14 @@ public class Warehouse implements Serializable {
   public List<Batch> getBatchSortedList(Product product){
     return sortBatches(product.getBatches());
   }
+  
   public List<Batch> getBatchSortedList(Partner partner){
     return sortBatches(partner.getBatches());
+  }
+
+  public void removeBatch(Batch batch){
+    batch.getPartner().removeBatch(batch);
+    batch.getProduct().removeBatch(batch);
   }
 
 
@@ -151,22 +151,65 @@ public class Warehouse implements Serializable {
 
 
 //TRANSACTION
+
   public void registerAcquisition(Partner partner, Product product, int quantity, double price){
     registerBatch(price, quantity, partner, product);
     partner.registerAcquisition(product,quantity);
     _transactions.add(new Acquisition(partner,product, quantity));
   }
+
   public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
     if(getProduct(productId).getQuantity()<quantity){
       throw new ProductAmountException(productId,quantity);
     }
     _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline));
+    Batch removingBatch = searchCheapestBatch(productId);
+    while(quantity > 0){
+      //System.out.println("" + quantity);
+      if(removingBatch.getQuantity()<quantity){
+        quantity -= removingBatch.getQuantity();
+        removeBatch(removingBatch);
+      } else{
+        quantity-= removingBatch.getQuantity();
+        removingBatch.removeQuantity(quantity);
+      }
+    }
+    //System.out.println("" + quantity);
+  }
+
+  public Batch searchCheapestBatch(String productId) throws InvalidProductIdException{
+    Batch cheapestBatch = null;
+    for(Batch batch : getProduct(productId).getBatches()){
+      if(cheapestBatch == null)
+        cheapestBatch = batch;
+      else if(batch.getPrice()<cheapestBatch.getPrice())
+        cheapestBatch = batch;
+    }
+    return cheapestBatch;
   }
 
   public List<Transaction> getTransactionList(){
     return _transactions;
   }
 
+//NOTIFICATION
+  /*
+  public void addNotificationToSystem(String type, Product product){
+    Notification notif = new Notification(type, product.getId(), product.get);
+  }
+
+  public void addNotificationToPartners(Notification notification, Product product){
+    for(Partner partner: _partners.values()){
+      partner.addNotification(notification.getType(), product);
+    }
+  }
+  
+  public void addNotificationsToPartner(Partner partner){
+    for(Notification notification: _notifications.values()){
+      partner.addNotification(notification.getType(), getProduct(notification.getProductId()));
+    }
+  }
+  
 
   /**
    * @param txtfile filename to be loaded.

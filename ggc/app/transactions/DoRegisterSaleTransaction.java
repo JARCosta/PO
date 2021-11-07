@@ -18,8 +18,8 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
   public DoRegisterSaleTransaction(WarehouseManager receiver) {
     super(Label.REGISTER_SALE_TRANSACTION, receiver);
     addStringField("partnerId", Message.requestPartnerKey());
-    addStringField("productId", Message.requestProductKey());
     addIntegerField("deadline", Message.requestPaymentDeadline());
+    addStringField("productId", Message.requestProductKey());
     addIntegerField("quantity", Message.requestAmount());
   }
 

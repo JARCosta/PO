@@ -8,7 +8,7 @@ class BatchComparator implements Comparator<Batch> {
 
     diff = b1.getProduct().getId().toLowerCase().compareTo(b2.getProduct().getId().toLowerCase());
     if(diff == 0)    
-      diff = b1.getpartner().getId().compareTo(b2.getpartner().getId());
+      diff = b1.getPartner().getId().compareTo(b2.getPartner().getId());
       if(diff == 0)
         diff = (int)(b1.getPrice() - b2.getPrice());
         if(diff == 0)

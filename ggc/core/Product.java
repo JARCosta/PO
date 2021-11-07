@@ -73,13 +73,37 @@ public abstract class Product implements Serializable{
   * @return changes the actual maxPrice(highest price) of a product for the new highest price
   */
   public double getMaxPrice(){
-    double maxPrice = 0;
+    Batch retBatch = null;
     for(Batch i : _batches){
-      if(i.getPrice()>maxPrice)
-        maxPrice = i.getPrice();
+      if(retBatch == null)
+        retBatch = i;
+      else if(retBatch.getPrice()<i.getPrice())
+        retBatch = i;
     }
-    return _maxPrice = maxPrice;
+    return retBatch.getPrice();
   }
+
+  public double getMinPrice(){
+    Batch retBatch = null;
+    for(Batch i : _batches){
+      if(retBatch == null)
+        retBatch = i;
+      else if(retBatch.getPrice()>i.getPrice())
+        retBatch = i;
+    }
+    return retBatch.getPrice();
+  }
+  /*
+  public Batch getMinPriceBatch(){
+    Batch retBatch = null;
+    for(Batch i : _batches){
+      if(retBatch == null)
+        retBatch = i;
+      else if(retBatch.getPrice()>i.getPrice())
+        retBatch = i;
+    }
+    return retBatch;
+  }*/
 
   /**
   * Sum quantity of a product in all batches
@@ -101,7 +125,7 @@ public abstract class Product implements Serializable{
   public int getQuantity(Partner p){
     int quantity = 0;
     for( Batch i: _batches){
-      if(i.getpartner() == p){
+      if(i.getPartner() == p){
         quantity += i.getQuantity();
       }
     }
@@ -131,6 +155,10 @@ public abstract class Product implements Serializable{
   */
   public void addBatch(Batch batch){
     _batches.add(batch);
+  }
+
+  public void removeBatch(Batch batch){
+    _batches.remove(batch);
   }
 
   

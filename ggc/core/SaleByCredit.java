@@ -16,6 +16,6 @@ public class SaleByCredit extends Sale{
     public String toString(){
         String ret = "";
         if(super.getPaymentDate() != null){ ret = "|" + super.getPaymentDate(); }
-        return "VENDA|" + super.getId() + "|" + super.getpartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + super.getBaseValue() + "|" + getAmountToPay() + "|" + _deadine + ret;
+        return "VENDA|" + super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + _deadine + "|" + (int)super.getBaseValue() + "|" + (int)getAmountToPay() + "|" + super.getQuantity() + ret;
     }
 }

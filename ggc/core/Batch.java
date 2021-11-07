@@ -59,7 +59,7 @@ public class Batch implements Serializable{
    * Obtain the owner of this batch
    * @return returns the partner owner of this batch
    */
-  public Partner getpartner(){
+  public Partner getPartner(){
     return _partner;
   }
   /**
@@ -68,5 +68,8 @@ public class Batch implements Serializable{
    */
   public Product getProduct(){
     return _product;
+  }
+  public void removeQuantity(int quantity){
+    _quantity -= quantity;
   }
 }

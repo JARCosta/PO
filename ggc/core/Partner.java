@@ -14,6 +14,7 @@ public class Partner implements Serializable{
   private double _valorCompras;
   private double _valorVendas;
   private double _valorVendasPagas;
+  private PartnerState _state;
   private ArrayList<Batch> _batches;
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
@@ -23,7 +24,7 @@ public class Partner implements Serializable{
     _name = name;
     _adress = adress;
     _id = id;
-    _status = "NORMAL";
+    _state = new NormalPartner(this);
     _points = 0;
     _batches = new ArrayList<>();
     _acquisitions = new ArrayList<>();
@@ -63,18 +64,23 @@ public class Partner implements Serializable{
   }
 
   public void updateStatus(){
-    if(_points>2000)
-      if(_points>25000)
-        _status = "ELITE";
-      else
-      _status = "SELECTION";
-    else
-    _status = "NORMAL";
+    // desenho: state + singleton
+//    if(_points>2000)
+//      if(_points>25000)
+//        _state.elite();
+//      else
+//      _state.selection();
+//    else
+//    _state.normal();
   }
 
   public void registerBatch(double price, int stock, Partner partner, Product product){
     Batch batch = new Batch(price, stock, partner, product);
     _batches.add(batch);
+  }
+
+  public void removeBatch(Batch batch){
+    _batches.remove(batch);
   }
 
   public List<Batch> getBatches(){
