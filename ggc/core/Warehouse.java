@@ -124,7 +124,7 @@ public class Warehouse implements Serializable {
 
 //PARTNER
 
-  public void registerPartner(String id, String name, String adress) throws DuplicatePartnerIdException, InvalidProductIdException{
+  public void registerPartner(String id, String name, String adress) throws DuplicatePartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
       throw new DuplicatePartnerIdException(id);
     }
@@ -191,12 +191,12 @@ public class Warehouse implements Serializable {
   
   public void addNotificationToSystem(Product product, double price){
     if(!_notifications.keySet().contains(product.getId())){
-      Notification notification = new Notification("NEW", product.getId(), price);
+      Notification notification = new Notification("NEW", product, price);
       _notifications.put(product.getId(), notification);
     }
     else if(_notifications.keySet().contains(product.getId())){
       if(price<product.getMinPrice()){
-        Notification notification = new Notification("BARGAIN", product.getId(), price);
+        Notification notification = new Notification("BARGAIN", product, price);
         _notifications.put(product.getId(), notification);
       }
     }
@@ -208,9 +208,9 @@ public class Warehouse implements Serializable {
     }
   }
   
-  public void addNotificationsToPartner(Partner partner) throws InvalidProductIdException{
+  public void addNotificationsToPartner(Partner partner) {
     for(Notification notification: _notifications.values()){
-      partner.addNotification(notification.getType(), getProduct(notification.getProductId()));
+      partner.addNotification(notification.getType(), notification.getProduct());
     }
   }
   
@@ -226,5 +226,5 @@ public class Warehouse implements Serializable {
   void importFile(String txtfile) throws IOException, BadEntryException, DuplicatePartnerIdException, InvalidPartnerIdException, InvalidProductIdException {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
-    }
+  }
 }

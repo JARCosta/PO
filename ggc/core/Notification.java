@@ -2,12 +2,12 @@ package ggc.core;
 
 public class Notification{
     private String _type;
-    private String _productId;
+    private Product _product;
     private double _productPrice;
 
-    public Notification(String type, String productId, double productPrice){
+    public Notification(String type, Product product, double productPrice){
         _type = type;
-        _productId = productId;
+        _product = product;
         _productPrice = productPrice;
     }
 
@@ -15,11 +15,12 @@ public class Notification{
 
     @Override
     public String toString(){
-        return _type + "|" + _productId + "|" + _productPrice;
+        return _type + "|" + _product.getId() + "|" + _productPrice;
     }
 
     public String getType(){return _type;}
-    public String getProductId(){return _productId;}
+    public String getProductId(){return _product.getId();}
+    public Product getProduct(){return _product;}
     public double getProductPrice(){return _productPrice;}
 
 
