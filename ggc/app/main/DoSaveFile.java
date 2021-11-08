@@ -29,7 +29,7 @@ class DoSaveFile extends Command<WarehouseManager> {
       } catch (MissingFileAssociationException fileError) {
         System.out.println("aaaaaaaaaaaaa");
       } catch(IOException fileException){
-        System.out.println("DoSaveFile.execute()");
+        //System.out.println("DoSaveFile.execute()");
       }
     }
   }

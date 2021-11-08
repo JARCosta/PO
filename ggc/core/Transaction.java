@@ -6,14 +6,13 @@ public abstract class Transaction {
   private double _baseValue;
   private int _quantity;
   private Product _product;
-  private static int _currentId;
+  //private static int _currentId;
 
-  Transaction(Product product,int quantity){
+  Transaction(Product product,int quantity, int currentId){
     _quantity = quantity;
     _product = product;
     _paymentDate = null;
-    _id = _currentId;
-    _currentId++;
+    _id = currentId;
   }
 
   public int getId(){return _id;}

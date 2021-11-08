@@ -25,14 +25,15 @@ public class Warehouse implements Serializable {
   private Date _date;
   private Map<String, Partner> _partners;
   private Map<String, Product> _products;
-  private Map<String, Notification> _notifications;
+  private List<Notification> _notifications;
   private List<Transaction> _transactions;
+  private int _nextTransctionId;
   
   public Warehouse(){
     _date = new Date(0);
     _partners = new HashMap<String, Partner>();
     _products = new HashMap<String, Product>();
-    _notifications = new HashMap<>();
+    _notifications = new ArrayList<>();
     _transactions = new ArrayList<>();
   }
   
@@ -70,6 +71,7 @@ public class Warehouse implements Serializable {
     _products.put(id, product);
     return product;
   }
+  
   public Product getProduct(String id) throws InvalidProductIdException{
     if(!_products.containsKey(id)){
       throw new InvalidProductIdException(id);
@@ -95,7 +97,7 @@ public class Warehouse implements Serializable {
     partner.registerBatch(price, quantity, partner, product);
     product.addBatch(new Batch(price, quantity, partner, product));
     product.updateMaxPrice();
-    addNotificationToSystem(product, price);
+    addNotificationToSystem("NEW", product, price);
   }
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
@@ -152,11 +154,20 @@ public class Warehouse implements Serializable {
 
 //TRANSACTION
 
+  public int getTransactionId(){
+    return _nextTransctionId;
+  }
+  public void advanceTransactionId(){
+    _nextTransctionId++;
+  }
+
   public void registerAcquisition(Partner partner, Product product, int quantity, double price){
     registerBatch(price, quantity, partner, product);
     product.updateMaxPrice();
-    partner.registerAcquisition(product,quantity);
-    _transactions.add(new Acquisition(partner,product, quantity));
+    Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
+    partner.registerAcquisition(acq);
+    _transactions.add(acq); 
+    advanceTransactionId();
   }
 
   public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
@@ -164,7 +175,8 @@ public class Warehouse implements Serializable {
       throw new ProductAmountException(productId,quantity);
     }
     getProduct(productId).updateMaxPrice();
-    _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline));
+    _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline,_nextTransctionId));
+    advanceTransactionId();
     /*
     double _baseValue=0;
     Batch removingBatch = getProduct(productId).searchCheapestBatch();
@@ -183,6 +195,8 @@ public class Warehouse implements Serializable {
 
 
   public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException{
+    System.out.println(_transactions.size());
+    System.out.println(transactionId);
     if(_transactions.size()<transactionId){
       throw new InvalidTransactionKeyException(transactionId);
     }
@@ -196,8 +210,19 @@ public class Warehouse implements Serializable {
 
 //NOTIFICATION
   
+  public void addNotificationToSystem(String type, Product product, double price){
+    for(Notification notification: _notifications){
+      if(notification.equals(new Notification("NEW", product, price))){
+        
+
+      }
+    }
+
+
+  }
+  /*
   public void addNotificationToSystem(Product product, double price){
-    if(!_notifications.keySet().contains(product.getId())){
+    if(!_notfications.keySet().contains(product.getId())){
       Notification notification = new Notification("NEW", product, price);
       _notifications.put(product.getId(), notification);
     }
@@ -220,7 +245,7 @@ public class Warehouse implements Serializable {
       partner.addNotification(notification.getType(), notification.getProduct());
     }
   }
-  
+  */
 
   /**
    * @param txtfile filename to be loaded.

@@ -98,9 +98,8 @@ public class Partner implements Serializable{
 
 
 //TRANSACTION
-  public void registerAcquisition(Product product, int quantity){
-    Acquisition acquisition = new Acquisition(this, product, quantity);
-    _acquisitions.add(acquisition);
+  public void registerAcquisition(Acquisition acq){
+    _acquisitions.add(acq);
   }
 
   @Override

@@ -3,8 +3,8 @@ package ggc.core;
 public class Acquisition extends Transaction{
   private Partner _partner;
 
-  Acquisition(Partner partner, Product product, int quantity){
-    super(product, quantity);
+  Acquisition(Partner partner, Product product, int quantity, int transactionId){
+    super(product, quantity,transactionId);
     _partner = partner;
   }
 
