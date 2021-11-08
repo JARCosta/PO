@@ -1,14 +1,15 @@
 package ggc.core.partners;
 
 public abstract class PartnerState {
-    private Partner _partner;
-    private String _status;
+  private String _status;
 
-    public PartnerState(Partner partner, String status){
-        _partner = partner;
-        _status = status;
-    }
-    
+  public PartnerState(String status){
+    _status = status;
+  }
+  public String getStatus(){
+    return _status;
+  }
+  
 //    void normal();
 //    void selection();
 //    void ElitePartner();

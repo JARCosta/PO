@@ -30,7 +30,7 @@ public class Partner implements Serializable{
     _name = name;
     _adress = adress;
     _id = id;
-    _state = new NormalPartner(this);
+    _state = new NormalPartner();
     _points = 0;
     _batches = new ArrayList<>();
     _acquisitions = new ArrayList<>();
@@ -44,7 +44,7 @@ public class Partner implements Serializable{
 
   @Override
   public String toString() {
-    return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
+    return _id + "|" + _name + "|" + _adress + "|" + _state.getStatus() + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
   }
 
   public String showNotifications(){

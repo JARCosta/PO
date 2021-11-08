@@ -140,9 +140,9 @@ public class WarehouseManager{
    * @throws IOException
    */
   public void load(String filename) throws UnavailableFileException{
-    try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
+    _filename = filename;
+    try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(_filename))){
       _warehouse = (Warehouse) file.readObject();
-      _filename = filename;
     } catch(ClassNotFoundException | IOException a){
       throw new UnavailableFileException(filename);
     }
