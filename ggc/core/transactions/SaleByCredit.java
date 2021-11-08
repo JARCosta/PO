@@ -2,8 +2,10 @@ package ggc.core.transactions;
 
 import ggc.core.Batch;
 import ggc.core.Date;
+import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.partners.Partner;
 import ggc.core.products.Product;
+import ggc.core.Date;
 
 public class SaleByCredit extends Sale{
   private Date _deadine;
@@ -43,6 +45,11 @@ public class SaleByCredit extends Sale{
 
   public double getAmountToPay(){
     return super.getBaseValue() - _amountPaid; // should be total amopunt to pay - _amount paied;
+  }
+  public void pay(Date date){
+    if(_amountPaid != super.getBaseValue())
+      _amountPaid = super.getBaseValue();
+      super.setPaymentDate(date);
   }
 
   public String toString(){

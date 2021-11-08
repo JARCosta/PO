@@ -219,11 +219,22 @@ public class Warehouse implements Serializable {
   public List<Transaction> getTransactionList(){
     return _transactions;
   }
+  public void pay(int transactionId)throws IndexOutOfBoundsException{
+    Transaction trans = _transactions.get(transactionId);
+    if(trans instanceof SaleByCredit){
+      ((SaleByCredit)_transactions.get(transactionId)).pay(_date);
+    } 
+  }
+
 
 //NOTIFICATION
   
+
   public void addNotificationToSystem(Product product, double price){
     for(Notification notification: _notifications){
+      if(product.getId().equals(notification.getProductId())){
+      }
+
       if(!notification.getProductId().equals(product.getId())){
         // para todas as notificacoes com um produto diferente ao dado
         Notification notif = new Notification("NEW", product, price);
@@ -231,7 +242,7 @@ public class Warehouse implements Serializable {
       }
       else if(notification.getProductId().equals(product.getId())){
         if(price < product.getMinPrice()){
-          Notification notif = new 
+   //       Notification notif = new 
           
         }
       }

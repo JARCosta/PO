@@ -3,6 +3,7 @@ package ggc.core;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,11 +19,12 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.exception.MissingFileAssociationException;
+import ggc.core.exception.ProductAmountException;
+
 import ggc.core.partners.Partner;
 import ggc.core.products.Product;
 import ggc.core.transactions.Transaction;
-import ggc.core.exception.MissingFileAssociationException;
-import ggc.core.exception.ProductAmountException;
 
 public class WarehouseManager{
   private String _filename = "";
@@ -113,6 +115,9 @@ public class WarehouseManager{
     _warehouse.registerSaleByCredit(partnerId, productId, deadline,quantity);
   }
 
+  public void pay(int transactionId) throws IndexOutOfBoundsException{
+    _warehouse.pay(transactionId);
+  }
 
   /**
    * @@throws IOException
@@ -124,45 +129,45 @@ public class WarehouseManager{
     outStream.writeObject(_warehouse);
     outStream.close();
     fileOut.close();
-}
+  }
 
-/**
- * @@param filename
- * @@throws MissingFileAssociationException
- * @@throws IOException
- * @@throws FileNotFoundException
- */
-public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
-  _filename = filename;
-  save();
-}
-
-/**
- * @@param filename
- * @@throws UnavailableFileException
- * @throws IOException
- */
-public void load(String filename) throws UnavailableFileException{
-  try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
-    _warehouse = (Warehouse) file.readObject();
+  /**
+   * @@param filename
+   * @@throws MissingFileAssociationException
+   * @@throws IOException
+   * @@throws FileNotFoundException
+   */
+  public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
     _filename = filename;
-  } catch(ClassNotFoundException | IOException a){
-    throw new UnavailableFileException(filename);
+    save();
   }
-}
 
-/**
- * @param textfile
- * @throws ImportFileException
- * @throws InvalidProductIdException
- * @throws InvalidPartnerIdException
- * @throws DuplicatePartnerIdException
- */
-public void importFile(String textfile) throws ImportFileException{
-  try {
-    _warehouse.importFile(textfile);
-  } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerIdException  e) {
-    throw new ImportFileException(textfile, e);
+  /**
+   * @@param filename
+   * @@throws UnavailableFileException
+   * @throws IOException
+   */
+  public void load(String filename) throws UnavailableFileException{
+    try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
+      _warehouse = (Warehouse) file.readObject();
+      _filename = filename;
+    } catch(ClassNotFoundException | IOException a){
+      throw new UnavailableFileException(filename);
+    }
   }
-}
+
+  /**
+   * @param textfile
+   * @throws ImportFileException
+   * @throws InvalidProductIdException
+   * @throws InvalidPartnerIdException
+   * @throws DuplicatePartnerIdException
+  */
+  public void importFile(String textfile) throws ImportFileException{
+    try {
+      _warehouse.importFile(textfile);
+   } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerIdException  e) {
+      throw new ImportFileException(textfile, e);
+    }
+  }
 }

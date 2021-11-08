@@ -24,6 +24,7 @@ public abstract class Transaction {
   public double getBaseValue(){return _baseValue;}
   public Date getPaymentDate(){return _paymentDate;}
   public Product getProduct(){return _product;}
+  public void setPaymentDate(Date date){_paymentDate = date;}
 
   public String toString(){
     return getId() +"|"+ getQuantity() + "|" + getBaseValue() + "|" + getPaymentDate();
