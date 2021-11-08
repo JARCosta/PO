@@ -8,21 +8,31 @@ public class SaleByCredit extends Sale{
   public SaleByCredit(Partner partner, Product product, int quantity, int deadline){
     super(product, quantity, partner);
     _deadine = new Date(deadline);
+    removeQuantity(product,quantity);
+  }
 
-
-    Batch removingBatch = product.searchCheapestBatch();
+  public void removeQuantity(Product product, int quantity){
     while(quantity > 0){
-      if(removingBatch.getQuantity()<quantity){
-      quantity -= removingBatch.getQuantity();
-      _baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
-      removeBatch(removingBatch);
+      
+      Batch removingBatch = product.searchCheapestBatch();
+
+      if(removingBatch.getQuantity() <= quantity){
+        //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
+        quantity -= removingBatch.getQuantity();
+        _baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
+        removeBatch(removingBatch);
       } else{
-      _baseValue += quantity*removingBatch.getPrice();
-      quantity-= removingBatch.getQuantity();
-      removingBatch.removeQuantity(quantity);
+        //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
+        _baseValue += quantity*removingBatch.getPrice();
+        quantity = 0;
+        removingBatch.removeQuantity(quantity);
       }
     }
+  }
 
+  public void removeBatch(Batch batch){
+    batch.getPartner().removeBatch(batch);
+    batch.getProduct().removeBatch(batch);
   }
 
   public double getAmountToPay(){

@@ -90,9 +90,10 @@ public class Warehouse implements Serializable {
 //BATCH
 
   public void registerBatch(double price, int quantity,Partner partner,Product product){
-    addNotificationToSystem(product, price);
     partner.registerBatch(price, quantity, partner, product);
     product.addBatch(new Batch(price, quantity, partner, product));
+    product.updateMaxPrice();
+    addNotificationToSystem(product, price);
   }
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
@@ -114,11 +115,6 @@ public class Warehouse implements Serializable {
   
   public List<Batch> getBatchSortedList(Partner partner){
     return sortBatches(partner.getBatches());
-  }
-
-  public void removeBatch(Batch batch){
-    batch.getPartner().removeBatch(batch);
-    batch.getProduct().removeBatch(batch);
   }
 
 
@@ -156,6 +152,7 @@ public class Warehouse implements Serializable {
 
   public void registerAcquisition(Partner partner, Product product, int quantity, double price){
     registerBatch(price, quantity, partner, product);
+    product.updateMaxPrice();
     partner.registerAcquisition(product,quantity);
     _transactions.add(new Acquisition(partner,product, quantity));
   }
@@ -164,8 +161,9 @@ public class Warehouse implements Serializable {
     if(getProduct(productId).getQuantity()<quantity){
       throw new ProductAmountException(productId,quantity);
     }
+    getProduct(productId).updateMaxPrice();
     _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline));
-
+    /*
     double _baseValue=0;
     Batch removingBatch = getProduct(productId).searchCheapestBatch();
     while(quantity > 0){
@@ -178,7 +176,7 @@ public class Warehouse implements Serializable {
         quantity-= removingBatch.getQuantity();
         removingBatch.removeQuantity(quantity);
       }
-    }
+    }*/
   }
 
 

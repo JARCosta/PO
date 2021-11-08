@@ -102,7 +102,7 @@ public class WarehouseManager{
   public void registerAcquisition(String partnerId, String productId, int quantity, double price) throws InvalidPartnerIdException, InvalidProductIdException{
     _warehouse.registerAcquisition(getPartner(partnerId), getProduct(productId),quantity, price);
   }
-  public void registerSaleByCredit(String partnerId, String productId, int deadline, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+  public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
     _warehouse.registerSaleByCredit(partnerId, productId, deadline,quantity);
   }
 

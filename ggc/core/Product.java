@@ -1,6 +1,7 @@
 package ggc.core;
 
 import java.io.Serializable;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +32,7 @@ public abstract class Product implements Serializable{
   */
   Product(String id){
     _id = id;
-    _maxPrice = 0;
+    _maxPrice=0;
     _batches = new ArrayList<Batch>();
   }
 
@@ -73,14 +74,28 @@ public abstract class Product implements Serializable{
   * @return changes the actual maxPrice(highest price) of a product for the new highest price
   */
   public double getMaxPrice(){
-    Batch retBatch = null;
+    /*Batch retBatch = null;
+
     for(Batch i : _batches){
       if(retBatch == null)
         retBatch = i;
       else if(retBatch.getPrice()<i.getPrice())
         retBatch = i;
     }
-    return retBatch.getPrice();
+
+    return retBatch.getPrice();*/
+    return _maxPrice;
+  }
+  public void updateMaxPrice(){
+    Batch retBatch = null;
+
+    for(Batch i : _batches){
+      if(retBatch == null)
+        retBatch = i;
+      else if(retBatch.getPrice()<i.getPrice())
+        retBatch = i;
+    }
+    _maxPrice = retBatch.getPrice();
   }
 
   public double getMinPrice(){
@@ -96,6 +111,7 @@ public abstract class Product implements Serializable{
 
   public Batch searchCheapestBatch() {
     Batch cheapestBatch = null;
+
     for(Batch batch : getBatches()){
       if(cheapestBatch == null)
         cheapestBatch = batch;
