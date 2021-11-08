@@ -1,4 +1,7 @@
-package ggc.core;
+package ggc.core.transactions;
+
+import ggc.core.partners.Partner;
+import ggc.core.products.Product;
 
 public abstract class Sale extends Transaction {
   private Partner _Partner;

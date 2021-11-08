@@ -2,7 +2,7 @@ package ggc.core;
 
 import java.util.Comparator;
 
-class BatchComparator implements Comparator<Batch> {
+public class BatchComparator implements Comparator<Batch> {
   public int compare(Batch b1, Batch b2){
     int diff;
 

@@ -1,9 +1,15 @@
-package ggc.core;
+package ggc.core.partners;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import ggc.core.Batch;
+import ggc.core.Notification;
+import ggc.core.products.Product;
+import ggc.core.transactions.Acquisition;
+import ggc.core.transactions.Sale;
 
 public class Partner implements Serializable{
   private String _name;

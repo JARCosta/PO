@@ -9,6 +9,9 @@ import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
+import ggc.core.partners.Partner;
+import ggc.core.products.Component;
+import ggc.core.products.Product;
 
 public class Parser {
   private Warehouse _warehouse;

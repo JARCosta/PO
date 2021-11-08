@@ -1,4 +1,9 @@
-package ggc.core;
+package ggc.core.transactions;
+
+import ggc.core.Batch;
+import ggc.core.Date;
+import ggc.core.partners.Partner;
+import ggc.core.products.Product;
 
 public class SaleByCredit extends Sale{
   private Date _deadine;

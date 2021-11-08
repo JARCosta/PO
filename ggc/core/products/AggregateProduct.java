@@ -1,11 +1,13 @@
-package ggc.core;
+package ggc.core.products;
 
 import java.util.List;
+
+import ggc.core.partners.Partner;
 
 public class AggregateProduct extends Product {
   private Recipe _recipe;
   
-  AggregateProduct(String id, double aggravation,List<Component> components){
+  public AggregateProduct(String id, double aggravation,List<Component> components){
     super(id);
     _recipe = new Recipe(aggravation, components);
   }

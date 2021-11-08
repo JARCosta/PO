@@ -1,10 +1,14 @@
-package ggc.core;
+package ggc.core.products;
 
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import ggc.core.Batch;
+import ggc.core.BatchComparator;
+import ggc.core.partners.Partner;
 /**
 * @author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
 *

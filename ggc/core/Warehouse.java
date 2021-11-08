@@ -18,6 +18,16 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
+import ggc.core.partners.Partner;
+import ggc.core.partners.PartnerComparator;
+import ggc.core.products.AggregateProduct;
+import ggc.core.products.Component;
+import ggc.core.products.Product;
+import ggc.core.products.ProductComparator;
+import ggc.core.products.SimpleProduct;
+import ggc.core.transactions.Acquisition;
+import ggc.core.transactions.SaleByCredit;
+import ggc.core.transactions.Transaction;
 
 
 public class Warehouse implements Serializable {
@@ -130,7 +140,7 @@ public class Warehouse implements Serializable {
     }
     Partner partner = new Partner(id, name, adress);
     _partners.put(id.toLowerCase(),partner);
-    addNotificationsToPartner(partner);
+    //addNotificationsToPartner(partner);
   }
   public Partner getPartner(String id) throws InvalidPartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
@@ -195,9 +205,9 @@ public class Warehouse implements Serializable {
 
 
   public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException{
-    System.out.println(_transactions.size());
-    System.out.println(transactionId);
-    if(_transactions.size()<transactionId){
+    //System.out.println(_transactions.size());
+    //System.out.println(transactionId);
+    if(_transactions.size()<=transactionId){
       throw new InvalidTransactionKeyException(transactionId);
     }
     return _transactions.get(transactionId);

@@ -1,5 +1,4 @@
-package ggc.core;
-
+package ggc.core.products;
 
 public class Component {
   private int _quantity;

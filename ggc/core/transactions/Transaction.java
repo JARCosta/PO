@@ -1,4 +1,7 @@
-package ggc.core;
+package ggc.core.transactions;
+
+import ggc.core.Date;
+import ggc.core.products.Product;
 
 public abstract class Transaction {
   private int _id;

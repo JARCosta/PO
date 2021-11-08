@@ -1,4 +1,4 @@
-package ggc.core;
+package ggc.core.partners;
 
 public abstract class PartnerState {
     private Partner _partner;

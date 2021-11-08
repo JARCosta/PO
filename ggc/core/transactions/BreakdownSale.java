@@ -1,7 +1,11 @@
-package ggc.core;
+package ggc.core.transactions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ggc.core.Batch;
+import ggc.core.partners.Partner;
+import ggc.core.products.Product;
 
 public class BreakdownSale extends Sale{
     List<Batch> _batches;

@@ -2,6 +2,9 @@ package ggc.core;
 
 import java.io.Serializable;
 
+import ggc.core.partners.Partner;
+import ggc.core.products.Product;
+
 public class Batch implements Serializable{
   /**
    * Batch's price per Product unit

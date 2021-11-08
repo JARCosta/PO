@@ -1,9 +1,11 @@
-package ggc.core;
+package ggc.core.products;
+
+import ggc.core.partners.Partner;
 
 public class SimpleProduct extends Product{
 
   
-  SimpleProduct(String id){
+  public SimpleProduct(String id){
     super(id);
   }
 

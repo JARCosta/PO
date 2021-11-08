@@ -18,6 +18,9 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.partners.Partner;
+import ggc.core.products.Product;
+import ggc.core.transactions.Transaction;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.ProductAmountException;
 
