@@ -119,50 +119,50 @@ public class WarehouseManager{
    * @@throws MissingFileAssociationException
    */
   public void save() throws MissingFileAssociationException, IOException {
-      ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(_filename));
-      outStream.writeObject(_warehouse);
-  }
-  
-  /**
-   * @@param filename
-   * @@throws MissingFileAssociationException
-   * @@throws IOException
-   * @@throws FileNotFoundException
-   */
-  public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
+    FileOutputStream fileOut = new FileOutputStream(_filename);
+    ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
+    outStream.writeObject(_warehouse);
+    outStream.close();
+    fileOut.close();
+}
+
+/**
+ * @@param filename
+ * @@throws MissingFileAssociationException
+ * @@throws IOException
+ * @@throws FileNotFoundException
+ */
+public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
+  _filename = filename;
+  save();
+}
+
+/**
+ * @@param filename
+ * @@throws UnavailableFileException
+ * @throws IOException
+ */
+public void load(String filename) throws UnavailableFileException{
+  try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
+    _warehouse = (Warehouse) file.readObject();
     _filename = filename;
-    save();
+  } catch(ClassNotFoundException | IOException a){
+    throw new UnavailableFileException(filename);
   }
-  
-  /**
-   * @@param filename
-   * @@throws UnavailableFileException
-   * @throws IOException
-   */
-  public void load(String filename) throws UnavailableFileException{
-    _filename = filename;
-    try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(_filename))){
-      _warehouse = (Warehouse) file.readObject();
-    } catch(ClassNotFoundException | IOException a){
-      throw new UnavailableFileException(filename);
-    }
+}
+
+/**
+ * @param textfile
+ * @throws ImportFileException
+ * @throws InvalidProductIdException
+ * @throws InvalidPartnerIdException
+ * @throws DuplicatePartnerIdException
+ */
+public void importFile(String textfile) throws ImportFileException{
+  try {
+    _warehouse.importFile(textfile);
+  } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerIdException  e) {
+    throw new ImportFileException(textfile, e);
   }
-
-  /**
-   * @param textfile
-   * @throws ImportFileException
-   * @throws InvalidProductIdException
-   * @throws InvalidPartnerIdException
-   * @throws DuplicatePartnerIdException
-   */
-  public void importFile(String textfile) throws ImportFileException{
-    try {
-      _warehouse.importFile(textfile);
-    } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerIdException  e) {
-      throw new ImportFileException(textfile, e);
-    }
-  }
-
-
-
+}
 }

@@ -8,7 +8,6 @@ import ggc.core.products.Product;
 public class SaleByCredit extends Sale{
   private Date _deadine;
   private double _amountPaid;
-  private double _baseValue;
 
   public SaleByCredit(Partner partner, Product product, int quantity, int deadline, int transactionId){
     super(product, quantity, partner, transactionId);
@@ -17,6 +16,7 @@ public class SaleByCredit extends Sale{
   }
 
   public void removeQuantity(Product product, int quantity){
+    double baseValue=0;
     while(quantity > 0){
       
       Batch removingBatch = product.searchCheapestBatch();
@@ -24,15 +24,16 @@ public class SaleByCredit extends Sale{
       if(removingBatch.getQuantity() <= quantity){
         //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
         quantity -= removingBatch.getQuantity();
-        _baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
+        baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
         removeBatch(removingBatch);
       } else{
         //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
-        _baseValue += quantity*removingBatch.getPrice();
+        baseValue += quantity*removingBatch.getPrice();
         quantity = 0;
         removingBatch.removeQuantity(quantity);
       }
     }
+    super.setBaseValue(baseValue);
   }
 
   public void removeBatch(Batch batch){
@@ -43,9 +44,6 @@ public class SaleByCredit extends Sale{
   public double getAmountToPay(){
     return super.getBaseValue() - _amountPaid; // should be total amopunt to pay - _amount paied;
   }
-
-
-
 
   public String toString(){
     String ret = "";

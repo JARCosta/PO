@@ -18,6 +18,7 @@ public abstract class Transaction {
     _id = currentId;
   }
 
+  public void setBaseValue(double baseValue){_baseValue=baseValue;}
   public int getId(){return _id;}
   public int getQuantity(){return _quantity;}
   public double getBaseValue(){return _baseValue;}

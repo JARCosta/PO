@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import javax.lang.model.element.QualifiedNameable;
+import javax.naming.NoInitialContextException;
+import javax.swing.text.html.parser.Entity;
 
 import java.util.HashMap;
 import java.io.IOException;
@@ -107,7 +109,7 @@ public class Warehouse implements Serializable {
     partner.registerBatch(price, quantity, partner, product);
     product.addBatch(new Batch(price, quantity, partner, product));
     product.updateMaxPrice();
-    addNotificationToSystem("NEW", product, price);
+    addNotificationToSystem(product, price);
   }
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
@@ -220,14 +222,21 @@ public class Warehouse implements Serializable {
 
 //NOTIFICATION
   
-  public void addNotificationToSystem(String type, Product product, double price){
+  public void addNotificationToSystem(Product product, double price){
     for(Notification notification: _notifications){
-      if(notification.equals(new Notification("NEW", product, price))){
-        
-
+      if(!notification.getProductId().equals(product.getId())){
+        // para todas as notificacoes com um produto diferente ao dado
+        Notification notif = new Notification("NEW", product, price);
+        _notifications.add(notif);
+      }
+      else if(notification.getProductId().equals(product.getId())){
+        if(price < product.getMinPrice()){
+          Notification notif = new 
+          
+        }
       }
     }
-
+    
 
   }
   /*

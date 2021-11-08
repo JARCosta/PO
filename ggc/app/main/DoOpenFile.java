@@ -23,5 +23,4 @@ class DoOpenFile extends Command<WarehouseManager> {
       throw new FileOpenFailedException(stringField("name"));
     }
   }
-
 }

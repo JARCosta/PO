@@ -1,6 +1,8 @@
 package ggc.core.partners;
 
-public abstract class PartnerState {
+import java.io.Serializable;
+
+public abstract class PartnerState implements Serializable {
   private String _status;
 
   public PartnerState(String status){
