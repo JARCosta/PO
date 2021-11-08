@@ -10,6 +10,8 @@ import ggc.core.Notification;
 import ggc.core.products.Product;
 import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.Sale;
+import ggc.core.transactions.SaleByCredit;
+import ggc.core.transactions.Transaction;
 
 public class Partner implements Serializable{
   private String _name;
@@ -106,6 +108,17 @@ public class Partner implements Serializable{
 //TRANSACTION
   public void registerAcquisition(Acquisition acq){
     _acquisitions.add(acq);
+  }
+  public void registerSaleByCredit(SaleByCredit sale){
+    _sales.add(sale);
+  }
+
+  public List<Acquisition> getAcquisitionList(){
+    return _acquisitions;
+  }
+
+  public List<Sale> getSaleList(){
+    return _sales;
   }
 
   @Override

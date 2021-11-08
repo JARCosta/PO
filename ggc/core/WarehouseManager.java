@@ -24,6 +24,8 @@ import ggc.core.exception.ProductAmountException;
 
 import ggc.core.partners.Partner;
 import ggc.core.products.Product;
+import ggc.core.transactions.Acquisition;
+import ggc.core.transactions.Sale;
 import ggc.core.transactions.Transaction;
 
 public class WarehouseManager{
@@ -104,6 +106,15 @@ public class WarehouseManager{
   public List<Transaction> getTransactionList(){
     return _warehouse.getTransactionList();
   }
+
+  public List<Acquisition> getAcquisitionList(String partnerId) throws InvalidPartnerIdException{
+    return _warehouse.getAcquisitionList(partnerId);
+  }
+
+  public List<Sale> getSaleList(String partnerId) throws InvalidPartnerIdException{
+    return _warehouse.getSaleList(partnerId);
+  }
+
   public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException {
     return _warehouse.getTransaction(transactionId);
   }

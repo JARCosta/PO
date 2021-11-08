@@ -28,6 +28,7 @@ import ggc.core.products.Product;
 import ggc.core.products.ProductComparator;
 import ggc.core.products.SimpleProduct;
 import ggc.core.transactions.Acquisition;
+import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
 import ggc.core.transactions.Transaction;
 
@@ -173,6 +174,14 @@ public class Warehouse implements Serializable {
     _nextTransctionId++;
   }
 
+  public List<Acquisition> getAcquisitionList(String partnerId) throws InvalidPartnerIdException{
+    return getPartner(partnerId).getAcquisitionList();
+  }
+
+  public List<Sale> getSaleList(String partnerId) throws InvalidPartnerIdException{
+    return getPartner(partnerId).getSaleList();
+  }
+
   public void registerAcquisition(Partner partner, Product product, int quantity, double price){
     registerBatch(price, quantity, partner, product);
     product.updateMaxPrice();
@@ -187,7 +196,9 @@ public class Warehouse implements Serializable {
       throw new ProductAmountException(productId,quantity);
     }
     getProduct(productId).updateMaxPrice();
-    _transactions.add(new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline,_nextTransctionId));
+    SaleByCredit sale = new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline,_nextTransctionId);
+    _transactions.add(sale);
+    getPartner(partnerId).registerSaleByCredit(sale);
     advanceTransactionId();
     /*
     double _baseValue=0;
