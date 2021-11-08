@@ -10,11 +10,13 @@ import javax.lang.model.element.QualifiedNameable;
 import java.util.HashMap;
 import java.io.IOException;
 
+import ggc.app.exception.UnknownTransactionKeyException;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidDateException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
+import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
 
 
@@ -180,6 +182,13 @@ public class Warehouse implements Serializable {
   }
 
 
+  public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException{
+    if(_transactions.size()<transactionId){
+      throw new InvalidTransactionKeyException(transactionId);
+    }
+    return _transactions.get(transactionId);
+  }
+
 
   public List<Transaction> getTransactionList(){
     return _transactions;
@@ -225,4 +234,6 @@ public class Warehouse implements Serializable {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
   }
+
+
 }

@@ -26,8 +26,10 @@ class DoSaveFile extends Command<WarehouseManager> {
       String name = Form.requestString(Message.newSaveAs());
       try {
         _receiver.saveAs(name);
-      } catch (MissingFileAssociationException | IOException fileError) {
-        throw new FileOpenFailedException(name);
+      } catch (MissingFileAssociationException fileError) {
+        System.out.println("aaaaaaaaaaaaa");
+      } catch(IOException fileException){
+        System.out.println("DoSaveFile.execute()");
       }
     }
   }

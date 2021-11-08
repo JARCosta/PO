@@ -16,6 +16,7 @@ import ggc.core.exception.ImportFileException;
 import ggc.core.exception.InvalidDateException;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
+import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.ProductAmountException;
@@ -98,6 +99,9 @@ public class WarehouseManager{
   public List<Transaction> getTransactionList(){
     return _warehouse.getTransactionList();
   }
+  public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException {
+    return _warehouse.getTransaction(transactionId);
+  }
 
   public void registerAcquisition(String partnerId, String productId, int quantity, double price) throws InvalidPartnerIdException, InvalidProductIdException{
     _warehouse.registerAcquisition(getPartner(partnerId), getProduct(productId),quantity, price);
@@ -112,11 +116,8 @@ public class WarehouseManager{
    * @@throws MissingFileAssociationException
    */
   public void save() throws MissingFileAssociationException, IOException {
-      FileOutputStream fileOut = new FileOutputStream(_filename);
-      ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
+      ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(_filename));
       outStream.writeObject(_warehouse);
-      outStream.close();
-      fileOut.close();
   }
   
   /**
@@ -158,4 +159,7 @@ public class WarehouseManager{
       throw new ImportFileException(textfile, e);
     }
   }
+
+
+
 }
