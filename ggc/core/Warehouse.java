@@ -107,10 +107,11 @@ public class Warehouse implements Serializable {
 //BATCH
 
   public void registerBatch(double price, int quantity,Partner partner,Product product){
+    addNotificationToSystem(product, price); //Tem de ser invocada primeiro comparar o price com o MinPrice
     partner.registerBatch(price, quantity, partner, product);
     product.addBatch(new Batch(price, quantity, partner, product));
     product.updateMaxPrice();
-    addNotificationToSystem(product, price);
+    
   }
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
@@ -143,7 +144,7 @@ public class Warehouse implements Serializable {
     }
     Partner partner = new Partner(id, name, adress);
     _partners.put(id.toLowerCase(),partner);
-    //addNotificationsToPartner(partner);
+    addNotificationsToPartner(partner); //Adicionada as notificacoes existentes no sistema a um novo Parceiro
   }
   public Partner getPartner(String id) throws InvalidPartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
@@ -240,53 +241,38 @@ public class Warehouse implements Serializable {
 
 //NOTIFICATION
   
-
   public void addNotificationToSystem(Product product, double price){
     for(Notification notification: _notifications){
-      if(product.getId().equals(notification.getProductId())){
-      }
-
       if(!notification.getProductId().equals(product.getId())){
         // para todas as notificacoes com um produto diferente ao dado
         Notification notif = new Notification("NEW", product, price);
         _notifications.add(notif);
+        addNotificationToPartners(notif);
       }
       else if(notification.getProductId().equals(product.getId())){
+        // para todas as notificacoes com um produto igual ao dado
         if(price < product.getMinPrice()){
-   //       Notification notif = new 
-          
+          // e com um preco menor ao preco menor atual
+          Notification notif = new Notification("BARGAIN", product, price);
+          _notifications.add(notif);
+          addNotificationToPartners(notif);
         }
       }
     }
-    
-
-  }
-  /*
-  public void addNotificationToSystem(Product product, double price){
-    if(!_notfications.keySet().contains(product.getId())){
-      Notification notification = new Notification("NEW", product, price);
-      _notifications.put(product.getId(), notification);
-    }
-    else if(_notifications.keySet().contains(product.getId())){
-      if(price<product.getMinPrice()){
-        Notification notification = new Notification("BARGAIN", product, price);
-        _notifications.put(product.getId(), notification);
-      }
-    }
   }
 
-  public void addNotificationToPartners(Notification notification, Product product){
+  public void addNotificationToPartners(Notification notif){
+    // adicionar a notificao mais recente a todos os Parceiros existentes
     for(Partner partner: _partners.values()){
-      partner.addNotification(notification.getType(), product);
+      partner.addNotification(notif);
     }
   }
-  
-  public void addNotificationsToPartner(Partner partner) {
-    for(Notification notification: _notifications.values()){
-      partner.addNotification(notification.getType(), notification.getProduct());
+
+  public void addNotificationsToPartner(Partner partner){
+    for(Notification notif: _notifications){
+      partner.addNotification(notif);
     }
   }
-  */
 
   /**
    * @param txtfile filename to be loaded.

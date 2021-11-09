@@ -12,11 +12,14 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
 
   DoToggleProductNotifications(WarehouseManager receiver) {
     super(Label.TOGGLE_PRODUCT_NOTIFICATIONS, receiver);
-    //FIXME add command fields
+
+    addStringField("partnerId", Message.requestPartnerKey());
+    addStringField("productId", Message.requestProductKey());
   }
 
   @Override
   public void execute() throws CommandException {
+    //getPartner(stringField("partnerId")).toggleNotifications(getProduct(stringField("productId")));
     //FIXME implement command
   }
 
