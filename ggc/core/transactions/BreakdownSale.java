@@ -1,27 +1,21 @@
 package ggc.core.transactions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ggc.core.Batch;
 import ggc.core.partners.Partner;
 import ggc.core.products.AggregateProduct;
 import ggc.core.products.Component;
-import ggc.core.products.Product;
 
 public class BreakdownSale extends Sale{
   List<Batch> _batches;
-  public BreakdownSale(Product product, int quantity, Partner partner, int transactionId){
+  public BreakdownSale(AggregateProduct product, int quantity, Partner partner, int transactionId){
     super(product, quantity, partner,transactionId);
-    _batches = new ArrayList<>();
-    breakdown(partner,(AggregateProduct)product,quantity);
+    _batches = product.getBatchSortedList(partner);
+    breakdown(partner,product,quantity);
   }
   public List<Batch> getBatchList(){
     return _batches;
-  }
-
-  public void setBatcheList(Product product,Partner partner){
-    _batches = product.getBatchSortedList(partner);
   }
 
   public void breakdown(Partner partner, AggregateProduct product, int quantity){

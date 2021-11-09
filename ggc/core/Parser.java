@@ -70,7 +70,7 @@ public class Parser {
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);
     
-    if(!_warehouse.getProductMap().containsKey(idProduct)){
+    if(!_warehouse.productsContains(idProduct)){
       _warehouse.registerSimpleProduct(idProduct);
     }
     

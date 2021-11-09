@@ -116,7 +116,7 @@ public abstract class Product implements Serializable{
   public Batch searchCheapestBatch(Partner partner) {
     Batch cheapestBatch = null;
     for(Batch batch : getBatchSortedList()){ // already sorted by product,partner then price
-      if((batch.getPartner()).equals(partner) && batch.getProduct().equals(this))
+      if(/*(batch.getPartner()).equals(partner) &&*/ batch.getProduct().equals(this))
         if(cheapestBatch == null)
           return batch;
     }

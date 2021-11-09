@@ -3,16 +3,12 @@ package ggc.core;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
-
-import javax.lang.model.element.QualifiedNameable;
-import javax.naming.NoInitialContextException;
-import javax.swing.text.html.parser.Entity;
 
 import java.util.HashMap;
 import java.io.IOException;
 
-import ggc.app.exception.UnknownTransactionKeyException;
 import ggc.core.exception.BadEntryException;
 import ggc.core.exception.DuplicatePartnerIdException;
 import ggc.core.exception.InvalidDateException;
@@ -93,9 +89,14 @@ public class Warehouse implements Serializable {
     }
     return _products.get(id);
   }
-  public Map<String, Product> getProductMap(){
-    return _products;
+  public Collection<Product> getProductMap(){
+    return _products.values();
   }
+
+  public boolean productsContains(String productId) {
+    return _products.containsKey(productId);
+  }
+
   public List<Product> getProductList(){
     return new ArrayList<Product>(_products.values());
   }
@@ -213,7 +214,7 @@ public class Warehouse implements Serializable {
     if(getProduct(productId).getQuantity()<quantity){
       throw new ProductAmountException(productId,getProduct(productId).getQuantity());
     }
-    BreakdownSale sale =  new BreakdownSale(getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
+    BreakdownSale sale =  new BreakdownSale((AggregateProduct)getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
     _transactions.add(sale);
     getPartner(partnerId).registerBreakSownSale(sale);
   }
@@ -228,7 +229,7 @@ public class Warehouse implements Serializable {
     }
     return _transactions.get(transactionId);
   }
-
+  
 
   public List<Transaction> getTransactionList(){
     return _transactions;
@@ -239,9 +240,9 @@ public class Warehouse implements Serializable {
       ((SaleByCredit)_transactions.get(transactionId)).pay(_date);
     } 
   }
-
-
-//NOTIFICATION
+  
+  
+  //NOTIFICATION
   
   public void addNotificationToSystem(Product product, double price){
     for(Notification notification: _notifications){
@@ -262,7 +263,7 @@ public class Warehouse implements Serializable {
       }
     }
   }
-
+  
   public void addNotificationToPartners(Notification notif){
     // adicionar a notificao mais recente a todos os Parceiros existentes
     for(Partner partner: _partners.values()){
@@ -275,6 +276,11 @@ public class Warehouse implements Serializable {
       partner.addNotification(notif);
     }
   }
+  
+  public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException {
+    getPartner(partnerId).toggleNotifications(getProduct(productId));
+  }
+
 
   /**
    * @param txtfile filename to be loaded.
@@ -288,6 +294,8 @@ public class Warehouse implements Serializable {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
   }
+
+
 
 
 }

@@ -59,12 +59,7 @@ public class WarehouseManager{
   public Product getProduct(String id) throws InvalidProductIdException{
     return _warehouse.getProduct(id);
   }
-  public Map<String, Product> getProductMap(){
-    return _warehouse.getProductMap();
-  }
-  public List<Product> getProductList(){
-    return _warehouse.getProductList();
-  }
+
   public List<Product> getProductSortedList(){
     return _warehouse.getProductSortedList();
   }
@@ -73,9 +68,6 @@ public class WarehouseManager{
 
 //BATCH
 
-  public List<Batch> getBatchList(){
-    return _warehouse.getBatchList();
-  }
   public List<Batch> getBatchSortedList(){
     return _warehouse.getBatchSortedList();
   }
@@ -132,6 +124,12 @@ public class WarehouseManager{
 
   public void pay(int transactionId) throws IndexOutOfBoundsException{
     _warehouse.pay(transactionId);
+  }
+
+  //NOTIFICATION
+
+  public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException{
+    _warehouse.toggleNotifications(partnerId,productId);
   }
 
   /**
