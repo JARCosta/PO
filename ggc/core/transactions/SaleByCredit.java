@@ -14,14 +14,14 @@ public class SaleByCredit extends Sale{
   public SaleByCredit(Partner partner, Product product, int quantity, int deadline, int transactionId){
     super(product, quantity, partner, transactionId);
     _deadine = new Date(deadline);
-    removeQuantity(product,quantity);
+    removeQuantity(partner, product,quantity);
   }
 
-  public void removeQuantity(Product product, int quantity){
+  public void removeQuantity(Partner partner,Product product, int quantity){
     double baseValue=0;
     while(quantity > 0){
-      
-      Batch removingBatch = product.searchCheapestBatch();
+
+      Batch removingBatch = product.searchCheapestBatch(partner);
 
       if(removingBatch.getQuantity() <= quantity){
         //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());

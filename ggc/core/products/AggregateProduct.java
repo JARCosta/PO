@@ -16,9 +16,8 @@ public class AggregateProduct extends Product {
     return super.getQuantity(p) >= quantity;
   }
   
-  public int getQuantity(){
-    return super.getQuantity();
-  }
+  public int getQuantity(){return super.getQuantity();}
+  public Recipe getRecipe(){return _recipe;}
 
   @Override
   public String toString(){

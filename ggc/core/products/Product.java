@@ -113,14 +113,12 @@ public abstract class Product implements Serializable{
     return retBatch.getPrice();
   }
 
-  public Batch searchCheapestBatch() {
+  public Batch searchCheapestBatch(Partner partner) {
     Batch cheapestBatch = null;
-
-    for(Batch batch : getBatches()){
-      if(cheapestBatch == null)
-        cheapestBatch = batch;
-      else if(batch.getPrice()<cheapestBatch.getPrice())
-        cheapestBatch = batch;
+    for(Batch batch : getBatchSortedList()){ // already sorted by product,partner then price
+      if((batch.getPartner()).equals(partner) && batch.getProduct().equals(this))
+        if(cheapestBatch == null)
+          return batch;
     }
     return cheapestBatch;
   }
@@ -169,6 +167,16 @@ public abstract class Product implements Serializable{
   */
   public List<Batch> getBatches(){
     return _batches;
+  }
+  public List<Batch> getBatchSortedList(Partner partner){
+    ArrayList<Batch> batches = new ArrayList<>();
+
+    for(Batch i : getBatchSortedList()){
+      if(i.getPartner().equals(partner))
+        batches.add(i);
+    }
+
+    return batches;
   }
 
   /**

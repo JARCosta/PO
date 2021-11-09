@@ -20,6 +20,7 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
+
 import ggc.core.partners.Partner;
 import ggc.core.partners.PartnerComparator;
 import ggc.core.products.AggregateProduct;
@@ -30,6 +31,7 @@ import ggc.core.products.SimpleProduct;
 import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
+import ggc.core.transactions.BreakdownSale;
 import ggc.core.transactions.Transaction;
 
 
@@ -103,41 +105,8 @@ public class Warehouse implements Serializable {
     return productList;
   }
 
-
-//BATCH
-
-  public void registerBatch(double price, int quantity,Partner partner,Product product){
-    addNotificationToSystem(product, price); //Tem de ser invocada primeiro comparar o price com o MinPrice
-    partner.registerBatch(price, quantity, partner, product);
-    product.addBatch(new Batch(price, quantity, partner, product));
-    product.updateMaxPrice();
-    
-  }
-  public List<Batch> getBatchList(){
-    List<Batch> batches= new ArrayList<>();
-    for(Product product : new ArrayList<>(_products.values()))
-      for(Batch batch : product.getBatches())
-        batches.add(batch);
-    return batches;
-  }
-  public List<Batch> sortBatches(List<Batch> batches){
-    batches.sort(new BatchComparator());
-    return batches;
-  }
-  public List<Batch> getBatchSortedList(){
-    return sortBatches(getBatchList());
-  }
-  public List<Batch> getBatchSortedList(Product product){
-    return sortBatches(product.getBatches());
-  }
-  
-  public List<Batch> getBatchSortedList(Partner partner){
-    return sortBatches(partner.getBatches());
-  }
-
-
 //PARTNER
-
+  
   public void registerPartner(String id, String name, String adress) throws DuplicatePartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
       throw new DuplicatePartnerIdException(id);
@@ -164,6 +133,43 @@ public class Warehouse implements Serializable {
     partnerList.sort(new PartnerComparator());
     return partnerList;
   }
+  
+  
+//BATCH
+  
+  public void registerBatch(double price, int quantity,Partner partner,Product product){
+    addNotificationToSystem(product, price); //Tem de ser invocada primeiro comparar o price com o MinPrice
+    partner.registerBatch(price, quantity, product);
+    product.addBatch(new Batch(price, quantity, partner, product));
+    product.updateMaxPrice();
+    
+  }
+  public List<Batch> getBatchList(){
+    List<Batch> batches= new ArrayList<>();
+    for(Product product : new ArrayList<>(_products.values()))
+      for(Batch batch : product.getBatches())
+        batches.add(batch);
+    return batches;
+  }
+  public List<Batch> sortBatches(List<Batch> batches){
+    batches.sort(new BatchComparator());
+    return batches;
+  }
+  public List<Batch> getBatchSortedList(){
+    return sortBatches(getBatchList());
+  }
+  public List<Batch> getBatchSortedList(Product product){
+    return sortBatches(product.getBatches());
+  }
+  
+  public List<Batch> getBatchSortedList(Partner partner){
+    return sortBatches(partner.getBatches());
+  }
+
+  public List<Batch> getBatchSortedByPrice(Product product){
+    return null;
+  }
+
 
 
 //TRANSACTION
@@ -201,21 +207,17 @@ public class Warehouse implements Serializable {
     _transactions.add(sale);
     getPartner(partnerId).registerSaleByCredit(sale);
     advanceTransactionId();
-    /*
-    double _baseValue=0;
-    Batch removingBatch = getProduct(productId).searchCheapestBatch();
-    while(quantity > 0){
-      if(removingBatch.getQuantity()<quantity){
-        quantity -= removingBatch.getQuantity();
-        _baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
-        removeBatch(removingBatch);
-      } else{
-        _baseValue += quantity*removingBatch.getPrice();
-        quantity-= removingBatch.getQuantity();
-        removingBatch.removeQuantity(quantity);
-      }
-    }*/
   }
+
+  public void registerBreakSownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+    if(getProduct(productId).getQuantity()<quantity){
+      throw new ProductAmountException(productId,getProduct(productId).getQuantity());
+    }
+    BreakdownSale sale =  new BreakdownSale(getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
+    _transactions.add(sale);
+    getPartner(partnerId).registerBreakSownSale(sale);
+  }
+
 
 
   public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException{

@@ -28,8 +28,13 @@ public class Partner implements Serializable{
   private ArrayList<Batch> _batches;
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
-  private List<Notification> _notifications;
+  //private List<Notification> _notificationsHistory;
   private Map<Product, List<Notification>> _notificationsByProduct;
+  //private List<Notification> _relevantNotifications;
+
+
+//  private Map<Product, List<Notification>> _notifications;
+
 
   public Partner(String id, String name, String adress){
     _name = name;
@@ -37,11 +42,12 @@ public class Partner implements Serializable{
     _id = id;
     _state = new NormalPartner();
     _points = 0;
-    _batches = new ArrayList<>();
-    _acquisitions = new ArrayList<>();
-    _sales = new ArrayList<>();
-    _notifications = new ArrayList<>();
-    _notificationsByProduct = new HashMap<>();
+    _batches = new ArrayList<Batch>();
+    _acquisitions = new ArrayList<Acquisition>();
+    _sales = new ArrayList<Sale>();
+    //_notificationsHistory = new ArrayList<Notification>();
+    _notificationsByProduct = new HashMap<Product, List<Notification>>();
+    //_relevantNotifications = _notificationsHistory;
   }
 
   public String getId(){
@@ -68,27 +74,31 @@ public class Partner implements Serializable{
   }
 
   public void addNotification(Notification notif){
-    _notifications.add(notif);
+    //_notificationsHistory.add(notif);
     addNotificationByProduct(notif);
   }
 
   public void clearNotifications(){
-    _notifications.clear();
+    //_notificationsHistory.clear();
+    for(List<Notification> productNotifs: _notificationsByProduct.values()){
+      productNotifs.clear();
+    }
   }
 
   public String showNotifications(){
     String notifs = "";
-    for(Notification notif: _notifications){
+    for(Notification notif: _notificationsByProduct.values()){
       notifs += notif.toString();
     }
     return notifs;
   }
 
-  /*
-  public void toggleNotifications(Product product){
+  
+  public boolean toggleNotifications(Product product){
+    
 
   }
-
+  /*
   public void toggleNotificationsOn(Product product){
 
   }
@@ -120,8 +130,8 @@ public class Partner implements Serializable{
 //    _state.normal();
   }
 
-  public void registerBatch(double price, int stock, Partner partner, Product product){
-    Batch batch = new Batch(price, stock, partner, product);
+  public void registerBatch(double price, int stock, Product product){
+    Batch batch = new Batch(price, stock, this, product);
     _batches.add(batch);
   }
 
@@ -165,6 +175,6 @@ public class Partner implements Serializable{
   }
   @Override
   public boolean equals(Object p2){
-    return p2 instanceof Partner && _id.equals(((Product) p2).getId());
+    return p2 instanceof Partner && _id.equals(((Partner) p2).getId());
   }
 }

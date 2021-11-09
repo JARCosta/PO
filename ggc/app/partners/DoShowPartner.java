@@ -16,8 +16,6 @@ class DoShowPartner extends Command<WarehouseManager> {
   DoShowPartner(WarehouseManager receiver) {
     super(Label.SHOW_PARTNER, receiver);
     addStringField("key", Message.requestPartnerKey());
-
-    //FIXME add command fields
   }
 
   @Override
