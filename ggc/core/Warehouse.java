@@ -16,7 +16,7 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
-
+import ggc.core.notifications.Notification;
 import ggc.core.partners.Partner;
 import ggc.core.partners.PartnerComparator;
 import ggc.core.products.AggregateProduct;
@@ -39,7 +39,7 @@ public class Warehouse implements Serializable {
   private List<Notification> _notifications;
   private List<Transaction> _transactions;
   private int _nextTransctionId;
-  
+
   public Warehouse(){
     _date = new Date(0);
     _partners = new HashMap<String, Partner>();
@@ -139,11 +139,9 @@ public class Warehouse implements Serializable {
 //BATCH
   
   public void registerBatch(double price, int quantity,Partner partner,Product product){
-    addNotificationToSystem(product, price); //Tem de ser invocada primeiro comparar o price com o MinPrice
+    //addNotificationToSystem(product, price); //Tem de ser invocada primeiro comparar o price com o MinPrice
     partner.registerBatch(price, quantity, product);
     product.addBatch(new Batch(price, quantity, partner, product));
-    product.updateMaxPrice();
-    
   }
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
@@ -174,7 +172,6 @@ public class Warehouse implements Serializable {
 
 
 //TRANSACTION
-
   public int getTransactionId(){
     return _nextTransctionId;
   }
@@ -191,12 +188,26 @@ public class Warehouse implements Serializable {
   }
 
   public void registerAcquisition(Partner partner, Product product, int quantity, double price){
+    int quantInit = product.getQuantity();
+    double priceInit = product.getMinPrice();
+
     registerBatch(price, quantity, partner, product);
     product.updateMaxPrice();
+
     Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
     partner.registerAcquisition(acq);
-    _transactions.add(acq); 
+    _transactions.add(acq);
     advanceTransactionId();
+
+    int quanFin = product.getQuantity();
+    double priceFin = product.getMinPrice();
+    if(quantInit == 0 && quanFin > 0){
+      registerNotification("NEW", product, price);
+    }
+    System.out.println(""+ priceFin +"<"+priceInit  );
+    if(priceFin<priceInit){
+      registerNotification("BARGAIN", product, price);
+    }
   }
 
   public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
@@ -214,9 +225,13 @@ public class Warehouse implements Serializable {
     if(getProduct(productId).getQuantity()<quantity){
       throw new ProductAmountException(productId,getProduct(productId).getQuantity());
     }
-    BreakdownSale sale =  new BreakdownSale((AggregateProduct)getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
-    _transactions.add(sale);
-    getPartner(partnerId).registerBreakSownSale(sale);
+    try{
+      BreakdownSale sale =  new BreakdownSale((AggregateProduct)getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
+      _transactions.add(sale);
+      getPartner(partnerId).registerBreakSownSale(sale);
+    } catch (ClassCastException e){
+      throw new InvalidProductIdException(productId);
+    }
   }
 
 
@@ -243,11 +258,18 @@ public class Warehouse implements Serializable {
   
   
   //NOTIFICATION
-  
+
+  public void registerNotification(String type, Product product, double price){
+    for(Partner i : getPartnerList()){
+      i.addNotification(new Notification(type, product, price));
+    }
+  }
+
+  /*
   public void addNotificationToSystem(Product product, double price){
     for(Notification notification: _notifications){
-      if(!notification.getProductId().equals(product.getId())){
-        // para todas as notificacoes com um produto diferente ao dado
+      if(!(notification.getProductId().equals(product.getId()))){
+        // para todas as notificacoes com um produto diferente do dado
         Notification notif = new Notification("NEW", product, price);
         _notifications.add(notif);
         addNotificationToPartners(notif);
@@ -262,6 +284,12 @@ public class Warehouse implements Serializable {
         }
       }
     }
+  }
+  */
+
+  public Collection<Notification> showNotifications(String partnerId) throws InvalidPartnerIdException{
+    return getPartner(partnerId).showNotifications();
+    //return getPartner(partnerId).showNotifications();
   }
   
   public void addNotificationToPartners(Notification notif){

@@ -3,6 +3,7 @@ package ggc.app.partners;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
+import ggc.core.notifications.Notification;
 import ggc.core.partners.Partner;
 //FIXME import classes
 import pt.tecnico.uilib.menus.Command;
@@ -15,19 +16,22 @@ class DoShowPartner extends Command<WarehouseManager> {
 
   DoShowPartner(WarehouseManager receiver) {
     super(Label.SHOW_PARTNER, receiver);
-    addStringField("key", Message.requestPartnerKey());
+    addStringField("partnerId", Message.requestPartnerKey());
   }
 
   @Override
   public void execute() throws CommandException {
-    
     try{
-      Object partner = _receiver.getPartner(stringField("key"));
+      Object partner = _receiver.getPartner(stringField("partnerId"));
+
       _display.popup(partner.toString());
-      _display.popup(((Partner) partner).showNotifications());
+      for(Notification i: _receiver.showNotifications(stringField("partnerId"))){
+        _display.popup(i.toString());
+      }
+
       ((Partner) partner).clearNotifications();  
     } catch (InvalidPartnerIdException upke){
-      throw new UnknownPartnerKeyException(stringField("key"));
+      throw new UnknownPartnerKeyException(stringField("partnerId"));
     }  
   }
 }

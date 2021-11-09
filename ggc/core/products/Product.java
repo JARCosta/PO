@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import ggc.core.Batch;
 import ggc.core.BatchComparator;
+import ggc.core.exception.ProductOutOfBatchesException;
 import ggc.core.partners.Partner;
 /**
 * @author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
@@ -78,39 +79,25 @@ public abstract class Product implements Serializable{
   * @return changes the actual maxPrice(highest price) of a product for the new highest price
   */
   public double getMaxPrice(){
-    /*Batch retBatch = null;
-
-    for(Batch i : _batches){
-      if(retBatch == null)
-        retBatch = i;
-      else if(retBatch.getPrice()<i.getPrice())
-        retBatch = i;
-    }
-
-    return retBatch.getPrice();*/
+    updateMaxPrice();
     return _maxPrice;
   }
-  public void updateMaxPrice(){
-    Batch retBatch = null;
 
+  public void updateMaxPrice(){
     for(Batch i : _batches){
-      if(retBatch == null)
-        retBatch = i;
-      else if(retBatch.getPrice()<i.getPrice())
-        retBatch = i;
+      if(_maxPrice<i.getPrice())
+        _maxPrice = i.getPrice();
     }
-    _maxPrice = retBatch.getPrice();
   }
 
   public double getMinPrice(){
-    Batch retBatch = null;
+    double minprice = -1;
     for(Batch i : _batches){
-      if(retBatch == null)
-        retBatch = i;
-      else if(retBatch.getPrice()>i.getPrice())
-        retBatch = i;
+      System.out.println(""+i.getProduct().toString()+ " "+ i.toString() +" "+ i.getPrice());
+      if(minprice == -1){ minprice = i.getPrice(); }
+      if(minprice>i.getPrice()){ minprice = i.getPrice(); }
     }
-    return retBatch.getPrice();
+    return minprice;
   }
 
   public Batch searchCheapestBatch(Partner partner) {

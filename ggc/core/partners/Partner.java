@@ -2,13 +2,15 @@ package ggc.core.partners;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Map;
 
 import ggc.core.Batch;
-import ggc.core.Notification;
+import ggc.core.notifications.Notification;
+import ggc.core.notifications.Observer;
 import ggc.core.products.Product;
 import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.BreakdownSale;
@@ -16,7 +18,7 @@ import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
 import ggc.core.transactions.Transaction;
 
-public class Partner implements Serializable{
+public class Partner implements Serializable, Observer{
   private String _name;
   private String _adress;
   private String _id;
@@ -34,7 +36,7 @@ public class Partner implements Serializable{
   private Map<Product, String> _relevantProducts;
 
 
-//  private Map<Product, List<Notification>> _notifications;
+  private Map<Product, List<Notification>> _myNotifications;
 
 
   public Partner(String id, String name, String adress){
@@ -62,7 +64,10 @@ public class Partner implements Serializable{
   // NOTIFICATION
 
   public void addNotification(Notification notif){
+    //_notifications.add(notif);
+    //_relevantNotifications.add(notif);
     if(notif.getType().equals("NEW")){
+      //System.out.println("aaaaaaaaaaaaaaaa");
       _relevantProducts.put(notif.getProduct(), "true");
       _notifications.add(notif);
       _relevantNotifications.add(notif);
@@ -83,17 +88,21 @@ public class Partner implements Serializable{
     _relevantNotifications.clear();
   }
 
-  public String showNotifications(){
-    String notifs = "";
+  public Collection<Notification> showNotifications(){
+    return _relevantNotifications;
+    /*String notifs = "";
     for(Notification notif: _relevantNotifications){
+      System.out.println(notif.toString());
       notifs += notif.toString();
     }
-    return notifs;
+    return notifs;*/
   }
 
   public void toggleNotifications(Product product){
-    if(_relevantProducts.get(product).equalsIgnoreCase("true")) {toggleNotificationsOff(product);}
-    if(_relevantProducts.get(product).equalsIgnoreCase("false")) {toggleNotificationsOn(product);}
+    if(_relevantProducts.containsKey(product)){
+      if(_relevantProducts.get(product).equals("true")) {toggleNotificationsOff(product);}
+      if(_relevantProducts.get(product).equals("false")) {toggleNotificationsOn(product);}
+    }
   }
 
   public void toggleNotificationsOn(Product product){
@@ -174,7 +183,6 @@ public class Partner implements Serializable{
     _sales.add(sale);
   }
 
-
   public List<Acquisition> getAcquisitionList(){
     return _acquisitions;
   }
@@ -183,6 +191,8 @@ public class Partner implements Serializable{
     return _sales;
   }
 
+
+
   @Override
   public int hashCode(){
     return Objects.hash(_id);
@@ -190,5 +200,11 @@ public class Partner implements Serializable{
   @Override
   public boolean equals(Object p2){
     return p2 instanceof Partner && _id.equals(((Partner) p2).getId());
+  }
+
+  @Override
+  public void notify(String notification) {
+    // TODO Auto-generated method stub
+    
   }
 }

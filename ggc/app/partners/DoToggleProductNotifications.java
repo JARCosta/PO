@@ -27,7 +27,7 @@ class DoToggleProductNotifications extends Command<WarehouseManager> {
   @Override
   public void execute() throws CommandException {
     try {
-      _receiver.toggleNotifications(stringField("partnerId"),stringField("prodictId"));
+      _receiver.toggleNotifications(stringField("partnerId"), stringField("productId"));
     } catch (InvalidPartnerIdException e) {
       throw new UnknownPartnerKeyException(e.getInvalidId());
     } catch (InvalidProductIdException e){

@@ -1,4 +1,4 @@
-package ggc.core;
+package ggc.core.notifications;
 
 import ggc.core.products.Product;
 

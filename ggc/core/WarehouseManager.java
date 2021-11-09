@@ -1,6 +1,7 @@
 package ggc.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.notifications.Notification;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.ProductAmountException;
 
@@ -130,6 +132,9 @@ public class WarehouseManager{
 
   public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException{
     _warehouse.toggleNotifications(partnerId,productId);
+  }
+  public Collection<Notification> showNotifications(String partnerId) throws InvalidPartnerIdException{
+    return _warehouse.showNotifications(partnerId);
   }
 
   /**
