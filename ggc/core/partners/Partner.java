@@ -2,8 +2,10 @@ package ggc.core.partners;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Map;
 
 import ggc.core.Batch;
 import ggc.core.Notification;
@@ -27,6 +29,7 @@ public class Partner implements Serializable{
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
   private List<Notification> _notifications;
+  private Map<Product, List<Notification>> _notificationsByProduct;
 
   public Partner(String id, String name, String adress){
     _name = name;
@@ -38,6 +41,7 @@ public class Partner implements Serializable{
     _acquisitions = new ArrayList<>();
     _sales = new ArrayList<>();
     _notifications = new ArrayList<>();
+    _notificationsByProduct = new HashMap<>();
   }
 
   public String getId(){
@@ -48,6 +52,29 @@ public class Partner implements Serializable{
   public String toString() {
     return _id + "|" + _name + "|" + _adress + "|" + _state.getStatus() + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
   }
+  // NOTIFICATION
+
+  public void addNotificationByProduct(Notification notif){
+    List<Notification> productNotifs = _notificationsByProduct.get(notif.getProduct());
+    if(productNotifs == null){
+      productNotifs = new ArrayList<Notification>();
+      productNotifs.add(notif);
+      _notificationsByProduct.put(notif.getProduct(), productNotifs);
+    }else{
+      if(!productNotifs.contains(notif)){
+        productNotifs.add(notif);
+      }
+    }
+  }
+
+  public void addNotification(Notification notif){
+    _notifications.add(notif);
+    addNotificationByProduct(notif);
+  }
+
+  public void clearNotifications(){
+    _notifications.clear();
+  }
 
   public String showNotifications(){
     String notifs = "";
@@ -57,11 +84,22 @@ public class Partner implements Serializable{
     return notifs;
   }
 
-  public void addNotification(String type, Product product){
-    Notification notif = new Notification(type, product, product.getMaxPrice());
-    _notifications.add(notif);
+  /*
+  public void toggleNotifications(Product product){
+
   }
-  
+
+  public void toggleNotificationsOn(Product product){
+
+  }
+
+  public void toggleNotificationsOff(Product product){
+
+
+  }
+  */
+
+  //
 
   public double getPoints(){
     return _points;
