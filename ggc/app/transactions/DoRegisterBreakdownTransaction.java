@@ -3,8 +3,10 @@ package ggc.app.transactions;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnavailableProductException;
+import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.app.exception.UnknownProductKeyException;
 import ggc.core.WarehouseManager;
+import ggc.core.exception.InvalidPartnerIdException;
 //FIXME import classes
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.ProductAmountException;
@@ -29,7 +31,8 @@ public class DoRegisterBreakdownTransaction extends Command<WarehouseManager> {
       throw new UnavailableProductException(e.getProductId(), integerField("quantity"), e.getQuantity());
     } catch (InvalidProductIdException e) {
       throw new UnknownProductKeyException(e.getInvalidId());
+    } catch (InvalidPartnerIdException e){
+      throw new UnknownPartnerKeyException(e.getInvalidId());
     }
   }
-
 }

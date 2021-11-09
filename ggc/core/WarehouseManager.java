@@ -126,7 +126,7 @@ public class WarehouseManager{
     _warehouse.registerSaleByCredit(partnerId, productId, deadline,quantity);
   }
 
-  public void registerBreakSownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException{
+  public void registerBreakSownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
     _warehouse.registerBreakSownSale(partnerId,productId,quantity);
   }
 

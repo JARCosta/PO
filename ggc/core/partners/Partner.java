@@ -11,6 +11,7 @@ import ggc.core.Batch;
 import ggc.core.Notification;
 import ggc.core.products.Product;
 import ggc.core.transactions.Acquisition;
+import ggc.core.transactions.BreakdownSale;
 import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
 import ggc.core.transactions.Transaction;
@@ -28,9 +29,9 @@ public class Partner implements Serializable{
   private ArrayList<Batch> _batches;
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
-  //private List<Notification> _notificationsHistory;
-  private Map<Product, List<Notification>> _notificationsByProduct;
-  //private List<Notification> _relevantNotifications;
+  private List<Notification> _notifications;
+  private List<Notification> _relevantNotifications;
+  private Map<Product, String> _relevantProducts;
 
 
 //  private Map<Product, List<Notification>> _notifications;
@@ -45,9 +46,9 @@ public class Partner implements Serializable{
     _batches = new ArrayList<Batch>();
     _acquisitions = new ArrayList<Acquisition>();
     _sales = new ArrayList<Sale>();
-    //_notificationsHistory = new ArrayList<Notification>();
-    _notificationsByProduct = new HashMap<Product, List<Notification>>();
-    //_relevantNotifications = _notificationsHistory;
+    _notifications = new ArrayList<Notification>();
+    _relevantNotifications = new ArrayList<>();
+    _relevantProducts = new HashMap<Product, String>();
   }
 
   public String getId(){
@@ -60,54 +61,63 @@ public class Partner implements Serializable{
   }
   // NOTIFICATION
 
-  public void addNotificationByProduct(Notification notif){
-    List<Notification> productNotifs = _notificationsByProduct.get(notif.getProduct());
-    if(productNotifs == null){
-      productNotifs = new ArrayList<Notification>();
-      productNotifs.add(notif);
-      _notificationsByProduct.put(notif.getProduct(), productNotifs);
-    }else{
-      if(!productNotifs.contains(notif)){
-        productNotifs.add(notif);
+  public void addNotification(Notification notif){
+    if(notif.getType().equals("NEW")){
+      _relevantProducts.put(notif.getProduct(), "true");
+      _notifications.add(notif);
+      _relevantNotifications.add(notif);
+    }
+    if(notif.getType().equals("BARGAIN")){
+      if(_relevantProducts.get(notif.getProduct()).equals("false")){
+        _notifications.add(notif);
+      }
+      else{
+        _notifications.add(notif);
+        _relevantNotifications.add(notif);
       }
     }
   }
 
-  public void addNotification(Notification notif){
-    //_notificationsHistory.add(notif);
-    addNotificationByProduct(notif);
-  }
-
   public void clearNotifications(){
-    //_notificationsHistory.clear();
-    for(List<Notification> productNotifs: _notificationsByProduct.values()){
-      productNotifs.clear();
-    }
+    _notifications.clear();
+    _relevantNotifications.clear();
   }
 
   public String showNotifications(){
     String notifs = "";
-    for(Notification notif: _notificationsByProduct.values()){
+    for(Notification notif: _relevantNotifications){
       notifs += notif.toString();
     }
     return notifs;
   }
 
-  
-  public boolean toggleNotifications(Product product){
-    
-
+  public void toggleNotifications(Product product){
+    if(_relevantProducts.get(product).equalsIgnoreCase("true")) {toggleNotificationsOff(product);}
+    if(_relevantProducts.get(product).equalsIgnoreCase("false")) {toggleNotificationsOn(product);}
   }
-  /*
+
   public void toggleNotificationsOn(Product product){
-
+    List<Notification> toggledNotifications = new ArrayList<>();
+    for(Notification notif: _notifications){
+      if(notif.getProduct().equals(product) || _relevantNotifications.contains(notif)){
+        toggledNotifications.add(notif);        
+      }
+    }
+    _relevantProducts.put(product, "true");
+    _relevantNotifications = toggledNotifications;
   }
-
+  
   public void toggleNotificationsOff(Product product){
-
-
+    List<Notification> toggledNotifications = new ArrayList<>();
+    for(Notification notif: _relevantNotifications){
+      if(!notif.getProduct().equals(product)){
+        toggledNotifications.add(notif);
+      }
+    }
+    _relevantProducts.put(product, "false");
+    _relevantNotifications = toggledNotifications;
   }
-  */
+  
 
   //
 
@@ -160,6 +170,10 @@ public class Partner implements Serializable{
   public void registerSaleByCredit(SaleByCredit sale){
     _sales.add(sale);
   }
+  public void registerBreakSownSale(BreakdownSale sale){
+    _sales.add(sale);
+  }
+
 
   public List<Acquisition> getAcquisitionList(){
     return _acquisitions;
