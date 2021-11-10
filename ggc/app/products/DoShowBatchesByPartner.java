@@ -3,6 +3,7 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
+import ggc.core.Batch;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
 
@@ -19,7 +20,7 @@ class DoShowBatchesByPartner extends Command<WarehouseManager> {
   @Override
   public final void execute() throws CommandException {
     try{
-      for(Object batch : _receiver.getBatchSortedList(_receiver.getPartner(stringField("partner")))){
+      for(Batch batch : _receiver.getBatchSortedList(_receiver.getPartner(stringField("partner")))){
         _display.addLine(batch.toString());
       }
     } catch(InvalidPartnerIdException UnknowPartnerId){

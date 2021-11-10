@@ -169,7 +169,10 @@ public class WarehouseManager{
     try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
       _warehouse = (Warehouse) file.readObject();
       _filename = filename;
-    } catch(ClassNotFoundException | IOException a){
+
+    } catch(ClassNotFoundException a){
+      throw new UnavailableFileException(filename);
+    } catch(IOException a){
       throw new UnavailableFileException(filename);
     }
   }

@@ -22,7 +22,7 @@ class DoShowPartner extends Command<WarehouseManager> {
   @Override
   public void execute() throws CommandException {
     try{
-      Object partner = _receiver.getPartner(stringField("partnerId"));
+      Partner partner = _receiver.getPartner(stringField("partnerId"));
 
       _display.popup(partner.toString());
       for(Notification i: _receiver.showNotifications(stringField("partnerId"))){

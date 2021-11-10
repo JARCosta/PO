@@ -19,7 +19,7 @@ class DoShowBatchesByProduct extends Command<WarehouseManager> {
   @Override
   public final void execute() throws CommandException {
     try {
-      for(Object batch : _receiver.getBatchSortedList(_receiver.getProduct(stringField("product")))){
+      for(Batch batch : _receiver.getBatchSortedList(_receiver.getProduct(stringField("product")))){
         _display.addLine(batch.toString());
       }
       _display.display();  
