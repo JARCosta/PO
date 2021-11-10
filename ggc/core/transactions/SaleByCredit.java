@@ -19,20 +19,19 @@ public class SaleByCredit extends Sale{
 
   public void removeQuantity(Partner partner,Product product, int quantity){
     double baseValue=0;
-    while(quantity > 0){
-
+    int quan = quantity;
+    while(quan > 0){
       Batch removingBatch = product.searchCheapestBatch(partner);
-
-      if(removingBatch.getQuantity() <= quantity){
+      if(removingBatch.getQuantity() <= quan){
         //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
-        quantity -= removingBatch.getQuantity();
-        baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
+        quan -= removingBatch.getQuantity();
+        baseValue += removingBatch.getPrice()*removingBatch.getQuantity();
         removeBatch(removingBatch);
       } else{
         //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
-        baseValue += quantity*removingBatch.getPrice();
-        quantity = 0;
-        removingBatch.removeQuantity(quantity);
+        baseValue += removingBatch.getPrice()*quan;
+        quan = 0;
+        removingBatch.removeQuantity(quan);
       }
     }
     super.setBaseValue(baseValue);
@@ -44,6 +43,7 @@ public class SaleByCredit extends Sale{
   }
 
   public double getAmountToPay(){
+    //System.out.println(""+super.getBaseValue()+" "+super.getQuantity());
     return super.getBaseValue() - _amountPaid; // should be total amopunt to pay - _amount paied;
   }
   public void pay(Date date){

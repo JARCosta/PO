@@ -1,5 +1,9 @@
 package ggc.core.notifications;
 
-public class BargainNotification {
-    
+import ggc.core.products.Product;
+
+public class BargainNotification extends AbstractNotification {
+    public BargainNotification(Product product, double price) {
+        super("BARGAIN", product, price);
+    }
 }

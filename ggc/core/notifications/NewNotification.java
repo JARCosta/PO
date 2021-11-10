@@ -1,5 +1,15 @@
 package ggc.core.notifications;
 
-public class NewNotification {
-    
-}
+import ggc.core.products.Product;
+
+public class NewNotification extends AbstractNotification {
+    public NewNotification(Product product, double price) {
+        super("NEW", product, price);
+    }
+
+    @Override
+    void update() {
+        super.update();
+        _observers.clear();
+    }
+    }

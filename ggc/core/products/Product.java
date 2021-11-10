@@ -9,6 +9,8 @@ import java.util.Objects;
 import ggc.core.Batch;
 import ggc.core.BatchComparator;
 import ggc.core.exception.ProductOutOfBatchesException;
+import ggc.core.notifications.BargainNotification;
+import ggc.core.notifications.NewNotification;
 import ggc.core.partners.Partner;
 /**
 * @author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
@@ -30,6 +32,10 @@ public abstract class Product implements Serializable{
   * List of Batches that contain this product
   */
   private List<Batch> _batches;
+
+  private NewNotification _newSubject = new NewNotification(this, 0);
+	private BargainNotification _bargainSubject = new BargainNotification(this, 0);
+
 
   /**
   * Constructor: Inicialize a product
@@ -93,7 +99,7 @@ public abstract class Product implements Serializable{
   public double getMinPrice(){
     double minprice = -1;
     for(Batch i : _batches){
-      System.out.println(""+i.getProduct().toString()+ " "+ i.toString() +" "+ i.getPrice());
+      //System.out.println(""+i.getProduct().toString()+ " "+ i.toString() +" "+ i.getPrice());
       if(minprice == -1){ minprice = i.getPrice(); }
       if(minprice>i.getPrice()){ minprice = i.getPrice(); }
     }
@@ -109,17 +115,6 @@ public abstract class Product implements Serializable{
     }
     return cheapestBatch;
   }
-  /*
-  public Batch getMinPriceBatch(){
-    Batch retBatch = null;
-    for(Batch i : _batches){
-      if(retBatch == null)
-        retBatch = i;
-      else if(retBatch.getPrice()>i.getPrice())
-        retBatch = i;
-    }
-    return retBatch;
-  }*/
 
   /**
   * Sum quantity of a product in all batches
@@ -197,4 +192,11 @@ public abstract class Product implements Serializable{
   public boolean equals(Object p2){
     return p2 instanceof Product && _id.equals(((Product) p2).getId());
   }
+
+  public void addNewObserver(Partner partner) {
+		_newSubject.addObserver(partner);
+	}
+  public void addBargainObserver(Partner partner) {
+		_bargainSubject.addObserver(partner);
+	}
 }

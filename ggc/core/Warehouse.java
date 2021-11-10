@@ -195,16 +195,17 @@ public class Warehouse implements Serializable {
     product.updateMaxPrice();
 
     Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
-    partner.registerAcquisition(acq);
+    partner.registerAcquisition(acq, price);
     _transactions.add(acq);
     advanceTransactionId();
 
     int quanFin = product.getQuantity();
     double priceFin = product.getMinPrice();
+    //System.out.println(""+ quantInit + "<" + quanFin  );
     if(quantInit == 0 && quanFin > 0){
       registerNotification("NEW", product, price);
     }
-    System.out.println(""+ priceFin +"<"+priceInit  );
+    //System.out.println(""+ priceFin +"<"+priceInit  );
     if(priceFin<priceInit){
       registerNotification("BARGAIN", product, price);
     }
@@ -259,13 +260,31 @@ public class Warehouse implements Serializable {
   
   //NOTIFICATION
 
+  /*void addNewNotification(String productId, String partnerId) throws InvalidProductIdException, InvalidPartnerIdException {
+    Product product = getProduct(productId);
+    Partner partner = getPartner(partnerId);
+    product.addNewObserver(partner);
+  }
+  void addRequestNotification(String partnerId, String productId) throws InvalidProductIdException, InvalidPartnerIdException {
+    Product product = getProduct(productId);
+    Partner partner = getPartner(partnerId);
+    product.addBargainObserver(partner);
+  }
+
+  List<String> getPartnerNotifications(String partnerId) throws InvalidPartnerIdException {
+    Partner partner = getPartner(partnerId);
+    List<String> notifications = partner.getNotifications();
+    partner.clearNotifications();
+    return notifications;
+  }*/
+
   public void registerNotification(String type, Product product, double price){
     for(Partner i : getPartnerList()){
       i.addNotification(new Notification(type, product, price));
     }
   }
 
-  /*
+  
   public void addNotificationToSystem(Product product, double price){
     for(Notification notification: _notifications){
       if(!(notification.getProductId().equals(product.getId()))){
@@ -285,7 +304,7 @@ public class Warehouse implements Serializable {
       }
     }
   }
-  */
+  
 
   public Collection<Notification> showNotifications(String partnerId) throws InvalidPartnerIdException{
     return getPartner(partnerId).showNotifications();
@@ -309,7 +328,7 @@ public class Warehouse implements Serializable {
     getPartner(partnerId).toggleNotifications(getProduct(productId));
   }
 
-
+/*
   /**
    * @param txtfile filename to be loaded.
    * @throws IOException

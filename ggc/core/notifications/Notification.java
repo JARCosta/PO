@@ -17,7 +17,7 @@ public class Notification{
 
   @Override
   public String toString(){
-    return _type + "|" + _product.getId() + "|" + _productPrice;
+    return _type + "|" + _product.getId() + "|" + (int)_productPrice;
   }
 
   public String getType(){return _type;}
@@ -29,6 +29,4 @@ public class Notification{
   public boolean equals(Object t2){
     return t2 instanceof Product && _type.equals(((Notification) t2).getType()) && _product.equals(((Notification)t2).getProduct());
   }
-
-
 }
