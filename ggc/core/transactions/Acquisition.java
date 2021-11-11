@@ -11,16 +11,17 @@ public class Acquisition extends Transaction{
     super(product, quantity,transactionId);
     _partner = partner;
   }
-  public double getPricePayed(){
+  public double getTotalPrice(){
     return getBaseValue()*getQuantity();
   }
 
   public void setPaied(Date date){
     super.setPaymentDate(date);
   }
+
   @Override
   public String toString() {
     //COMPRA|id|idParceiro|idProduto|quantidade|valor-pago|data-pagamento
-    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)getPricePayed() + "|" + super.getPaymentDate();
+    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)getTotalPrice() + "|" + super.getPaymentDate();
   }
 }

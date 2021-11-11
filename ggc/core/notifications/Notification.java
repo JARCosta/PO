@@ -11,6 +11,7 @@ public class Notification{
     _type = type;
     _product = product;
     _productPrice = productPrice;
+    //System.out.println(_type +" "+ _product +" "+ _productPrice);
   }
 
   // desenhos : observer e strategy

@@ -193,15 +193,17 @@ public abstract class Product implements Serializable{
 
 
 
+//OBSERVER
+
   public boolean add(Observer obs) {
     // adiciona partner interessado
     return _observers.add(obs);
   }
-
   public boolean remove(Observer obs) {
     // remove partner interessado
     return _observers.remove(obs);
   }
+  
   public void notifyObservers(String type) {
     // notifica partners
     //System.out.println("aaaaaaaaaaa");

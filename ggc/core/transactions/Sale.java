@@ -10,6 +10,9 @@ public abstract class Sale extends Transaction {
     super(product, quantity,transactionId);
     _Partner = partner;
   }
+  public double getTotalPrice(){
+    return super.getQuantity()*super.getBaseValue();
+  }
   public Partner getPartner(){
     return _Partner;
   }

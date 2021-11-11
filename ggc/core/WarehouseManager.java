@@ -181,25 +181,16 @@ public class WarehouseManager{
     }
   }
 
+
   /**
+   * 
    * @param textfile
    * @throws ImportFileException
-   * @throws InvalidProductIdException
-   * @throws InvalidPartnerIdException
-   * @throws DuplicatePartnerIdException
-  */
+   */
   public void importFile(String textfile) throws ImportFileException{
     try {
       _warehouse.importFile(textfile);
-    } catch (IOException e) {
-      System.out.println(e.getClass());
-    } catch (BadEntryException e) {
-      System.out.println(e.getClass());
-    } catch (DuplicatePartnerIdException e) {
-      System.out.println(e.getClass());
-    } catch (InvalidPartnerIdException e) {
-      System.out.println(e.getClass());
-    } catch (InvalidProductIdException e) {
+    } catch (IOException | BadEntryException | DuplicatePartnerIdException | InvalidPartnerIdException | InvalidProductIdException e) {
       System.out.println(e.getClass());
     }
   }
@@ -207,5 +198,15 @@ public class WarehouseManager{
 
 public List<Transaction> getTransactionsPayed(String partnerId) throws InvalidPartnerIdException {
   return _warehouse.getTransactionsPayed(partnerId);
+}
+
+
+public double getBalance() {
+  return _warehouse.getBalance();
+}
+
+
+public double getAccountingBalance() {
+  return _warehouse.getAccountingBalance();
 }
 }

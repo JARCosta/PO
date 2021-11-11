@@ -133,7 +133,6 @@ public class Warehouse implements Serializable {
     partner.setNotifications(_nullPartner.showNotifications());
 
     _partners.put(id.toLowerCase(),partner);
-    addNotificationsToPartner(partner); //Adicionada as notificacoes existentes no sistema a um novo Parceiro
   }
   public Partner getPartner(String id) throws InvalidPartnerIdException{
     if(_partners.containsKey(id.toLowerCase())){
@@ -158,10 +157,11 @@ public class Warehouse implements Serializable {
 //BATCH
   
   public void registerBatch(double price, int quantity,Partner partner,Product product){
-    //addNotificationToSystem(product, price); //Tem de ser invocada primeiro comparar o price com o MinPrice
+    Batch batch = new Batch(price, quantity, partner, product);
     partner.registerBatch(price, quantity, product);
-    product.addBatch(new Batch(price, quantity, partner, product));
+    product.addBatch(batch);
   }
+  
   public List<Batch> getBatchList(){
     List<Batch> batches= new ArrayList<>();
     for(Product product : new ArrayList<>(_products.values()))
@@ -249,46 +249,46 @@ public class Warehouse implements Serializable {
     advanceTransactionId();
   }
 
-  public void registerBreakDownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
-  /*  if(getProduct(productId).getQuantity()<quantity){
-      throw new ProductAmountException(productId,getProduct(productId).getQuantity());
-    }
+  public void registerBreakDownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidPartnerIdException, InvalidProductIdException{
     try{
       Partner partner = getPartner(partnerId);
-      Product product = getProduct(productId);
+      AggregateProduct product = (AggregateProduct) getProduct(productId);
+      if(product.getQuantity()<quantity){
+        throw new ProductAmountException(productId,product.getQuantity());
+      }
+      int quant = quantity;
+      while(quant > 0){
+        Batch removingBatch = product.searchCheapestBatch(partner);
 
-        int quant = quantity;
-        while(quant > 0){
-          Batch removingBatch = product.searchCheapestBatch(partner);
-          if(removingBatch.getQuantity() <= quantity){
-            //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
-            quant -= removingBatch.getQuantity();
-            //baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
-            for(Component i : product.getRecipe().getComponents()){
-              System.out.println(i.getProduct().getId());
-              partner.registerBatch(removingBatch.getPrice(), removingBatch.getQuantity(), i.getProduct());
-            }
-            partner.removeBatch(removingBatch);
-            product.removeBatch(removingBatch);
-          } else{
-            //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
-            //baseValue += quant*removingBatch.getPrice();
-            for(Component i : product.getRecipe().getComponents()){
-              partner.registerBatch(removingBatch.getPrice(), quant, i.getProduct());
-            }
-            removingBatch.removeQuantity(quant);
-            quant = 0;
+        if(removingBatch.getQuantity() <= quantity){
+          //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
+          quant -= removingBatch.getQuantity();
+          for(Component i : product.getRecipe().getComponents()){
+            //System.out.println(i.getProduct().getId());
+            partner.registerBatch(removingBatch.getPrice(), removingBatch.getQuantity(), i.getProduct());
           }
+          partner.removeBatch(removingBatch);
+          product.removeBatch(removingBatch);
         }
-
-
+        
+        else{
+          //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
+          //baseValue += quant*removingBatch.getPrice();
+          for(Component i : product.getRecipe().getComponents()){
+            //System.out.println(i.getProduct().getId());
+            partner.registerBatch(removingBatch.getPrice(), quant, i.getProduct());
+          }
+          removingBatch.removeQuantity(quant);
+          quant = 0;
+        }
       BreakdownSale sale =  new BreakdownSale((AggregateProduct)getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
       _transactions.add(sale);
       getPartner(partnerId).registerBreakSownSale(sale);
+      }
     } catch (ClassCastException e){
-      throw new InvalidProductIdException(productId);
-    }*/
+    }
   }
+  
 
 
 
@@ -316,75 +316,13 @@ public class Warehouse implements Serializable {
   
   //NOTIFICATION
 
-  /*void addNewNotification(String productId, String partnerId) throws InvalidProductIdException, InvalidPartnerIdException {
-    Product product = getProduct(productId);
-    Partner partner = getPartner(partnerId);
-    product.addNewObserver(partner);
-  }
-  void addRequestNotification(String partnerId, String productId) throws InvalidProductIdException, InvalidPartnerIdException {
-    Product product = getProduct(productId);
-    Partner partner = getPartner(partnerId);
-    product.addBargainObserver(partner);
-  }
-
-  List<String> getPartnerNotifications(String partnerId) throws InvalidPartnerIdException {
-    Partner partner = getPartner(partnerId);
-    List<String> notifications = partner.getNotifications();
-    partner.clearNotifications();
-    return notifications;
-  }*/
-
-  
-  public void registerNotification(String type, Product product, double price){
-    for(Partner i : getPartnerList()){
-      i.addNotification(new Notification(type, product, price));
-    }
-  }
-
-  
-  public void addNotificationToSystem(Product product, double price){
-    for(Notification notification: _notifications){
-      if(!(notification.getProductId().equals(product.getId()))){
-        // para todas as notificacoes com um produto diferente do dado
-        Notification notif = new Notification("NEW", product, price);
-        _notifications.add(notif);
-        addNotificationToPartners(notif);
-      }
-      else if(notification.getProductId().equals(product.getId())){
-        // para todas as notificacoes com um produto igual ao dado
-        if(price < product.getMinPrice()){
-          // e com um preco menor ao preco menor atual
-          Notification notif = new Notification("BARGAIN", product, price);
-          _notifications.add(notif);
-          addNotificationToPartners(notif);
-        }
-      }
-    }
-  }
-  
-
-  //used
   public Collection<Notification> showNotifications(String partnerId) throws InvalidPartnerIdException{
     return getPartner(partnerId).showNotifications();
-    //return getPartner(partnerId).showNotifications();
-  }
-  
-  public void addNotificationToPartners(Notification notif){
-    // adicionar a notificao mais recente a todos os Parceiros existentes
-    for(Partner partner: _partners.values()){
-      partner.addNotification(notif);
-    }
   }
 
-  public void addNotificationsToPartner(Partner partner){
-    for(Notification notif: _notifications){
-      partner.addNotification(notif);
-    }
-  }
-  
-  //used
   public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException {
-    getPartner(partnerId).toggleNotifications(getProduct(productId));
+    getProduct(productId).remove(getPartner(partnerId));
+    //getPartner(partnerId).toggleNotifications(getProduct(productId));
   }
 
 /*
@@ -412,6 +350,30 @@ public List<Transaction> getTransactionsPayed(String partnerId) throws InvalidPa
 }
 
 
+public double getBalance() {
+  double ret = 0;
+  for(Partner i : getPartnerList()){
+    for(Acquisition j: i.getAcquisitionList()){
+      ret += j.getTotalPrice();
+    }
+    for(Sale j : i.getSaleList()){
+      ret -= j.getTotalPrice();
+    }
+  }
+  return -1*ret;
+}
 
 
+  public double getAccountingBalance() {
+    double ret = 0;
+    for(Partner i : getPartnerList()){
+      for(Acquisition j: i.getAcquisitionList()){
+        ret += j.getTotalPrice();
+      }
+      for(Sale j : i.getSaleList()){
+        ret -= j.getTotalPrice();
+      }
+    }
+    return -1*ret;
+  }
 }

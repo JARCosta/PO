@@ -40,10 +40,12 @@ public class SaleByCredit extends Sale{
     batch.getProduct().removeBatch(batch);
   }
 
+  public double getAmountPaied(){ return _amountPaid;}
   public double getAmountToPay(){
     //System.out.println(""+super.getBaseValue()+" "+super.getQuantity());
-    return super.getBaseValue() - _amountPaid; // should be total amopunt to pay - _amount paied;
+    return super.getBaseValue() - getAmountPaied();
   }
+  
   public void pay(Date date){
     if(_amountPaid != super.getBaseValue())
       _amountPaid = super.getBaseValue();

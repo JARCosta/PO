@@ -29,7 +29,7 @@ public class Parser {
     }
   }
 
-  private void parseLine(String line) throws BadEntryException, BadEntryException, InvalidPartnerIdException, InvalidProductIdException, DuplicatePartnerIdException {
+  private void parseLine(String line) throws BadEntryException, InvalidPartnerIdException, InvalidProductIdException, DuplicatePartnerIdException {
     String[] components = line.split("\\|");
 
     switch (components[0]) {

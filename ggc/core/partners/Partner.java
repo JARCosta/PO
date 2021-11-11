@@ -106,42 +106,15 @@ public class Partner implements Serializable, Observer{
 
 // NOTIFICATION--------------------------------------------------------------------------------------------------------
 
-  public void addNotification(Notification notif){
-    if(notif.getType().equals("NEW")){
-      _relevantProducts.put(notif.getProduct(), "true");
-      _notifications.add(notif);
-      _relevantNotifications.add(notif);
-    }
-    if(notif.getType().equals("BARGAIN")){
-      if(_relevantProducts.containsKey(notif.getProduct()) && _relevantProducts.get(notif.getProduct()).equals("false")){
-        _notifications.add(notif);
-      }
-      /*
-      else if(_relevantProducts.containsKey(notif.getProduct()) && _relevantProducts.get(notif.getProduct()).equals("true")){
-        _notifications.add(notif);
-        _relevantNotifications.add(notif);
-      }
-      */
-      else{
-        _notifications.add(notif);
-        _relevantNotifications.add(notif);
-      }
-    }
-  }
-
-  //used
-  public void clearNotifications(){
+public void clearNotifications(){
     _notifications.clear();
     _relevantNotifications.clear();
   }
 
-
-  //used
   public Collection<Notification> showNotifications(){
     return _relevantNotifications;
   }
 
-  //used
   public void toggleNotifications(Product product){
     if(_relevantProducts.containsKey(product)){
       if(_relevantProducts.get(product).equals("true")) {toggleNotificationsOff(product);}
@@ -149,7 +122,6 @@ public class Partner implements Serializable, Observer{
     }
   }
 
-  //used
   public void toggleNotificationsOn(Product product){
     List<Notification> toggledNotifications = new ArrayList<>();
     for(Notification notif: _notifications){
@@ -161,7 +133,6 @@ public class Partner implements Serializable, Observer{
     _relevantNotifications = toggledNotifications;
   }
   
-  //used
   public void toggleNotificationsOff(Product product){
     List<Notification> toggledNotifications = new ArrayList<>();
     for(Notification notif: _relevantNotifications){
