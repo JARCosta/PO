@@ -16,6 +16,7 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
+import ggc.core.notifications.Notification;
 import ggc.core.partners.Partner;
 import ggc.core.partners.PartnerComparator;
 import ggc.core.products.AggregateProduct;
@@ -67,12 +68,20 @@ public class Warehouse implements Serializable {
   public Product registerSimpleProduct(String id){
     SimpleProduct product = new SimpleProduct(id);
     _products.put(id, product);
+    for(Partner i:getPartnerList()){
+      if(!product.getObservers().contains(i))
+        product.add(i);
+    }
     return product;
   }
 
   public Product registerAggregateProduct(String id, double aggravation, List<Component> comps){
     AggregateProduct product = new AggregateProduct(id, aggravation, comps);
     _products.put(id, product);
+    for(Partner i:getPartnerList()){
+      if(!product.getObservers().contains(i))
+        product.add(i);
+    }
     return product;
   }
 
@@ -116,7 +125,10 @@ public class Warehouse implements Serializable {
       throw new DuplicatePartnerIdException(id);
     }
     Partner partner = new Partner(id, name, adress);
-
+    for(Product i:getProductList()){
+      if(!i.getObservers().contains(partner))
+        i.add(partner);
+    }
 // transfer notifications from _nullPartner to partner
     partner.setNotifications(_nullPartner.showNotifications());
 
@@ -216,11 +228,13 @@ public class Warehouse implements Serializable {
         if(i.getProduct().equals(product))
           hasTransaction = true;
       if(!hasTransaction)
-        registerNotification("NEW", product, price);
+        product.notifyObservers("NEW");
+        //registerNotification("NEW", product, price);
     }
     //System.out.println(""+ priceFin +"<"+priceInit  );
     if(priceFin<priceInit){
-      registerNotification("BARGAIN", product, price);
+      product.notifyObservers("BARGAIN");
+      //registerNotification("BARGAIN", product, price);
     }
   }
 

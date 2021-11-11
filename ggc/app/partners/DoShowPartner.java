@@ -1,9 +1,9 @@
 package ggc.app.partners;
 
 import ggc.app.exception.UnknownPartnerKeyException;
-import ggc.core.Notification;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
+import ggc.core.notifications.Notification;
 import ggc.core.partners.Partner;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;

@@ -2,13 +2,16 @@ package ggc.core.products;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import ggc.core.Batch;
 import ggc.core.BatchComparator;
-
+import ggc.core.notifications.Observer;
 import ggc.core.partners.Partner;
+import ggc.core.notifications.Notification;
 /**
 * @author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
 *
@@ -29,6 +32,8 @@ public abstract class Product implements Serializable{
   * List of Batches that contain this product
   */
   private List<Batch> _batches;
+
+  private List<Observer> _observers = new ArrayList<>();
 
   /**
   * Constructor: Inicialize a product
@@ -184,5 +189,32 @@ public abstract class Product implements Serializable{
   @Override
   public boolean equals(Object p2){
     return p2 instanceof Product && _id.equals(((Product) p2).getId());
+  }
+
+
+
+  public boolean add(Observer obs) {
+    // adiciona partner interessado
+    return _observers.add(obs);
+  }
+
+  public boolean remove(Observer obs) {
+    // remove partner interessado
+    return _observers.remove(obs);
+  }
+  public void notifyObservers(String type) {
+    // notifica partners
+    //System.out.println("aaaaaaaaaaa");
+    for (Observer obs : _observers){
+      //System.out.println(obs.toString());
+      if(type.equals("NEW"))
+        obs.notify(new Notification("NEW", this, getMinPrice()));
+      else{
+        obs.notify(new Notification("BARGAIN", this, getMinPrice()));
+    }
+    }
+  }
+  public List<Observer> getObservers(){
+    return _observers;
   }
 }

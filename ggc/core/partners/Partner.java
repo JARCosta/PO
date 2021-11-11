@@ -9,14 +9,15 @@ import java.util.Objects;
 import java.util.Map;
 
 import ggc.core.Batch;
-import ggc.core.Notification;
+import ggc.core.notifications.Notification;
+import ggc.core.notifications.Observer;
 import ggc.core.products.Product;
 import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.BreakdownSale;
 import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
 
-public class Partner implements Serializable{
+public class Partner implements Serializable, Observer{
   private String _name;
   private String _adress;
   private String _id;
@@ -48,6 +49,10 @@ public class Partner implements Serializable{
 
   public String getId(){
     return _id;
+  }
+  public void notify(Notification notification){
+    //System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    _relevantNotifications.add(notification);
   }
 
 //BATCHES--------------------------------------------------------------------------------------------------------

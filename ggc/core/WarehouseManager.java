@@ -20,6 +20,7 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
+import ggc.core.notifications.Notification;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.ProductAmountException;
 
