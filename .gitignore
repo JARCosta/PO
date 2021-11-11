@@ -1,6 +1,4 @@
 **/*.class
-**/*.diff
-**/*.outhyp
 **/*.dat
 **/*.ggc
 **/*.md

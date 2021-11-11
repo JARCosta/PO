@@ -11,7 +11,6 @@ public abstract class Transaction implements Serializable{
   private double _baseValue;
   private int _quantity;
   private Product _product;
-  //private static int _currentId;
 
   Transaction(Product product,int quantity, int currentId){
     _quantity = quantity;

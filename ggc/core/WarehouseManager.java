@@ -119,8 +119,8 @@ public class WarehouseManager{
     _warehouse.registerSaleByCredit(partnerId, productId, deadline,quantity);
   }
 
-  public void registerBreakSownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
-    _warehouse.registerBreakSownSale(partnerId,productId,quantity);
+  public void registerBreakDownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+    _warehouse.registerBreakDownSale(partnerId,productId,quantity);
   }
 
   public void pay(int transactionId) throws IndexOutOfBoundsException{

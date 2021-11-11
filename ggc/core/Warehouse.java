@@ -38,6 +38,7 @@ public class Warehouse implements Serializable {
   private List<Notification> _notifications;
   private List<Transaction> _transactions;
   private int _nextTransctionId;
+  private Partner _nullPartner;
 
   public Warehouse(){
     _date = new Date(0);
@@ -45,6 +46,7 @@ public class Warehouse implements Serializable {
     _products = new HashMap<String, Product>();
     _notifications = new ArrayList<>();
     _transactions = new ArrayList<>();
+    _nullPartner = new Partner(null, null, null);
   }
   
 
@@ -114,6 +116,10 @@ public class Warehouse implements Serializable {
       throw new DuplicatePartnerIdException(id);
     }
     Partner partner = new Partner(id, name, adress);
+
+// transfer notifications from _nullPartner to partner
+    partner.setNotifications(_nullPartner.showNotifications());
+
     _partners.put(id.toLowerCase(),partner);
     addNotificationsToPartner(partner); //Adicionada as notificacoes existentes no sistema a um novo Parceiro
   }
@@ -204,8 +210,13 @@ public class Warehouse implements Serializable {
     int quanFin = product.getQuantity();
     double priceFin = product.getMinPrice();
     //System.out.println(""+ quantInit + "<" + quanFin  );
+    boolean hasTransaction=false;
     if(quantInit == 0 && quanFin > 0){
-      registerNotification("NEW", product, price);
+      for(Transaction i : _transactions)
+        if(i.getProduct().equals(product))
+          hasTransaction = true;
+      if(!hasTransaction)
+        registerNotification("NEW", product, price);
     }
     //System.out.println(""+ priceFin +"<"+priceInit  );
     if(priceFin<priceInit){
@@ -224,17 +235,45 @@ public class Warehouse implements Serializable {
     advanceTransactionId();
   }
 
-  public void registerBreakSownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
-    if(getProduct(productId).getQuantity()<quantity){
+  public void registerBreakDownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+  /*  if(getProduct(productId).getQuantity()<quantity){
       throw new ProductAmountException(productId,getProduct(productId).getQuantity());
     }
     try{
+      Partner partner = getPartner(partnerId);
+      Product product = getProduct(productId);
+
+        int quant = quantity;
+        while(quant > 0){
+          Batch removingBatch = product.searchCheapestBatch(partner);
+          if(removingBatch.getQuantity() <= quantity){
+            //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
+            quant -= removingBatch.getQuantity();
+            //baseValue += removingBatch.getQuantity()*removingBatch.getPrice();
+            for(Component i : product.getRecipe().getComponents()){
+              System.out.println(i.getProduct().getId());
+              partner.registerBatch(removingBatch.getPrice(), removingBatch.getQuantity(), i.getProduct());
+            }
+            partner.removeBatch(removingBatch);
+            product.removeBatch(removingBatch);
+          } else{
+            //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
+            //baseValue += quant*removingBatch.getPrice();
+            for(Component i : product.getRecipe().getComponents()){
+              partner.registerBatch(removingBatch.getPrice(), quant, i.getProduct());
+            }
+            removingBatch.removeQuantity(quant);
+            quant = 0;
+          }
+        }
+
+
       BreakdownSale sale =  new BreakdownSale((AggregateProduct)getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
       _transactions.add(sale);
       getPartner(partnerId).registerBreakSownSale(sale);
     } catch (ClassCastException e){
       throw new InvalidProductIdException(productId);
-    }
+    }*/
   }
 
 

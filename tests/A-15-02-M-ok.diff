@@ -1,0 +1,20 @@
+*** tests/A-15-02-M-ok.out	2021-11-07 16:04:59.270429000 +0000
+--- tests/A-15-02-M-ok.outhyp	2021-11-11 11:26:09.281453125 +0000
+***************
+*** 16,22 ****
+  4 - Registar compra
+  5 - Receber pagamento de venda
+  0 - Sair
+! Escolha uma opção: Identificador do parceiro: Identificador do produto: Quantidade: Gestão de Transacções
+  1 - Visualizar
+  2 - Registar desagregação
+  3 - Registar venda
+--- 16,23 ----
+  4 - Registar compra
+  5 - Receber pagamento de venda
+  0 - Sair
+! Escolha uma opção: Identificador do parceiro: Identificador do produto: Quantidade: Registar desagregação: Operação inválida: O produto 'SAL' não existe.
+! Gestão de Transacções
+  1 - Visualizar
+  2 - Registar desagregação
+  3 - Registar venda

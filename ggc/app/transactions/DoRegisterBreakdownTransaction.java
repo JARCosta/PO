@@ -26,7 +26,7 @@ public class DoRegisterBreakdownTransaction extends Command<WarehouseManager> {
   @Override
   public final void execute() throws CommandException {
     try {
-      _receiver.registerBreakSownSale(stringField("partnerId"),stringField("productId"),integerField("quantity"));
+      _receiver.registerBreakDownSale(stringField("partnerId"),stringField("productId"),integerField("quantity"));
     } catch (ProductAmountException e) {
       throw new UnavailableProductException(e.getProductId(), integerField("quantity"), e.getQuantity());
     } catch (InvalidProductIdException e) {

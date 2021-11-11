@@ -168,6 +168,13 @@ public class Partner implements Serializable{
     _relevantNotifications = toggledNotifications;
   }
 
+  public void setNotifications(Collection<Notification> notifs){
+    for(Notification notif: notifs){
+      _notifications.add(notif);
+      _relevantNotifications.add(notif);
+    }
+  }
+
 //STATUS--------------------------------------------------------------------------------------------------------
 
   public double getPoints(){
