@@ -22,12 +22,12 @@ class DoSaveFile extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     try{
       _receiver.save();
-    } catch (MissingFileAssociationException | IOException noFile){
+    } catch (IOException noFile){
       String name = Form.requestString(Message.newSaveAs());
       try {
         _receiver.saveAs(name);
-      } catch (MissingFileAssociationException | IOException fileError) {
-        //System.out.println("DoSaveFile.execute()");
+      } catch (IOException fileError) {
+        System.out.println("DoSaveFile.execute()");
       }
     }
   }

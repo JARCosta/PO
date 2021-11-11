@@ -1,16 +1,13 @@
 package ggc.core.products;
 
 import java.io.Serializable;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import ggc.core.Batch;
 import ggc.core.BatchComparator;
-import ggc.core.exception.ProductOutOfBatchesException;
-import ggc.core.notifications.BargainNotification;
-import ggc.core.notifications.NewNotification;
+
 import ggc.core.partners.Partner;
 /**
 * @author Joao Andre Costa 99088 & Jose Maria Vilar Gomes 100598
@@ -32,10 +29,6 @@ public abstract class Product implements Serializable{
   * List of Batches that contain this product
   */
   private List<Batch> _batches;
-
-  private NewNotification _newSubject = new NewNotification(this, 0);
-	private BargainNotification _bargainSubject = new BargainNotification(this, 0);
-
 
   /**
   * Constructor: Inicialize a product
@@ -192,11 +185,4 @@ public abstract class Product implements Serializable{
   public boolean equals(Object p2){
     return p2 instanceof Product && _id.equals(((Product) p2).getId());
   }
-
-  public void addNewObserver(Partner partner) {
-		_newSubject.addObserver(partner);
-	}
-  public void addBargainObserver(Partner partner) {
-		_bargainSubject.addObserver(partner);
-	}
 }

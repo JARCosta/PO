@@ -20,7 +20,6 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
-import ggc.core.notifications.Notification;
 import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.ProductAmountException;
 
@@ -130,6 +129,7 @@ public class WarehouseManager{
 
   //NOTIFICATION
 
+  //used
   public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException{
     _warehouse.toggleNotifications(partnerId,productId);
   }
@@ -141,7 +141,7 @@ public class WarehouseManager{
    * @@throws IOException
    * @@throws MissingFileAssociationException
    */
-  public void save() throws MissingFileAssociationException, IOException {
+  public void save() throws IOException{
     FileOutputStream fileOut = new FileOutputStream(_filename);
     ObjectOutputStream outStream = new ObjectOutputStream(fileOut);
     outStream.writeObject(_warehouse);
@@ -155,7 +155,7 @@ public class WarehouseManager{
    * @@throws IOException
    * @@throws FileNotFoundException
    */
-  public void saveAs(String filename) throws MissingFileAssociationException, FileNotFoundException, IOException {
+  public void saveAs(String filename) throws IOException{
     _filename = filename;
     save();
   }
@@ -166,13 +166,16 @@ public class WarehouseManager{
    * @throws IOException
    */
   public void load(String filename) throws UnavailableFileException{
-    try(ObjectInputStream file = new ObjectInputStream(new FileInputStream(filename))){
+    try{
+      FileInputStream file1 = new FileInputStream(filename);
+      ObjectInputStream file = new ObjectInputStream(file1);
       _warehouse = (Warehouse) file.readObject();
       _filename = filename;
-
     } catch(ClassNotFoundException a){
+      //System.out.println("" + a.getClass()+" "+ filename);
       throw new UnavailableFileException(filename);
     } catch(IOException a){
+      //System.out.println("" + a.getClass()+" "+ filename);
       throw new UnavailableFileException(filename);
     }
   }
@@ -187,8 +190,21 @@ public class WarehouseManager{
   public void importFile(String textfile) throws ImportFileException{
     try {
       _warehouse.importFile(textfile);
-   } catch (IOException | BadEntryException | InvalidPartnerIdException | InvalidProductIdException | DuplicatePartnerIdException  e) {
-      throw new ImportFileException(textfile, e);
+    } catch (IOException e) {
+      System.out.println(e.getClass());
+    } catch (BadEntryException e) {
+      System.out.println(e.getClass());
+    } catch (DuplicatePartnerIdException e) {
+      System.out.println(e.getClass());
+    } catch (InvalidPartnerIdException e) {
+      System.out.println(e.getClass());
+    } catch (InvalidProductIdException e) {
+      System.out.println(e.getClass());
     }
   }
+
+
+public List<Transaction> getTransactionsPayed(String partnerId) throws InvalidPartnerIdException {
+  return _warehouse.getTransactionsPayed(partnerId);
+}
 }

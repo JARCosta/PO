@@ -1,9 +1,11 @@
 package ggc.core.transactions;
 
+import java.io.Serializable;
+
 import ggc.core.Date;
 import ggc.core.products.Product;
 
-public abstract class Transaction {
+public abstract class Transaction implements Serializable{
   private int _id;
   private Date _paymentDate;
   private double _baseValue;
@@ -25,6 +27,7 @@ public abstract class Transaction {
   public Date getPaymentDate(){return _paymentDate;}
   public Product getProduct(){return _product;}
   public void setPaymentDate(Date date){_paymentDate = date;}
+  public boolean isPaid(){return false;}
 
   public String toString(){
     return getId() +"|"+ getQuantity() + "|" + getBaseValue() + "|" + getPaymentDate();

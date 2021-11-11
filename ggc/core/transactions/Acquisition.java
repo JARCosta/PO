@@ -1,5 +1,6 @@
 package ggc.core.transactions;
 
+import ggc.core.Date;
 import ggc.core.partners.Partner;
 import ggc.core.products.Product;
 
@@ -10,10 +11,16 @@ public class Acquisition extends Transaction{
     super(product, quantity,transactionId);
     _partner = partner;
   }
+  public double getPricePayed(){
+    return getBaseValue()*getQuantity();
+  }
 
+  public void setPaied(Date date){
+    super.setPaymentDate(date);
+  }
   @Override
   public String toString() {
     //COMPRA|id|idParceiro|idProduto|quantidade|valor-pago|data-pagamento
-    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)super.getBaseValue() + "|" + super.getPaymentDate();
+    return "COMPRA|" + super.getId() + "|" + _partner.getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)getPricePayed() + "|" + super.getPaymentDate();
   }
 }

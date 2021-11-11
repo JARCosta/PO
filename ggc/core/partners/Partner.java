@@ -9,16 +9,14 @@ import java.util.Objects;
 import java.util.Map;
 
 import ggc.core.Batch;
-import ggc.core.notifications.Notification;
-import ggc.core.notifications.Observer;
+import ggc.core.Notification;
 import ggc.core.products.Product;
 import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.BreakdownSale;
 import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
-import ggc.core.transactions.Transaction;
 
-public class Partner implements Serializable, Observer{
+public class Partner implements Serializable{
   private String _name;
   private String _adress;
   private String _id;
@@ -27,7 +25,6 @@ public class Partner implements Serializable, Observer{
   private double _valorCompras;
   private double _valorVendas;
   private double _valorVendasPagas;
-  private PartnerState _state;
   private ArrayList<Batch> _batches;
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
@@ -35,15 +32,11 @@ public class Partner implements Serializable, Observer{
   private List<Notification> _relevantNotifications;
   private Map<Product, String> _relevantProducts;
 
-
-  private Map<Product, List<Notification>> _myNotifications;
-
-
   public Partner(String id, String name, String adress){
     _name = name;
     _adress = adress;
     _id = id;
-    _state = new NormalPartner();
+    _status= "NORMAL";
     _points = 0;
     _batches = new ArrayList<Batch>();
     _acquisitions = new ArrayList<Acquisition>();
@@ -109,40 +102,41 @@ public class Partner implements Serializable, Observer{
 // NOTIFICATION--------------------------------------------------------------------------------------------------------
 
   public void addNotification(Notification notif){
-
-    //_notifications.add(notif);
-    //_relevantNotifications.add(notif);
-
     if(notif.getType().equals("NEW")){
-      //System.out.println("aaaaaaaaaaaaaaaa");
       _relevantProducts.put(notif.getProduct(), "true");
       _notifications.add(notif);
       _relevantNotifications.add(notif);
     }
     if(notif.getType().equals("BARGAIN")){
-      if(_relevantNotifications.contains(notif.getProduct()) && _relevantProducts.get(notif.getProduct()).equals("false")){
+      if(_relevantProducts.containsKey(notif.getProduct()) && _relevantProducts.get(notif.getProduct()).equals("false")){
         _notifications.add(notif);
       }
+      /*
+      else if(_relevantProducts.containsKey(notif.getProduct()) && _relevantProducts.get(notif.getProduct()).equals("true")){
+        _notifications.add(notif);
+        _relevantNotifications.add(notif);
+      }
+      */
       else{
         _notifications.add(notif);
         _relevantNotifications.add(notif);
       }
     }
   }
+
+  //used
   public void clearNotifications(){
     _notifications.clear();
     _relevantNotifications.clear();
   }
+
+
+  //used
   public Collection<Notification> showNotifications(){
     return _relevantNotifications;
-    /*String notifs = "";
-    for(Notification notif: _relevantNotifications){
-      System.out.println(notif.toString());
-      notifs += notif.toString();
-    }
-    return notifs;*/
   }
 
+  //used
   public void toggleNotifications(Product product){
     if(_relevantProducts.containsKey(product)){
       if(_relevantProducts.get(product).equals("true")) {toggleNotificationsOff(product);}
@@ -150,6 +144,7 @@ public class Partner implements Serializable, Observer{
     }
   }
 
+  //used
   public void toggleNotificationsOn(Product product){
     List<Notification> toggledNotifications = new ArrayList<>();
     for(Notification notif: _notifications){
@@ -161,6 +156,7 @@ public class Partner implements Serializable, Observer{
     _relevantNotifications = toggledNotifications;
   }
   
+  //used
   public void toggleNotificationsOff(Product product){
     List<Notification> toggledNotifications = new ArrayList<>();
     for(Notification notif: _relevantNotifications){
@@ -171,16 +167,6 @@ public class Partner implements Serializable, Observer{
     _relevantProducts.put(product, "false");
     _relevantNotifications = toggledNotifications;
   }
-  
-  public void notify(String notification) {
-    //	_notifications.add(notification);
-    }
-    /*public void clearNotifications() {
-      _notifications.clear();
-    }
-    public List<String> getNotifications() {
-      return new ArrayList<String>(_notifications);
-    }*/
 
 //STATUS--------------------------------------------------------------------------------------------------------
 
@@ -190,15 +176,38 @@ public class Partner implements Serializable, Observer{
   public void addPoints(double adding){
     _points += adding;
   }
+  public void multiplyPoints(double value){
+    _points = _points*value;
+  }
+
+  // desenho: state + singleton
   public void updateStatus(){
-    // desenho: state + singleton
-//    if(_points>2000)
-//      if(_points>25000)
-//        _state.elite();
-//      else
-//      _state.selection();
-//    else
-//    _state.normal();
+    if(_points>2000)
+      if(_points>25000)
+      _status = "ELITE";
+      else
+      _status = "SELECTION";
+    else
+    _status = "NORMAL";
+    //System.out.println(_status);
+  }
+
+  public void calculateAlpha(int dateDifference){
+    if(_status == "ELITE"){
+      if(dateDifference<0){
+        multiplyPoints(0.25);
+        _status="SELECTION";
+      }
+    }
+    if(_status == "SELECTION"){
+      if(dateDifference<-2){
+        multiplyPoints(0.1);
+        _status="NORMAL";
+      }
+    }
+    if(_status == "NORMAL")
+      if(dateDifference<0)
+        multiplyPoints(0);
   }
 
 
@@ -214,6 +223,6 @@ public class Partner implements Serializable, Observer{
   }
   @Override
   public String toString() {
-    return _id + "|" + _name + "|" + _adress + "|" + _state.getStatus() + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
+    return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
   }
 }

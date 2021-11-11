@@ -16,7 +16,6 @@ import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
-import ggc.core.notifications.Notification;
 import ggc.core.partners.Partner;
 import ggc.core.partners.PartnerComparator;
 import ggc.core.products.AggregateProduct;
@@ -52,10 +51,12 @@ public class Warehouse implements Serializable {
 //DATE
 
   public int currentDate(){
-    return _date.currentDate();
+    return _date.getDate();
   }
   public void advanceDate(int days) throws InvalidDateException{
     _date.advanceDate(days);
+    for(Partner p : getPartnerList())
+      p.updateStatus();
   }
 
 
@@ -195,6 +196,7 @@ public class Warehouse implements Serializable {
     product.updateMaxPrice();
 
     Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
+    acq.setPaied(_date);
     partner.registerAcquisition(acq, price);
     _transactions.add(acq);
     advanceTransactionId();
@@ -254,6 +256,7 @@ public class Warehouse implements Serializable {
     Transaction trans = _transactions.get(transactionId);
     if(trans instanceof SaleByCredit){
       ((SaleByCredit)_transactions.get(transactionId)).pay(_date);
+
     } 
   }
   
@@ -278,6 +281,7 @@ public class Warehouse implements Serializable {
     return notifications;
   }*/
 
+  
   public void registerNotification(String type, Product product, double price){
     for(Partner i : getPartnerList()){
       i.addNotification(new Notification(type, product, price));
@@ -306,6 +310,7 @@ public class Warehouse implements Serializable {
   }
   
 
+  //used
   public Collection<Notification> showNotifications(String partnerId) throws InvalidPartnerIdException{
     return getPartner(partnerId).showNotifications();
     //return getPartner(partnerId).showNotifications();
@@ -324,6 +329,7 @@ public class Warehouse implements Serializable {
     }
   }
   
+  //used
   public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException {
     getPartner(partnerId).toggleNotifications(getProduct(productId));
   }
@@ -341,6 +347,16 @@ public class Warehouse implements Serializable {
     Parser parser = new Parser(this);
     parser.parseFile(txtfile);
   }
+
+
+public List<Transaction> getTransactionsPayed(String partnerId) throws InvalidPartnerIdException {
+  List<Transaction> sales = new ArrayList<>();
+  for(Transaction s : getPartner(partnerId).getSaleList()){
+    if(s.isPaid())
+      sales.add(s);
+  }
+  return sales;
+}
 
 
 

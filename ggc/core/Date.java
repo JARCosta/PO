@@ -19,16 +19,16 @@ public class Date implements Serializable{
     _days += days;
   }
 
-  public int currentDate(){
+  public int getDate(){
     return _days;
   }
 
   public int difference(Date other){
-    return _days - other.currentDate();
+    return other.getDate() - _days;
   }
   @Override
   public String toString(){
-    return "" + currentDate();
+    return "" + getDate();
   }
 /*
   public static Date now(){

@@ -3,6 +3,7 @@ package ggc.app.products;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownProductKeyException;
+import ggc.core.Batch;
 import ggc.core.WarehouseManager;
 //FIXME import classes
 import ggc.core.exception.InvalidProductIdException;
