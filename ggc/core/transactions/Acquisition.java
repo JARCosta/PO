@@ -7,6 +7,9 @@ import ggc.core.products.Product;
 public class Acquisition extends Transaction{
   private Partner _partner;
 
+  @Override
+  public boolean isPaid(){ return true;}
+
   public Acquisition(Partner partner, Product product, int quantity, int transactionId){
     super(product, quantity,transactionId);
     _partner = partner;

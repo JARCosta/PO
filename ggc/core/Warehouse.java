@@ -396,13 +396,13 @@ public double getBalance() {
   double ret = 0;
   for(Partner i : getPartnerList()){
     for(Acquisition j: i.getAcquisitionList()){
-      ret += j.getTotalPrice();
-    }
-    for(Sale j : i.getSaleList()){
       ret -= j.getTotalPrice();
     }
+    for(Sale j : i.getSaleList()){
+      ret += j.getTotalPrice();
+    }
   }
-  return -1*ret;
+  return ret;
 }
 
 
@@ -410,12 +410,15 @@ public double getBalance() {
     double ret = 0;
     for(Partner i : getPartnerList()){
       for(Acquisition j: i.getAcquisitionList()){
-        ret += j.getTotalPrice();
+        if(j.isPaid())
+          ret -= j.getTotalPrice();
       }
       for(Sale j : i.getSaleList()){
-        ret -= j.getTotalPrice();
+        if(j.isPaid())
+
+          ret += j.getTotalPrice();
       }
     }
-    return -1*ret;
+    return ret;
   }
 }
