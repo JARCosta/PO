@@ -10,7 +10,8 @@ import ggc.core.products.Component;
 import ggc.core.products.Product;
 
 public class BreakdownSale extends Sale{
-  List<Batch> _batches;
+  private List<Batch> _batches;
+
   public BreakdownSale(Product product, int quantity, Partner partner, int transactionId){
     super(product, quantity, partner,transactionId);
     _batches = product.getBatchSortedList(partner);
@@ -18,23 +19,23 @@ public class BreakdownSale extends Sale{
   public List<Batch> getBatchList(){
     return _batches;
   }
+  public void setPaymentDate(Date now){
+    super.setPaymentDate(now);
+  }
   public double getPricePaid(){
-    if(super.isPaid())
-      return getTotalPrice();
-    else
-      return 0;
+    return getBaseValue();
   }
 
   @Override
-  //DESAGREGAC ̧ ̃AO|id|idParceiro|idProduto|quantidade|valor-base|valor-pago|data-pagamento|idC1:q1:v1#...#idCN:qN:vN
+  //DESAGREGAÇÃO|id|idParceiro|idProduto|quantidade|valor-base|valor-pago|data-pagamento|idC1:q1:v1#...#idCN:qN:vN
   public String toString(Date now) {
     String ret = "";
     AggregateProduct prod = (AggregateProduct)getProduct();
     for(Component c : prod.getRecipe().getComponents()){
       if(ret != "")
         ret += "#";
-      ret += c.getProduct().getId() + ":" + c.getQuantity() + ":" + c.getProduct().getMinPrice();
+      ret += c.getProduct().getId() + ":" + c.getQuantity()*super.getQuantity() + ":" + (int)c.getProduct().getMinPrice()*super.getQuantity()*c.getQuantity();
     }
-    return"DESAGREGAÇÃO|"+super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + super.getBaseValue() + "|" + getPricePaid() + "|" + super.getPaymentDate() + "|" + ret;
+    return"DESAGREGAÇÃO|" + super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)super.getBaseValue() + "|" + (int)getPricePaid() + "|" + super.getPaymentDate() + "|" + ret;
   }
 }

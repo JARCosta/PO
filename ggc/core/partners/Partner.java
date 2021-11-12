@@ -32,7 +32,6 @@ public class Partner implements Serializable, Observer{
   private ArrayList<Batch> _batches;
   private List<Acquisition> _acquisitions;
   private List<Sale> _sales;
-  private List<Notification> _notifications;
   private List<Notification> _relevantNotifications;
   private Map<Product, String> _relevantProducts;
 
@@ -45,7 +44,6 @@ public class Partner implements Serializable, Observer{
     _batches = new ArrayList<Batch>();
     _acquisitions = new ArrayList<Acquisition>();
     _sales = new ArrayList<Sale>();
-     _notifications = new ArrayList<>();
     _relevantNotifications = new ArrayList<>();
     _relevantProducts = new HashMap<Product, String>();
   }
@@ -113,7 +111,6 @@ public class Partner implements Serializable, Observer{
 // NOTIFICATION--------------------------------------------------------------------------------------------------------
 
 public void clearNotifications(){
-    _notifications.clear();
     _relevantNotifications.clear();
   }
 
@@ -121,38 +118,8 @@ public void clearNotifications(){
     return _relevantNotifications;
   }
 
-  public void toggleNotifications(Product product){
-    if(_relevantProducts.containsKey(product)){
-      if(_relevantProducts.get(product).equals("true")) {toggleNotificationsOff(product);}
-      if(_relevantProducts.get(product).equals("false")) {toggleNotificationsOn(product);}
-    }
-  }
-
-  public void toggleNotificationsOn(Product product){
-    List<Notification> toggledNotifications = new ArrayList<>();
-    for(Notification notif: _notifications){
-      if(notif.getProduct().equals(product) || _relevantNotifications.contains(notif)){
-        toggledNotifications.add(notif);        
-      }
-    }
-    _relevantProducts.put(product, "true");
-    _relevantNotifications = toggledNotifications;
-  }
-  
-  public void toggleNotificationsOff(Product product){
-    List<Notification> toggledNotifications = new ArrayList<>();
-    for(Notification notif: _relevantNotifications){
-      if(!notif.getProduct().equals(product)){
-        toggledNotifications.add(notif);
-      }
-    }
-    _relevantProducts.put(product, "false");
-    _relevantNotifications = toggledNotifications;
-  }
-
   public void setNotifications(Collection<Notification> notifs){
     for(Notification notif: notifs){
-      _notifications.add(notif);
       _relevantNotifications.add(notif);
     }
   }
@@ -199,25 +166,6 @@ public void clearNotifications(){
     else
     _status = NormalPartner.getInstance();
   }
-
-  /*public double calculateAlpha(int dateDifference){
-    if(_status == "ELITE"){
-      if(dateDifference<0){
-        multiplyPoints(0.25);
-        _status="SELECTION";
-      }
-    }
-    if(_status == "SELECTION"){
-      if(dateDifference<-2){
-        multiplyPoints(0.1);
-        _status="NORMAL";
-      }
-    }
-    if(_status == "NORMAL")
-      if(dateDifference<0)
-        multiplyPoints(0);
-  }*/
-
 
 //---------------------------------------------------------------------------------------------------------------------
 

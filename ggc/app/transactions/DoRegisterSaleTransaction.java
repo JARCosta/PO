@@ -32,7 +32,7 @@ public class DoRegisterSaleTransaction extends Command<WarehouseManager> {
     } catch (InvalidProductIdException e) {
       throw new UnknownProductKeyException(stringField("productId"));
     } catch (ProductAmountException e) {
-        throw new UnavailableProductException(stringField("productId"), integerField("quantity"), e.getQuantity());
+      throw new UnavailableProductException(e.getProductId(), e.getQuantityAsked(), e.getQuantity());
     }
   }
 }

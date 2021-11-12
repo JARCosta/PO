@@ -28,7 +28,7 @@ public class DoRegisterBreakdownTransaction extends Command<WarehouseManager> {
     try {
       _receiver.registerBreakDownSale(stringField("partnerId"),stringField("productId"),integerField("quantity"));
     } catch (ProductAmountException e) {
-      throw new UnavailableProductException(e.getProductId(), integerField("quantity"), e.getQuantity());
+      throw new UnavailableProductException(e.getProductId(), e.getQuantityAsked(), e.getQuantity());
     } catch (InvalidProductIdException e) {
       throw new UnknownProductKeyException(e.getInvalidId());
     } catch (InvalidPartnerIdException e){

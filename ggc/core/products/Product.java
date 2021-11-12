@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import ggc.core.Batch;
 import ggc.core.BatchComparator;
+import ggc.core.BatchPriceComparator;
 import ggc.core.notifications.Observer;
 import ggc.core.partners.Partner;
 import ggc.core.notifications.Notification;
@@ -102,14 +103,23 @@ public abstract class Product implements Serializable{
     return minprice;
   }
 
-  public Batch searchCheapestBatch(Partner partner) {
+  public Batch searchCheapestBatch() {
     Batch cheapestBatch = null;
-    for(Batch batch : getBatchSortedList()){ // already sorted by product,partner then price
+    for(Batch batch : getBatchSortedByPriceList()){
       if(/*(batch.getPartner()).equals(partner) &&*/ batch.getProduct().equals(this))
         if(cheapestBatch == null)
           return batch;
     }
     return cheapestBatch;
+  }
+  public void removeQuantity(int quantity, Partner partner){
+    Batch batch = searchCheapestBatch();
+    if(quantity>batch.getQuantity()){
+      partner.removeBatch(batch);
+      removeBatch(batch);
+    } else{
+      batch.removeQuantity(quantity);
+    }
   }
 
   /**
@@ -164,6 +174,11 @@ public abstract class Product implements Serializable{
   public ArrayList<Batch> getBatchSortedList(){
     ArrayList<Batch> batchSorted = (ArrayList<Batch>) _batches;
     batchSorted.sort(new BatchComparator());
+    return batchSorted;
+  }
+  public ArrayList<Batch> getBatchSortedByPriceList(){
+    ArrayList<Batch> batchSorted = (ArrayList<Batch>) _batches;
+    batchSorted.sort(new BatchPriceComparator());
     return batchSorted;
   }
 

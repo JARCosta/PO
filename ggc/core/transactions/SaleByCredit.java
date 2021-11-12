@@ -19,7 +19,7 @@ public class SaleByCredit extends Sale{
     double baseValue=0;
     int quan = quantity;
     while(quan > 0){
-      Batch removingBatch = product.searchCheapestBatch(partner);
+      Batch removingBatch = product.searchCheapestBatch();
       if(removingBatch.getQuantity() <= quan){
         //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
         quan -= removingBatch.getQuantity();

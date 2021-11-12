@@ -24,8 +24,9 @@ public abstract class Transaction implements Serializable{
   public int getQuantity(){return _quantity;}
   public double getBaseValue(){return _baseValue;}
   public Date getPaymentDate(){return _paymentDate;}
-  public Product getProduct(){return _product;}
   public void setPaymentDate(Date date){_paymentDate = date;}
+
+  public Product getProduct(){return _product;}
   public boolean isPaid(){return false;}
 
   public String toString(Date now){
