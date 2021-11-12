@@ -36,7 +36,6 @@ public class Warehouse implements Serializable {
   private Date _date;
   private Map<String, Partner> _partners;
   private Map<String, Product> _products;
-  private List<Notification> _notifications;
   private Map<Integer,Transaction> _transactions;
   private int _nextTransctionId;
   private Partner _nullPartner;
@@ -45,7 +44,6 @@ public class Warehouse implements Serializable {
     _date = new Date(0);
     _partners = new HashMap<String, Partner>();
     _products = new HashMap<String, Product>();
-    _notifications = new ArrayList<>();
     _transactions = new HashMap<>();
     _nullPartner = new Partner(null, null, null);
   }

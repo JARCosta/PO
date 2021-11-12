@@ -18,7 +18,6 @@ import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.BreakdownSale;
 import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
-import ggc.core.transactions.Transaction;
 
 public class Partner implements Serializable, Observer{
   private String _name;
@@ -246,7 +245,7 @@ public void clearNotifications(){
     _valorVendasPagas = 0;
     for(Sale i :_sales){
       if(i.isPaid())
-      _valorVendasPagas+= i.getBaseValue()*i.getQuantity();
+      _valorVendasPagas+= i.getBaseValue();
     }
     return _valorVendasPagas;
   }

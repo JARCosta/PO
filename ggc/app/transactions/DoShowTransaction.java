@@ -5,9 +5,6 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownTransactionKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidTransactionKeyException;
-import ggc.core.transactions.Acquisition;
-import ggc.core.transactions.BreakdownSale;
-import ggc.core.transactions.SaleByCredit;
 
 /**
  * Show specific transaction.

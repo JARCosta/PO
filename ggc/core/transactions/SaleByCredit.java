@@ -59,7 +59,8 @@ public class SaleByCredit extends Sale{
   
   @Override
   public boolean isPaid(){
-    return _amountPaid == super.getQuantity()*super.getBaseValue();
+    //System.out.println(_amountPaid);
+    return _amountPaid != 0;
   }
 
   public String toString(Date now){

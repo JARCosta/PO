@@ -5,8 +5,6 @@ import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
-//FIXME import classes
-import ggc.core.transactions.Sale;
 import ggc.core.transactions.Transaction;
 
 /**

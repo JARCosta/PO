@@ -3,8 +3,6 @@ package ggc.app.partners;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.core.WarehouseManager;
-import ggc.core.partners.Partner;
-import ggc.core.products.Product;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.app.exception.UnknownProductKeyException;
 import ggc.core.exception.InvalidPartnerIdException;

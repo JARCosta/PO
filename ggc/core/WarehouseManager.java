@@ -1,6 +1,5 @@
 package ggc.core;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import ggc.core.exception.BadEntryException;
@@ -21,7 +19,6 @@ import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.UnavailableFileException;
 import ggc.core.notifications.Notification;
-import ggc.core.exception.MissingFileAssociationException;
 import ggc.core.exception.ProductAmountException;
 
 import ggc.core.partners.Partner;

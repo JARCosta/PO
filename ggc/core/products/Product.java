@@ -2,10 +2,8 @@ package ggc.core.products;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import ggc.core.Batch;
 import ggc.core.BatchComparator;

@@ -1,13 +1,11 @@
 package ggc.app.partners;
 
-import pt.tecnico.uilib.Display;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownPartnerKeyException;
 import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
 import ggc.core.transactions.Acquisition;
-import ggc.core.transactions.Transaction;
 
 /**
  * Show all transactions for a specific partner.

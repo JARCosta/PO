@@ -3,8 +3,6 @@ package ggc.core;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.w3c.dom.stylesheets.StyleSheetList;
-
 import java.io.FileReader;
 import java.io.BufferedReader;
 
