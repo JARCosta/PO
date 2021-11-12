@@ -49,7 +49,7 @@ public abstract class Product implements Serializable{
   */
   @Override
   public String toString(){
-    return _id + "|" + (int)_maxPrice + "|" + getQuantity();
+    return _id + "|" + Math.round(_maxPrice) + "|" + getQuantity();
   }
 
   /**

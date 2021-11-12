@@ -159,6 +159,7 @@ public class Warehouse implements Serializable {
   
   public void registerBatch(double price, int quantity,Partner partner,Product product){
     Batch batch = new Batch(price, quantity, partner, product);
+    product.updateMaxPrice();
     partner.registerBatch(batch);
     product.addBatch(batch);
     product.updateMaxPrice();
@@ -251,10 +252,18 @@ public class Warehouse implements Serializable {
   }
 
   public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
+    double pricee=0;
     if(getProduct(productId).getQuantity()<quantity){
       if(getProduct(productId) instanceof AggregateProduct){
-        registerAggregation(partnerId, productId, quantity - getProduct(productId).getQuantity());
-        registerBatch(10, quantity, getPartner(partnerId), getProduct(productId));
+        pricee = getProduct(productId).getQuantity() * getProduct(productId).getMinPrice();
+        double unitPrice = registerAggregation(partnerId, productId, quantity - getProduct(productId).getQuantity());
+        registerBatch(Math.round(unitPrice), 0, getPartner(partnerId), getProduct(productId));
+        pricee += (quantity - getProduct(productId).getQuantity()) * unitPrice;
+        getProduct(productId).removeQuantity(getProduct(productId).getQuantity(), getPartner(partnerId));
+
+        registerBatch(pricee/quantity, quantity, getPartner(partnerId), getProduct(productId));
+        getProduct(productId).updateMaxPrice();
+
       }else{
         throw new ProductAmountException(productId,getProduct(productId).getQuantity(),quantity);
       }
@@ -265,18 +274,24 @@ public class Warehouse implements Serializable {
     advanceTransactionId();
   }
 
-  public void registerAggregation(String partnerId, String productId, int quantity) throws InvalidProductIdException, ProductAmountException, InvalidPartnerIdException{
+  public double registerAggregation(String partnerId, String productId, int quantity) throws InvalidProductIdException, ProductAmountException, InvalidPartnerIdException{
+    double unitaryPrice=0;
+    double aggravation=1;
     if(getProduct(productId) instanceof AggregateProduct)
+    aggravation += ((AggregateProduct)getProduct(productId)).getRecipe().getAggravaton();
       for(Component c : ((AggregateProduct)getProduct(productId)).getRecipe().getComponents() ){
+        unitaryPrice += c.getProduct().getMinPrice()*c.getQuantity();
         if(!(c.getProduct().getQuantity()>quantity*c.getQuantity())){
           if(c.getProduct() instanceof AggregateProduct)
-            registerAggregation(partnerId, c.getProduct().getId(), quantity-c.getProduct().getQuantity()*c.getQuantity());
+            unitaryPrice = registerAggregation(partnerId, c.getProduct().getId(), quantity-c.getProduct().getQuantity()*c.getQuantity());
           else
             throw new ProductAmountException(c.getProduct().getId(), c.getProduct().getQuantity(), quantity*c.getQuantity());
         }else{
           c.getProduct().removeQuantity(quantity*c.getQuantity(),getPartner(partnerId));
         }
       }
+    //System.out.println(Math.round(unitaryPrice*aggravation));
+    return unitaryPrice*aggravation;
   }
 
   public void registerBreakDownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidPartnerIdException, InvalidProductIdException{
