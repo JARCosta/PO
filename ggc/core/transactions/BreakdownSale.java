@@ -3,6 +3,7 @@ package ggc.core.transactions;
 import java.util.List;
 
 import ggc.core.Batch;
+import ggc.core.Date;
 import ggc.core.partners.Partner;
 import ggc.core.products.AggregateProduct;
 import ggc.core.products.Component;
@@ -26,7 +27,7 @@ public class BreakdownSale extends Sale{
 
   @Override
   //DESAGREGAC ̧ ̃AO|id|idParceiro|idProduto|quantidade|valor-base|valor-pago|data-pagamento|idC1:q1:v1#...#idCN:qN:vN
-  public String toString() {
+  public String toString(Date now) {
     String ret = "";
     AggregateProduct prod = (AggregateProduct)getProduct();
     for(Component c : prod.getRecipe().getComponents()){

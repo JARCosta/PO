@@ -26,10 +26,11 @@ public class SaleByCredit extends Sale{
         baseValue += removingBatch.getPrice()*removingBatch.getQuantity();
         removeBatch(removingBatch);
       } else{
+        //System.out.println(quan + " " + removingBatch.getQuantity());
         //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
         baseValue += removingBatch.getPrice()*quan;
-        quan = 0;
         removingBatch.removeQuantity(quan);
+        quan = 0;
       }
     }
     super.setBaseValue(baseValue);
@@ -41,14 +42,14 @@ public class SaleByCredit extends Sale{
   }
 
   public double getAmountPaied(){ return _amountPaid;}
-  public double getAmountToPay(){
-    //System.out.println(""+super.getBaseValue()+" "+super.getQuantity());
-    return super.getBaseValue() - getAmountPaied();
+  public double getAmountToPay(Date date){
+    return super.getBaseValue() * super.getPartner().calculateP(_deadine,date, getProduct());
   }
   
   public void pay(Date date){
-    if(_amountPaid != super.getBaseValue())
-      _amountPaid = super.getBaseValue();
+    if(_amountPaid == 0)
+      _amountPaid = getAmountToPay(date);
+
       if(_deadine.getDate()>date.getDate()){
         super.getPartner().addPoints(_amountPaid*10);
         super.getPartner().updateStatus();
@@ -61,9 +62,9 @@ public class SaleByCredit extends Sale{
     return _amountPaid == super.getQuantity()*super.getBaseValue();
   }
 
-  public String toString(){
+  public String toString(Date now){
     String ret = "";
     if(super.getPaymentDate() != null){ ret = "|" + super.getPaymentDate(); }
-    return "VENDA|" + super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)super.getBaseValue() + "|" + (int)getAmountToPay() + "|" + _deadine + ret;
+    return "VENDA|" + super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)super.getBaseValue() + "|" + (int)getAmountToPay(now) + "|" + _deadine + ret;
   }
 }

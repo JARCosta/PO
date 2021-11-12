@@ -41,7 +41,7 @@ public abstract class Product implements Serializable{
   */
   Product(String id){
     _id = id;
-    _maxPrice=0;
+    _maxPrice = 0;
     _batches = new ArrayList<Batch>();
   }
 

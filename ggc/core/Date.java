@@ -5,7 +5,6 @@ import java.io.Serializable;
 import ggc.core.exception.InvalidDateException;
 
 public class Date implements Serializable{
-  //private static Date _now = new Date();
   private int _days;
 
   public Date(int days){
@@ -30,9 +29,4 @@ public class Date implements Serializable{
   public String toString(){
     return "" + getDate();
   }
-/*
-  public static Date now(){
-    return _now;
-  }
-*/
 }

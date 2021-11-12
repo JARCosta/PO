@@ -23,7 +23,7 @@ class DoShowPartnerAcquisitions extends Command<WarehouseManager> {
   public void execute() throws CommandException {
     try {
       for(Acquisition acq:_receiver.getAcquisitionList(stringField("partnerId"))){
-        _display.popup(acq.toString());
+        _display.popup(_receiver.transactionToString(acq));
       }
     } catch (InvalidPartnerIdException e) {
       throw new UnknownPartnerKeyException(e.getInvalidId());

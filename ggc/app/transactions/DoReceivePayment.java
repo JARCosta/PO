@@ -3,6 +3,7 @@ package ggc.app.transactions;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import ggc.app.exception.UnknownTransactionKeyException;
+import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.WarehouseManager;
 //FIXME import classes
 
@@ -20,8 +21,8 @@ public class DoReceivePayment extends Command<WarehouseManager> {
   public final void execute() throws CommandException {
     try{
       _receiver.pay(integerField("transactionId"));
-    } catch(IndexOutOfBoundsException ioot){
-      throw new UnknownTransactionKeyException(integerField("transactionId"));
+    } catch(InvalidTransactionKeyException ioot){
+      throw new UnknownTransactionKeyException(ioot.getInvalidId());
     }
 
   }

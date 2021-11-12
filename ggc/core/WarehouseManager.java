@@ -43,6 +43,9 @@ public class WarehouseManager{
   public int currentDate(){
     return _warehouse.currentDate();
   }
+  public Date getdate(){
+    return _warehouse.getDate();
+  }
   public void advanceDate(int days) throws InvalidDateException{
     _warehouse.advanceDate(days);
   }
@@ -101,6 +104,10 @@ public class WarehouseManager{
     return _warehouse.getTransactionList();
   }
 
+  public String transactionToString(Transaction sale){
+    return _warehouse.transactionToString(sale);
+  }
+
   public List<Acquisition> getAcquisitionList(String partnerId) throws InvalidPartnerIdException{
     return _warehouse.getAcquisitionList(partnerId);
   }
@@ -124,7 +131,7 @@ public class WarehouseManager{
     _warehouse.registerBreakDownSale(partnerId,productId,quantity);
   }
 
-  public void pay(int transactionId) throws IndexOutOfBoundsException{
+  public void pay(int transactionId) throws IndexOutOfBoundsException, InvalidTransactionKeyException{
     _warehouse.pay(transactionId);
   }
 

@@ -7,6 +7,7 @@ import ggc.core.WarehouseManager;
 import ggc.core.exception.InvalidPartnerIdException;
 //FIXME import classes
 import ggc.core.transactions.Sale;
+import ggc.core.transactions.Transaction;
 
 /**
  * Show all transactions for a specific partner.
@@ -21,8 +22,8 @@ class DoShowPartnerSales extends Command<WarehouseManager> {
   @Override
   public void execute() throws CommandException {
     try {
-      for(Sale sale:_receiver.getSaleList(stringField("partnerId"))){
-        _display.popup(sale.toString());
+      for(Transaction sale:_receiver.getSaleList(stringField("partnerId"))){
+        _display.popup(_receiver.transactionToString(sale));
       }
     } catch (InvalidPartnerIdException e) {
       throw new UnknownPartnerKeyException(e.getInvalidId());

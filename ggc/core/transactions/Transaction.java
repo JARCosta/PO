@@ -28,7 +28,7 @@ public abstract class Transaction implements Serializable{
   public void setPaymentDate(Date date){_paymentDate = date;}
   public boolean isPaid(){return false;}
 
-  public String toString(){
+  public String toString(Date now){
     return getId() +"|"+ getQuantity() + "|" + getBaseValue() + "|" + getPaymentDate();
   }
 }

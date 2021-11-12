@@ -2,6 +2,9 @@ package ggc.core;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import org.w3c.dom.stylesheets.StyleSheetList;
+
 import java.io.FileReader;
 import java.io.BufferedReader;
 
@@ -88,7 +91,8 @@ public class Parser {
     String idProduct = components[1];
     String idPartner = components[2];
 
-    if (!_warehouse.getProductList().contains(idProduct)) {
+    if (!_warehouse.productsContains(idProduct)){
+      //System.out.println(idProduct);
       ArrayList<Product> products = new ArrayList<>();
       ArrayList<Integer> quantities = new ArrayList<>();
       
@@ -111,6 +115,7 @@ public class Parser {
     }
     
     Product product = _warehouse.getProduct(idProduct);
+
     Partner partner = _warehouse.getPartner(idPartner);
     double price = Double.parseDouble(components[3]);
     int stock = Integer.parseInt(components[4]);

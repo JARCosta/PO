@@ -37,7 +37,7 @@ public class Warehouse implements Serializable {
   private Map<String, Partner> _partners;
   private Map<String, Product> _products;
   private List<Notification> _notifications;
-  private List<Transaction> _transactions;
+  private Map<Integer,Transaction> _transactions;
   private int _nextTransctionId;
   private Partner _nullPartner;
 
@@ -46,7 +46,7 @@ public class Warehouse implements Serializable {
     _partners = new HashMap<String, Partner>();
     _products = new HashMap<String, Product>();
     _notifications = new ArrayList<>();
-    _transactions = new ArrayList<>();
+    _transactions = new HashMap<>();
     _nullPartner = new Partner(null, null, null);
   }
   
@@ -55,6 +55,9 @@ public class Warehouse implements Serializable {
 
   public int currentDate(){
     return _date.getDate();
+  }
+  public Date getDate(){
+    return _date;
   }
   public void advanceDate(int days) throws InvalidDateException{
     _date.advanceDate(days);
@@ -158,8 +161,18 @@ public class Warehouse implements Serializable {
   
   public void registerBatch(double price, int quantity,Partner partner,Product product){
     Batch batch = new Batch(price, quantity, partner, product);
-    partner.registerBatch(price, quantity, product);
+    partner.registerBatch(batch);
     product.addBatch(batch);
+    product.updateMaxPrice();
+    /*System.out.println("");
+    int quant = 0;
+    for(Batch b : product.getBatchSortedList()){
+      quant+= b.getQuantity();
+    }
+    System.out.println(quant);
+    System.out.println(product.getId()+ " "+ product.getQuantity());
+    System.out.println("");
+    */
   }
   
   public List<Batch> getBatchList(){
@@ -198,6 +211,10 @@ public class Warehouse implements Serializable {
     _nextTransctionId++;
   }
 
+  public String transactionToString(Transaction sale){
+    return sale.toString(getDate());
+  }
+
   public List<Acquisition> getAcquisitionList(String partnerId) throws InvalidPartnerIdException{
     return getPartner(partnerId).getAcquisitionList();
   }
@@ -211,12 +228,11 @@ public class Warehouse implements Serializable {
     double priceInit = product.getMinPrice();
 
     registerBatch(price, quantity, partner, product);
-    product.updateMaxPrice();
 
     Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
     acq.setPaied(_date);
     partner.registerAcquisition(acq, price);
-    _transactions.add(acq);
+    _transactions.put(_nextTransctionId,acq);
     advanceTransactionId();
 
     int quanFin = product.getQuantity();
@@ -224,17 +240,15 @@ public class Warehouse implements Serializable {
     //System.out.println(""+ quantInit + "<" + quanFin  );
     boolean hasTransaction=false;
     if(quantInit == 0 && quanFin > 0){
-      for(Transaction i : _transactions)
+      for(Transaction i : _transactions.values())
         if(i.getProduct().equals(product))
           hasTransaction = true;
       if(!hasTransaction)
         product.notifyObservers("NEW");
-        //registerNotification("NEW", product, price);
     }
     //System.out.println(""+ priceFin +"<"+priceInit  );
     if(priceFin<priceInit){
       product.notifyObservers("BARGAIN");
-      //registerNotification("BARGAIN", product, price);
     }
   }
 
@@ -242,9 +256,9 @@ public class Warehouse implements Serializable {
     if(getProduct(productId).getQuantity()<quantity){
       throw new ProductAmountException(productId,quantity);
     }
-    getProduct(productId).updateMaxPrice();
     SaleByCredit sale = new SaleByCredit(getPartner(partnerId),getProduct(productId), quantity, deadline,_nextTransctionId);
-    _transactions.add(sale);
+
+    _transactions.put(_nextTransctionId,sale);
     getPartner(partnerId).registerSaleByCredit(sale);
     advanceTransactionId();
   }
@@ -259,30 +273,22 @@ public class Warehouse implements Serializable {
       int quant = quantity;
       while(quant > 0){
         Batch removingBatch = product.searchCheapestBatch(partner);
-
+        for(Component i : product.getRecipe().getComponents()){
+          if(i.getProduct().getBatches().size()>0)
+          registerBatch(i.getProduct().getMinPrice(), quant*i.getQuantity(), partner, i.getProduct());
+        else
+          registerBatch(i.getProduct().getMaxPrice(), quant*i.getQuantity(), partner, i.getProduct());
+        }
         if(removingBatch.getQuantity() <= quantity){
-          //System.out.println("quantity"+quantity+" > batch quantity"+ removingBatch.getQuantity());
           quant -= removingBatch.getQuantity();
-          for(Component i : product.getRecipe().getComponents()){
-            //System.out.println(i.getProduct().getId());
-            partner.registerBatch(removingBatch.getPrice(), removingBatch.getQuantity(), i.getProduct());
-          }
           partner.removeBatch(removingBatch);
           product.removeBatch(removingBatch);
-        }
-        
-        else{
-          //System.out.println("quantity"+quantity+" < batch quantity"+ removingBatch.getQuantity());
-          //baseValue += quant*removingBatch.getPrice();
-          for(Component i : product.getRecipe().getComponents()){
-            //System.out.println(i.getProduct().getId());
-            partner.registerBatch(removingBatch.getPrice(), quant, i.getProduct());
-          }
+        }else{
           removingBatch.removeQuantity(quant);
           quant = 0;
         }
       BreakdownSale sale =  new BreakdownSale((AggregateProduct)getProduct(productId), quantity, getPartner(partnerId), getTransactionId());
-      _transactions.add(sale);
+      _transactions.put(_nextTransctionId,sale);
       getPartner(partnerId).registerBreakSownSale(sale);
       }
     } catch (ClassCastException e){
@@ -293,24 +299,22 @@ public class Warehouse implements Serializable {
 
 
   public Transaction getTransaction(int transactionId) throws InvalidTransactionKeyException{
-    //System.out.println(_transactions.size());
-    //System.out.println(transactionId);
-    if(_transactions.size()<=transactionId){
+    if(!_transactions.containsKey(transactionId))
       throw new InvalidTransactionKeyException(transactionId);
-    }
     return _transactions.get(transactionId);
   }
   
 
   public List<Transaction> getTransactionList(){
-    return _transactions;
+    return (List<Transaction>) _transactions.values();
   }
-  public void pay(int transactionId)throws IndexOutOfBoundsException{
-    Transaction trans = _transactions.get(transactionId);
+  public void pay(int transactionId)throws IndexOutOfBoundsException, InvalidTransactionKeyException{
+    Transaction trans = getTransaction(transactionId);
     if(trans instanceof SaleByCredit){
-      ((SaleByCredit)_transactions.get(transactionId)).pay(_date);
-
-    } 
+      ((SaleByCredit)trans).pay(_date);
+    } else{
+      throw new InvalidTransactionKeyException(transactionId);
+    }
   }
   
   
@@ -325,7 +329,7 @@ public class Warehouse implements Serializable {
     //getPartner(partnerId).toggleNotifications(getProduct(productId));
   }
 
-/*
+
   /**
    * @param txtfile filename to be loaded.
    * @throws IOException

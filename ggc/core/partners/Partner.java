@@ -9,19 +9,23 @@ import java.util.Objects;
 import java.util.Map;
 
 import ggc.core.Batch;
+import ggc.core.Date;
 import ggc.core.notifications.Notification;
 import ggc.core.notifications.Observer;
 import ggc.core.products.Product;
+import ggc.core.products.SimpleProduct;
 import ggc.core.transactions.Acquisition;
 import ggc.core.transactions.BreakdownSale;
 import ggc.core.transactions.Sale;
 import ggc.core.transactions.SaleByCredit;
+import ggc.core.transactions.Transaction;
 
 public class Partner implements Serializable, Observer{
   private String _name;
   private String _adress;
   private String _id;
-  private String _status;
+  private Status _status;
+
   private double _points;
   private double _valorCompras;
   private double _valorVendas;
@@ -37,7 +41,7 @@ public class Partner implements Serializable, Observer{
     _name = name;
     _adress = adress;
     _id = id;
-    _status= "NORMAL";
+    _status= NormalPartner.getInstance();
     _points = 0;
     _batches = new ArrayList<Batch>();
     _acquisitions = new ArrayList<Acquisition>();
@@ -59,6 +63,9 @@ public class Partner implements Serializable, Observer{
   
   public void registerBatch(double price, int stock, Product product){
     Batch batch = new Batch(price, stock, this, product);
+    _batches.add(batch);
+  }
+  public void registerBatch(Batch batch){
     _batches.add(batch);
   }
   public void removeBatch(Batch batch){
@@ -153,6 +160,9 @@ public void clearNotifications(){
 
 //STATUS--------------------------------------------------------------------------------------------------------
 
+  public Status getStatus(){
+    return _status;
+  }
   public double getPoints(){
     return _points;
   }
@@ -163,19 +173,35 @@ public void clearNotifications(){
     _points = _points*value;
   }
 
+  public double calculateP(Date deadline,Date now, Product product) {
+    int n;
+    if(product instanceof SimpleProduct)
+      n = 5;
+    else
+      n = 3;
+    int diff = now.difference(deadline);
+    if(diff >= n)
+      return _status.P1(diff);
+    else if(0 <= diff && diff < n)
+      return _status.P2(diff);
+    else if(0<diff && diff <= n)
+      return _status.P3(diff);
+    else
+      return _status.P4(diff);
+  }
+
   // desenho: state + singleton
   public void updateStatus(){
     if(_points>2000)
       if(_points>25000)
-      _status = "ELITE";
+      _status = ElitePartner.getInstance();
       else
-      _status = "SELECTION";
+      _status = SelectionPartner.getInstance();
     else
-    _status = "NORMAL";
-    //System.out.println(_status);
+    _status = NormalPartner.getInstance();
   }
 
-  public void calculateAlpha(int dateDifference){
+  /*public double calculateAlpha(int dateDifference){
     if(_status == "ELITE"){
       if(dateDifference<0){
         multiplyPoints(0.25);
@@ -191,7 +217,7 @@ public void clearNotifications(){
     if(_status == "NORMAL")
       if(dateDifference<0)
         multiplyPoints(0);
-  }
+  }*/
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -206,6 +232,24 @@ public void clearNotifications(){
   }
   @Override
   public String toString() {
-    return _id + "|" + _name + "|" + _adress + "|" + _status + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)_valorVendas + "|" + (int)_valorVendasPagas;
+    return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)getVendas() + "|" + (int)getVendasPagas();
   }
+
+  public double getVendas(){
+    _valorVendas = 0;
+    for(Sale i :_sales){
+      _valorVendas+= i.getBaseValue();
+    }
+    return _valorVendas;
+  }
+  public double getVendasPagas(){
+    _valorVendasPagas = 0;
+    for(Sale i :_sales){
+      if(i.isPaid())
+      _valorVendasPagas+= i.getBaseValue()*i.getQuantity();
+    }
+    return _valorVendasPagas;
+  }
+
+
 }
