@@ -1,8 +1,10 @@
 package ggc.core.notifications;
 
+import java.io.Serializable;
+
 import ggc.core.products.Product;
 
-public class Notification{
+public class Notification implements Serializable{
   private String _type;
   private Product _product;
   private double _productPrice;

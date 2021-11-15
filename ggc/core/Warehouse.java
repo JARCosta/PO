@@ -242,7 +242,7 @@ public class Warehouse implements Serializable {
       for(Transaction i : _transactions.values())
         if(i.getProduct().equals(product))
           hasTransaction = true;
-      if(!hasTransaction)
+      if(hasTransaction)
         product.notifyObservers("NEW");
     }
     //System.out.println(""+ priceFin +"<"+priceInit  );

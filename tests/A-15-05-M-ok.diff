@@ -1,0 +1,19 @@
+*** tests/A-15-05-M-ok.out	2021-10-31 21:59:41.000000000 +0000
+--- tests/A-15-05-M-ok.outhyp	2021-11-15 00:21:46.568746788 +0000
+***************
+*** 91,97 ****
+  5 - Mostrar compras com parceiro
+  6 - Mostrar vendas (e desagregações) com parceiro
+  0 - Sair
+! Escolha uma opção: Identificador do parceiro: R1|António Figueiredo|Lisboa|NORMAL|900|0|0|0
+  Gestão de Parceiros
+  1 - Mostrar parceiro
+  2 - Mostrar parceiros
+--- 91,97 ----
+  5 - Mostrar compras com parceiro
+  6 - Mostrar vendas (e desagregações) com parceiro
+  0 - Sair
+! Escolha uma opção: Identificador do parceiro: R1|António Figueiredo|Lisboa|NORMAL|0|0|90|0
+  Gestão de Parceiros
+  1 - Mostrar parceiro
+  2 - Mostrar parceiros
