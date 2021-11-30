@@ -51,7 +51,7 @@ public class DoRegisterAcquisitionTransaction extends Command<WarehouseManager> 
         _receiver.registerAggregateProduct(stringField("productId"), alpha, ids, qnts);
         }catch (InvalidProductIdException e) {
           // duplicate product
-          throw new UnknownProductKeyException(stringField("productId")); // should be duplicate product exception
+          throw new UnknownProductKeyException(e.getInvalidId()); // should be duplicate product exception
         }
       }
       try {

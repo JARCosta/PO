@@ -1,24 +1,5 @@
 *** tests/A-16-03-M-ok.out	2021-11-01 17:27:24.000000000 +0000
---- tests/A-16-03-M-ok.outhyp	2021-11-15 00:21:47.896794715 +0000
-***************
-*** 105,112 ****
-  8 - Menu de Consultas
-  9 - Ver Saldo Global
-  0 - Sair
-! Escolha uma opção: Saldo disponível: 30
-! Saldo contabilístico: 30
-  Menu Principal
-  1 - Abrir
-  2 - Guardar
---- 105,112 ----
-  8 - Menu de Consultas
-  9 - Ver Saldo Global
-  0 - Sair
-! Escolha uma opção: Saldo disponível: 180
-! Saldo contabilístico: 180
-  Menu Principal
-  1 - Abrir
-  2 - Guardar
+--- tests/A-16-03-M-ok.outhyp	2021-11-19 22:41:46.408090523 +0000
 ***************
 *** 126,132 ****
   5 - Mostrar compras com parceiro

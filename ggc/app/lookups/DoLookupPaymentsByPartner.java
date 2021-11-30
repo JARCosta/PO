@@ -22,7 +22,7 @@ public class DoLookupPaymentsByPartner extends Command<WarehouseManager> {
   public void execute() throws CommandException {
     try{
       for(Transaction t : _receiver.getTransactionsPayed(stringField("partnerId"))){
-        _display.popup(t.toString());
+        _display.popup(t.toString(_receiver.getdate()));
       }
     } catch (InvalidPartnerIdException e){
       throw new UnknownPartnerKeyException(e.getInvalidId());

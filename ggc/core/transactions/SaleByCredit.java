@@ -33,7 +33,8 @@ public class SaleByCredit extends Sale{
         quan = 0;
       }
     }
-    super.setBaseValue(baseValue);
+
+    super.setBaseValue(baseValue/quantity);
   }
 
   public void removeBatch(Batch batch){
@@ -41,9 +42,15 @@ public class SaleByCredit extends Sale{
     batch.getProduct().removeBatch(batch);
   }
 
-  public double getAmountPaied(){ return _amountPaid;}
+  public double getPricePaid(){ return _amountPaid;}
   public double getAmountToPay(Date date){
-    return super.getBaseValue() * super.getPartner().calculateP(_deadine,date, getProduct());
+    //System.out.println(_deadine.getDate() + " " + date.getDate());
+    if(_amountPaid==0){
+      double p = super.getPartner().calculateP(_deadine,date, getProduct());
+      //System.out.println(p +" "+ date.getDate() + ' ' + _deadine.getDate());
+      return super.getBaseValue() * p;
+    }
+    else return _amountPaid;
   }
   
   public void pay(Date date){
@@ -56,6 +63,7 @@ public class SaleByCredit extends Sale{
       }
       super.setPaymentDate(date);
   }
+  public Date getDeadline(){return _deadine;}
   
   @Override
   public boolean isPaid(){
@@ -66,6 +74,6 @@ public class SaleByCredit extends Sale{
   public String toString(Date now){
     String ret = "";
     if(super.getPaymentDate() != null){ ret = "|" + super.getPaymentDate(); }
-    return "VENDA|" + super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + (int)super.getBaseValue() + "|" + (int)getAmountToPay(now) + "|" + _deadine + ret;
+    return "VENDA|" + super.getId() + "|" + super.getPartner().getId() + "|" + super.getProduct().getId() + "|" + super.getQuantity() + "|" + Math.round(super.getBaseValue()) + "|" + Math.round(getAmountToPay(now))  + "|" + _deadine + ret;
   }
 }

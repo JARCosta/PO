@@ -1,5 +1,6 @@
 package ggc.core.transactions;
 
+import ggc.core.Date;
 import ggc.core.partners.Partner;
 import ggc.core.products.Product;
 
@@ -16,4 +17,6 @@ public abstract class Sale extends Transaction {
   public Partner getPartner(){
     return _Partner;
   }
+  public double getAmountToPay(Date _date){return 0;}
+  public double getPricePaid(){return 0;}
 }

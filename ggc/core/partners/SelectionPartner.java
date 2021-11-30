@@ -27,7 +27,8 @@ public class SelectionPartner implements Status, Serializable{
     }
     @Override
     public double P2(int dateDifference) {
-        return 0.95;
+        if(dateDifference>=2)return 0.95;
+        else return 1;
     }
     @Override
     public double P3(int dateDifference) {

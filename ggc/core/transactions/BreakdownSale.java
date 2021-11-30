@@ -23,6 +23,7 @@ public class BreakdownSale extends Sale{
     super.setPaymentDate(now);
   }
   public double getPricePaid(){
+    if(getBaseValue()<0) return 0;
     return getBaseValue();
   }
 

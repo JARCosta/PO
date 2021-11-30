@@ -17,8 +17,11 @@ import ggc.core.exception.InvalidProductIdException;
 import ggc.core.exception.InvalidTransactionKeyException;
 import ggc.core.exception.ProductAmountException;
 import ggc.core.notifications.Notification;
+import ggc.core.partners.ElitePartner;
+import ggc.core.partners.NormalPartner;
 import ggc.core.partners.Partner;
 import ggc.core.partners.PartnerComparator;
+import ggc.core.partners.SelectionPartner;
 import ggc.core.products.AggregateProduct;
 import ggc.core.products.Component;
 import ggc.core.products.Product;
@@ -228,11 +231,6 @@ public class Warehouse implements Serializable {
 
     registerBatch(price, quantity, partner, product);
 
-    Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
-    acq.setPaied(new Date(_date.getDate()));
-    partner.registerAcquisition(acq, price);
-    _transactions.put(_nextTransctionId,acq);
-    advanceTransactionId();
 
     int quanFin = product.getQuantity();
     double priceFin = product.getMinPrice();
@@ -240,28 +238,31 @@ public class Warehouse implements Serializable {
     boolean hasTransaction=false;
     if(quantInit == 0 && quanFin > 0){
       for(Transaction i : _transactions.values())
-        if(i.getProduct().equals(product))
-          hasTransaction = true;
+      if(i.getProduct().equals(product))
+      hasTransaction = true;
       if(hasTransaction)
-        product.notifyObservers("NEW");
+      product.notifyObservers("NEW");
     }
     //System.out.println(""+ priceFin +"<"+priceInit  );
     if(priceFin<priceInit){
       product.notifyObservers("BARGAIN");
     }
+    Acquisition acq = new Acquisition(partner,product, quantity, _nextTransctionId);
+    acq.setPaied(new Date(_date.getDate()));
+    partner.registerAcquisition(acq, price);
+    _transactions.put(_nextTransctionId,acq);
+    advanceTransactionId();
   }
 
   public void registerSaleByCredit(String partnerId, String productId, int quantity, int deadline) throws ProductAmountException, InvalidProductIdException, InvalidPartnerIdException{
     double pricee=0;
     if(getProduct(productId).getQuantity()<quantity){
       if(getProduct(productId) instanceof AggregateProduct){
-        pricee = getProduct(productId).getQuantity() * getProduct(productId).getMinPrice();
+        for(Batch i : getProduct(productId).getBatches()){   pricee += i.getPrice()*i.getQuantity(); }
+        //pricee = getProduct(productId).getQuantity() * getProduct(productId).getMinPrice();
         double unitPrice = registerAggregation(partnerId, productId, quantity - getProduct(productId).getQuantity());
-        registerBatch(Math.round(unitPrice), 0, getPartner(partnerId), getProduct(productId));
-        pricee += (quantity - getProduct(productId).getQuantity()) * unitPrice;
-        getProduct(productId).removeQuantity(getProduct(productId).getQuantity(), getPartner(partnerId));
-
-        registerBatch(pricee/quantity, quantity, getPartner(partnerId), getProduct(productId));
+        registerBatch(unitPrice, quantity-getProduct(productId).getQuantity(), getPartner(partnerId), getProduct(productId));
+        
         getProduct(productId).updateMaxPrice();
 
       }else{
@@ -275,23 +276,40 @@ public class Warehouse implements Serializable {
   }
 
   public double registerAggregation(String partnerId, String productId, int quantity) throws InvalidProductIdException, ProductAmountException, InvalidPartnerIdException{
-    double unitaryPrice=0;
+    double price=0;
     double aggravation=1;
-    if(getProduct(productId) instanceof AggregateProduct)
-    aggravation += ((AggregateProduct)getProduct(productId)).getRecipe().getAggravaton();
+    if(getProduct(productId) instanceof AggregateProduct){
+      aggravation += ((AggregateProduct)getProduct(productId)).getRecipe().getAggravaton();
       for(Component c : ((AggregateProduct)getProduct(productId)).getRecipe().getComponents() ){
-        unitaryPrice += c.getProduct().getMinPrice()*c.getQuantity();
+        price += c.getProduct().getMinPrice()*c.getQuantity();
         if(!(c.getProduct().getQuantity()>quantity*c.getQuantity())){
           if(c.getProduct() instanceof AggregateProduct)
-            unitaryPrice = registerAggregation(partnerId, c.getProduct().getId(), quantity-c.getProduct().getQuantity()*c.getQuantity());
+            price = registerAggregation(partnerId, c.getProduct().getId(), quantity-c.getProduct().getQuantity()*c.getQuantity());
           else
             throw new ProductAmountException(c.getProduct().getId(), c.getProduct().getQuantity(), quantity*c.getQuantity());
         }else{
           c.getProduct().removeQuantity(quantity*c.getQuantity(),getPartner(partnerId));
         }
       }
-    //System.out.println(Math.round(unitaryPrice*aggravation));
-    return unitaryPrice*aggravation;
+    }else{
+      if(getProduct(productId).getQuantity()<quantity) throw new ProductAmountException(productId, getProduct(productId).getQuantity(), quantity);
+      else{
+        int quant = quantity;
+        while (quant>0){
+          Batch b = getProduct(productId).searchCheapestBatch();
+          if(b.getQuantity()>quant){
+            price += quant*b.getPrice();
+            b.removeQuantity(quant);
+          }else{
+            price += b.getQuantity()*b.getPrice();
+            quant -= b.getQuantity();
+            getProduct(productId).removeBatch(b);
+            getPartner(partnerId).removeBatch(b);
+          }
+        }
+      }
+    }
+    return price*aggravation;
   }
 
   public void registerBreakDownSale(String partnerId, String productId, int quantity) throws ProductAmountException, InvalidPartnerIdException, InvalidProductIdException{
@@ -306,9 +324,9 @@ public class Warehouse implements Serializable {
       double buyValue=0;
       while(quant > 0){
         Batch removingBatch = product.searchCheapestBatch();
-        buyValue = removingBatch.getPrice()*quantity;
+        buyValue = removingBatch.getPrice();
         for(Component i : product.getRecipe().getComponents()){
-          saleValue += i.getProduct().getMinPrice()*i.getQuantity()*quantity;
+          saleValue += i.getProduct().getMinPrice()*i.getQuantity();
           if(i.getProduct().getBatches().size()>0)
             registerBatch(i.getProduct().getMinPrice(), quant*i.getQuantity(), partner, i.getProduct());
           else
@@ -328,8 +346,12 @@ public class Warehouse implements Serializable {
       sale.setPaymentDate(_date);
       _transactions.put(_nextTransctionId,sale);
       getPartner(partnerId).registerBreakSownSale(sale);
+      getPartner(partnerId).addPoints(sale.getBaseValue()*10);
+      //System.out.println(getTransaction(getTransactionId()).toString(_date) + " " + getTransaction(getTransactionId()).isPaid());
+      advanceTransactionId();
       }
     } catch (ClassCastException e){
+      System.out.println("Warehouse.registerBreakDownSale()");
     }
   }
   
@@ -347,12 +369,22 @@ public class Warehouse implements Serializable {
     return (List<Transaction>) _transactions.values();
   }
   public void pay(int transactionId)throws IndexOutOfBoundsException, InvalidTransactionKeyException{
-    Transaction trans = getTransaction(transactionId);
-    if(trans instanceof SaleByCredit){
+    try{
+      SaleByCredit trans = (SaleByCredit)getTransaction(transactionId);
+      if(trans.getPartner().getStatus().getClass().equals(NormalPartner.class))
+        if(_date.getDate() - trans.getDeadline().getDate() > 0) 
+          trans.getPartner().multiplyPoints(0);
+      if(trans.getPartner().getStatus().getClass().equals(SelectionPartner.class))
+        if(_date.getDate() - trans.getDeadline().getDate() > 2) 
+          trans.getPartner().multiplyPoints(0.90);
+      if(trans.getPartner().getStatus().getClass().equals(ElitePartner.class))
+        if(_date.getDate() - trans.getDeadline().getDate() > 15) 
+          trans.getPartner().multiplyPoints(0.75);
       ((SaleByCredit)trans).pay(new Date(_date.getDate()));
-    } else{
+    } catch (ClassCastException e){
       throw new InvalidTransactionKeyException(transactionId);
     }
+
   }
   
   
@@ -363,7 +395,9 @@ public class Warehouse implements Serializable {
   }
 
   public void toggleNotifications(String partnerId, String productId) throws InvalidPartnerIdException, InvalidProductIdException {
-    getProduct(productId).remove(getPartner(partnerId));
+    if(getProduct(productId).getObservers().contains(getPartner(partnerId)))
+      getProduct(productId).remove(getPartner(partnerId));
+    else{ getProduct(productId).add(getPartner(partnerId)); }
     //getPartner(partnerId).toggleNotifications(getProduct(productId));
   }
 
@@ -396,10 +430,10 @@ public double getBalance() {
   double ret = 0;
   for(Partner i : getPartnerList()){
     for(Acquisition j: i.getAcquisitionList()){
-      ret -= j.getTotalPrice();
+      ret -= j.getBaseValue();
     }
     for(Sale j : i.getSaleList()){
-      ret += j.getTotalPrice();
+      ret += j.getAmountToPay(_date);
     }
   }
   return ret;
@@ -411,12 +445,12 @@ public double getBalance() {
     for(Partner i : getPartnerList()){
       for(Acquisition j: i.getAcquisitionList()){
         if(j.isPaid())
-          ret -= j.getTotalPrice();
+          ret -= j.getBaseValue();
       }
       for(Sale j : i.getSaleList()){
         if(j.isPaid())
 
-          ret += j.getTotalPrice();
+          ret += j.getAmountToPay(_date);
       }
     }
     return ret;

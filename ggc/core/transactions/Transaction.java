@@ -22,7 +22,7 @@ public abstract class Transaction implements Serializable{
   public void setBaseValue(double baseValue){_baseValue=baseValue;}
   public int getId(){return _id;}
   public int getQuantity(){return _quantity;}
-  public double getBaseValue(){return _baseValue;}
+  public double getBaseValue(){return _baseValue*_quantity;}
   public Date getPaymentDate(){return _paymentDate;}
   public void setPaymentDate(Date date){_paymentDate = date;}
 

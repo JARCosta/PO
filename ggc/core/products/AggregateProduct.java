@@ -21,7 +21,7 @@ public class AggregateProduct extends Product {
 
   @Override
   public String toString(){
-    return getId() + "|" + (int)getMaxPrice() + "|" + getQuantity() + "|" + _recipe.toString();
+    return getId() + "|" + Math.round(getMaxPrice()) + "|" + getQuantity() + "|" + _recipe.toString();
   }
 
 }

@@ -88,7 +88,7 @@ public class Partner implements Serializable, Observer{
     //System.out.println(price);
     _acquisitions.add(acq);
     acq.setBaseValue(price);
-    _valorCompras += acq.getBaseValue()*acq.getQuantity();
+    _valorCompras += acq.getBaseValue();
     //System.out.println("A"+price + " "+ acq.getQuantity());
   }
   public void registerSaleByCredit(SaleByCredit sale){
@@ -146,14 +146,23 @@ public void clearNotifications(){
     else
       n = 3;
     int diff = now.difference(deadline);
-    if(diff >= n)
-      return _status.P1(diff);
-    else if(0 <= diff && diff < n)
+    //System.out.println(diff);
+    if(diff >= n){
+      //System.out.println("P1");
+        return _status.P1(diff);
+    }
+    else if(0 <= diff && diff < n){
+      //System.out.println("P2");
       return _status.P2(diff);
-    else if(0<diff && diff <= n)
-      return _status.P3(diff);
-    else
-      return _status.P4(diff);
+    }
+    else if(0<-diff && -diff <= n){
+      //System.out.println("P3");
+      return _status.P3(-diff);
+    }
+    else{
+      //System.out.println("P4");
+      return _status.P4(-diff);
+    }
   }
 
   // desenho: state + singleton
@@ -177,23 +186,26 @@ public void clearNotifications(){
   public boolean equals(Object p2){
     return p2 instanceof Partner && _id.equals(((Partner) p2).getId());
   }
+  
   @Override
   public String toString() {
-    return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + (int)_points + "|" + (int)_valorCompras + "|" + (int)getVendas() + "|" + (int)getVendasPagas();
+    return _id + "|" + _name + "|" + _adress + "|" + _status.getStatus() + "|" + (int)_points + "|" + Math.round(_valorCompras) + "|" + Math.round(getVendas()) + "|" + Math.round(getVendasPagas());
   }
 
   public double getVendas(){
     _valorVendas = 0;
     for(Sale i :_sales){
-      _valorVendas+= i.getBaseValue();
+      if(i.getClass().equals(SaleByCredit.class))
+        _valorVendas+= i.getBaseValue();
     }
     return _valorVendas;
   }
   public double getVendasPagas(){
     _valorVendasPagas = 0;
     for(Sale i :_sales){
-      if(i.isPaid())
-      _valorVendasPagas+= i.getBaseValue();
+      if(i.getClass().equals(SaleByCredit.class))
+        if(i.isPaid())
+          _valorVendasPagas+= i.getPricePaid();
     }
     return _valorVendasPagas;
   }
